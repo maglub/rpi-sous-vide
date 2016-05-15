@@ -1,11 +1,24 @@
 ---
-#- name: update apt cache
-#  apt: update_cache=yes cache_valid_time=3600
-#  become: True
-#
-#- name: Install required packages
-#  apt: name={{item}} state=present
-#  become: True
-#  tags:
-#    - packages
-#  with_items: []
+- name: update apt cache
+  apt: update_cache=yes cache_valid_time=3600
+  become: True
+  tags:
+    - configure
+    - packages
+
+- name: Install required packages
+  apt: name={{item}} state=present
+  become: True
+  tags:
+    - configure
+    - packages
+  with_items:
+    - rrdtool
+    - sqlite3
+    - php5-cgi
+    - php5
+    - php5-sqlite
+    - php5-cli
+    - php5-rrd
+    - php5-curl
+    - lighttpd

@@ -1,0 +1,8 @@
+---
+- name: restart lighttpd
+  become: true
+  service: state=restarted name=lighttpd
+
+- name: restart php5-fpm
+  become: true
+  service: state=restarted name=php5-fpm

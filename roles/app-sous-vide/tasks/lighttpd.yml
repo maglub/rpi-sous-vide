@@ -1,0 +1,21 @@
+---
+- name: set up lighttpd.conf
+  become: true
+  template: src=lighttpd.conf.j2 dest=/etc/lighttpd/lighttpd.conf mode=0644 owner=root group=root
+  notify: restart lighttpd
+
+- name: set up lighttpd access logging
+  become: True
+  file: state=link src=../conf-available/10-accesslog.conf dest=/etc/lighttpd/conf-enabled/10-accesslog.conf
+  tags: config
+
+- name: set up lighttpd access logging
+  become: True
+  file: state=link src=../conf-available/10-dir-listing.conf dest=/etc/lighttpd/conf-enabled/10-dir-listing.conf
+  tags: config
+
+- name: set up lighttpd access logging
+  become: True
+  file: state=link src=../conf-available/10-cgi.conf dest=/etc/lighttpd/conf-enabled/10-cgi.conf
+  tags: config
+

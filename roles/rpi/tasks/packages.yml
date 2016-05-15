@@ -10,3 +10,8 @@
     - packages
   with_items:
     - htop
+    - bc
+    - git
+    - ansible
+    - dnsutils
+    
