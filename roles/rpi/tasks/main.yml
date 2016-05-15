@@ -1,0 +1,5 @@
+- include: packages.yml
+
+- name: Set hostname
+  become: true
+  hostname: name={{ansible_hostname}}

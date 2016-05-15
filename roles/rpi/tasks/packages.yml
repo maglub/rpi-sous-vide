@@ -1,0 +1,12 @@
+---
+- name: update apt cache
+  apt: update_cache=yes cache_valid_time=3600
+  become: True
+
+- name: Install required packages
+  apt: name={{item}} state=present
+  become: True
+  tags:
+    - packages
+  with_items:
+    - htop

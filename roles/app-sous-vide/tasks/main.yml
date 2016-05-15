@@ -1,0 +1,26 @@
+- include: packages.yml
+
+- name: Set hostname
+  become: true
+  hostname: name={{ansible_hostname}}
+  
+- name: Add modules to /etc/modules
+  become: true
+  lineinfile: dest=/etc/modules state=present line="{{item}}"
+  with_items:
+    - "w1-gpio"
+    - "w1-therm"
+
+- name: Add modules to /boot/config.txt
+  become: true
+  lineinfile: dest=/boot/config.txt state=present line="{{item}}"
+  with_items:
+    - "dtoverlay=w1-gpio"
+
+
+#--- user aliases and stuff
+- name: Copy .aliases
+  copy: src=dot_aliases dest=/home/pi/.aliases
+
+- name: Copy .profile
+  copy: src=dot_bash_profile dest=/home/pi/.bash_profile

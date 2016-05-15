@@ -1,0 +1,5 @@
+svHome=/home/pi/rpi-sous-vide
+svBin=${svHome}/bin
+
+alias allOff='$svBin/wrapper setHeater off; $svBin/wrapper setPump off'
+alias allOn='$svBin/wrapper setHeater on; $svBin/wrapper setPump on'

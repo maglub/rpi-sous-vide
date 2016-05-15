@@ -1,0 +1,7 @@
+---
+- include: ../../../handlers/main.yml
+
+- name: restart sshd
+  become: true
+  service: name=ssh state=restarted
+

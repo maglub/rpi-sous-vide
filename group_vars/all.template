@@ -1,0 +1,14 @@
+---
+rpi_users:
+  - username: 'pi'
+    gecos: ''
+    uid: '1000'
+    gid: '1000'
+    password_hash: ''
+    shell: '/bin/bash'
+    home_dir: '/home/pi'
+    ssh_key:
+      - ''
+    ssh_key_ops: [ ]
+    ssh_key_remove: [ ]
+    ssh_key_ops_remove: [ ]

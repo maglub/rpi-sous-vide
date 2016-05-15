@@ -1,0 +1,43 @@
+- name: create application specific administrative groups
+  group: name={{item.username}}
+         state=present
+         gid={{item.gid}}
+  become: true
+  tags:
+   - user_management
+  with_items:
+    - "{{ rpi_users }}"
+
+- name: Create ops and admin users
+  user: createhome=no
+        home="{{item.home_dir}}"
+        group={{item.username}}
+        name={{item.username}}
+        shell={{item.shell}}
+        state=present
+        uid={{item.uid}}
+  become: true
+  tags:
+   - user_management
+  with_items:
+    - "{{ rpi_users }}"
+
+- name: add all admin users public keys to ops users authorized_keys
+  lineinfile: dest={{item.0.home_dir}}/.ssh/authorized_keys state=present line="{{ item.1 }}" create=yes owner={{item.0.username}} mode=0600
+  become: true
+  tags:
+    - user_management
+  with_subelements:
+    - "{{rpi_users}}"
+    - ssh_key
+
+- name: remove bad public keys from ops users authorized_keys
+  lineinfile: dest={{item.0.home_dir}}/.ssh/authorized_keys state=absent line="{{item.1}}" create=yes owner=ops mode=0600
+  become: true
+  tags:
+    - user_management
+  with_subelements:
+    - "{{rpi_users}}"
+    - ssh_key_remove
+
+
