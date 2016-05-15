@@ -1,0 +1,81 @@
+function initRelays(){
+  local pin=""
+
+  for pin in $gpioPins
+  do
+    echo $pin | sudo tee /sys/class/gpio/export
+    echo out | sudo tee /sys/class/gpio/gpio${pin}/direction
+  done
+}
+
+function getW1DevicePath(){
+  [ -z "$1" ] && local curDevice=$(ls /sys/bus/w1/devices | grep "^2" | head -1)
+  
+  echo "/sys/bus/w1/devices/$curDevice"
+}
+
+function getTemperature(){
+  local devicePath=$(getW1DevicePath)
+
+  cat $devicePath/w1_slave | awk '$NF~/t=/ { gsub(".*=","", $NF); temperature=$NF/1000; printf "%.2f\n", temperature;}'
+}
+
+function setPump(){
+  case $1 in
+    on)
+      echo 1 | sudo tee /sys/class/gpio/gpio${pumpPin}/value
+    ;;
+    off)
+      echo 0 | sudo tee /sys/class/gpio/gpio${pumpPin}/value
+    ;;
+    *)
+    ;;
+  esac
+}
+
+function getPumpStatus(){
+  local ret=$(cat /sys/class/gpio/gpio${pumpPin}/value)
+  case $ret in
+    0)
+      echo "off"
+      ;;
+    1)
+      echo "on"
+      ;;
+    *)
+      echo "unknown"
+      ;;
+  esac
+
+  return $ret
+}
+
+function getHeaterStatus(){
+  local ret=$(cat /sys/class/gpio/gpio${heaterPin}/value)
+  case $ret in
+    0)
+      echo "off"
+      ;;
+    1)
+      echo "on"
+      ;;
+    *)
+      echo "unknown"
+      ;;
+  esac
+
+  return $ret
+}
+
+function setHeater(){
+  case $1 in
+    on)
+      echo 1 | sudo tee /sys/class/gpio/gpio${heaterPin}/value
+    ;;
+    off)
+      echo 0 | sudo tee /sys/class/gpio/gpio${heaterPin}/value
+    ;;
+    *)
+    ;;
+  esac
+}

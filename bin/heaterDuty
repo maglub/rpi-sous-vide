@@ -1,0 +1,16 @@
+#!/bin/bash
+
+this_dir=$(cd $(dirname $0);pwd)
+
+. $this_dir/../conf/app.conf
+. $this_dir/functions
+
+while true
+do
+  $this_dir/heater on
+  sleep $1
+  $this_dir/heater off
+  sleep $2
+done
+
+

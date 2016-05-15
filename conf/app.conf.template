@@ -1,0 +1,4 @@
+heaterPin=17
+pumpPin=27
+
+gpioPins="$heaterPin $pumpPin"

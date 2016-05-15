@@ -1,0 +1,24 @@
+#!/bin/bash
+
+#---------------------------------
+# With the wrapper script, you can call any function in the
+# "functions" file
+#---------------------------------
+
+this_dir=$(cd `dirname $0`;pwd)
+. $this_dir/functions
+. $this_dir/../conf/app.conf
+
+command="$1"
+shift
+
+case $command in
+  --list|-l)
+    grep "^function" $this_dir/functions
+    ;; 
+  *)
+    $command $@
+    ;;
+esac
+
+
