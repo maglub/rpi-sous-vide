@@ -25,5 +25,16 @@
 
 - name: Copy .profile
   copy: src=dot_bash_profile dest=/home/pi/.bash_profile
+
+
+#- name: Directory /var/lib/rpi-sous-vide/tmp
+#  become: true
+#  file: state=directory dest=/var/lib/rpi-sous-vide/tmp owner=pi group=pi mode=0755
+  
+- name: tmpfs /var/lib/rpi-sous-vide/tmp
+  become: true
+  mount: name=/var/lib/rpi-sous-vide/tmp fstype=tmpfs src=tmpfs opts="defaults,noatime,nosuid,size=30m" state=mounted
+  tags: mount
   
   
+#line="tmpfs    /var/lib/rpi-sous-vide/tmp    tmpfs    defaults,noatime,nosuid,size=30m    0 0" dest=/etc/fstab
