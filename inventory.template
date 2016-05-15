@@ -1,0 +1,4 @@
+sv-r001fry  ansible_ssh_host=192.168.2.208 ansible_user=pi
+
+[raspbian]
+sv-r001fry
