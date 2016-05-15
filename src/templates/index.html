@@ -1,0 +1,185 @@
+{% extends "_layout.html" %}
+{% from 'macros.html' import graphBox %}
+
+
+{% block div %}
+<style>
+.graphItem.over {
+  border: 2px dashed #000;
+}
+.graphItem.transparent, .graphItem.over {
+  opacity: 0.4;
+}
+
+</style>
+
+
+<div class="row">
+   <div class="col-lg-12">
+      <h1 class="page-header">Graphs</h1>
+   </div>
+</div>
+
+<div class="row">
+  
+  <div id="graphList">
+	{% for curPlotConfig in plotConfig %}
+          {{ graphBox(curPlotConfig) }}
+	{% endfor %}
+  </div>
+</div>
+
+{% if "shiftr.io" in activePlugins %} 
+<div class="row">
+	<div class="col-lg-8">
+		<div class="panel panel-default">
+			<div class="panel-heading">shiftr.io</div>
+			<div class="panel-body">
+    <div id="shiftr.io" class="embed-responsive embed-responsive-16by9"> 
+    <iframe src="https://shiftr.io/maglub/demo/embed?zoom=1" class="embed-responsive-item"></iframe>
+    </div> 
+			</div>
+		</div>
+	</div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block myjavascript %}
+
+<script type="text/javascript">
+
+var firstTime = true;
+
+function drawGraphs(){
+ 	{% for curPlotConfig in plotConfig %}
+	log.log("Drawing graph: {{ curPlotConfig['plotgroup']}}-{{ curPlotConfig['timespan']}}");
+    var nothing = printGroupGraph('{{ curPlotConfig['plotgroup']}}-{{ curPlotConfig['timespan']}}', '{{ curPlotConfig['plotgroup']}}', '{{ curPlotConfig['timespan']}}', ! firstTime);
+   	{% endfor %}	
+
+	firstTime=false;
+	//#--- reload the cache data after 60 seconds
+//	log.log("Sleeping 600 seconds");
+//    setTimeout('drawGraphs()', 600000);
+}
+
+ $(document).ready(function(){
+
+	 drawGraphs();
+ });
+
+
+
+{% if isAuthenticated %}
+//#==========================================
+//# Functions for drag and drop
+//#   - Based on: http://www.html5rocks.com/en/tutorials/dnd/basics/
+//#
+//# Description:
+//#
+//# This will allow you to move the graphs on a web page. The moved graph will
+//# be placed before the destination.
+//#
+//#==========================================
+
+var dragSrcEl = null;
+
+function handleDragStart(e) {
+  dragSrcEl = this;
+
+/*
+  e.dataTransfer.effectAllowed = 'move';
+  e.dataTransfer.setData('text/html', this.innerHTML);
+  e.dataTransfer.setData('id', this.id);
+  e.dataTransfer.setData('className', this.className);
+  e.dataTransfer.setData('sourceObject',this);
+*/
+
+  log.log('Started dragging with dragSrcEl: ' + dragSrcEl.id);
+  this.classList.add('transparent');
+}
+
+function handleDragOver(e) {
+  if (e.preventDefault) {
+    e.preventDefault(); // Necessary. Allows us to drop.
+  }
+
+  e.dataTransfer.dropEffect = 'move';  // See the section on the DataTransfer object.
+
+  return false;
+}
+
+function handleDragEnter(e) {
+  // this / e.target is the current hover target.
+  this.classList.add('over');
+  this.parentNode.classList.add('over');
+}
+
+function handleDragLeave(e) {
+  this.classList.remove('over');  // this / e.target is previous target element.
+  this.parentNode.classList.remove('over');
+}
+
+function handleDrop(e) {
+  // this / e.target is current target element.
+
+  this.classList.remove('over');
+  log.log('I am in handleDrop');
+  if (e.stopPropagation) {
+    e.stopPropagation(); // stops the browser from redirecting.
+  }
+
+  // if the element land on itself, don't do anything
+  if (dragSrcEl != this) {
+    // Set the source column's HTML, id, class to the HTML,id, class of the column we dropped on.
+
+/*
+    //--- this switches the place between the src and dst
+    dragSrcEl.innerHTML = this.innerHTML;
+    dragSrcEl.id = this.id;
+    dragSrcEl.className = this.className;
+    this.innerHTML = e.dataTransfer.getData('text/html');
+    this.id = e.dataTransfer.getData('id');
+    this.className = e.dataTransfer.getData('className');
+*/
+
+    //--- this puts src before dst
+    myTopElement.insertBefore( dragSrcEl, this);
+
+  }
+
+  // See the section on the DataTransfer object.
+
+  return false;
+}
+
+function handleDragEnd(e) {
+  // this/e.target is the source node.
+  log.log('Handling dragEnd');
+
+  dragSrcEl.classList.remove('transparent');
+
+  [].forEach.call(cols, function (col) {
+    col.classList.remove('over');
+  });
+}
+
+//#--- this is the top level element of the graphs
+var myTopElement = document.getElementById("graphList");
+
+var cols = document.querySelectorAll('#graphList  .graphItem');
+  log.log('Setting up event listeners');
+[].forEach.call(cols, function(col) {
+  col.addEventListener('dragstart', handleDragStart, false);
+  col.addEventListener('dragenter', handleDragEnter, false)
+  col.addEventListener('dragover', handleDragOver, false);
+  col.addEventListener('dragleave', handleDragLeave, false);
+  col.addEventListener('drop', handleDrop, false);
+  log.log('  - Setting up dragend for: ' + col.id);
+  col.addEventListener('dragend', handleDragEnd, false);
+});
+{% endif %}
+
+  </script>
+{% endblock%}
+

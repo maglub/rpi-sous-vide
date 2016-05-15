@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="/img/favicon.ico">
+
+    <title>piLogger</title>
+
+		{% if (isOffline) %}
+	        <link href="/external/ajax/libs/twitter-bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+	        <link href="/external/ajax/libs/metisMenu/1.1.3/metisMenu.min.css" rel="stylesheet">
+	        <link href="/external/ajax/libs/startbootstrap-sb-admin-2/1.0.7/css/timeline.css" rel="stylesheet">
+	        <link href="/external/ajax/libs/startbootstrap-sb-admin-2/1.0.7/css/sb-admin-2.css" rel="stylesheet">
+	        <link href="/external/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+		{% else %}
+	        <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+	        <link href="https://cdnjs.cloudflare.com/ajax/libs/metisMenu/1.1.3/metisMenu.min.css" rel="stylesheet">
+	        <link href="https://cdnjs.cloudflare.com/ajax/libs/startbootstrap-sb-admin-2/1.0.7/css/timeline.css" rel="stylesheet">
+	        <link href="https://cdnjs.cloudflare.com/ajax/libs/startbootstrap-sb-admin-2/1.0.7/css/sb-admin-2.css" rel="stylesheet">
+	        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+<!--                <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css"> -->
+		{% endif %}
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+           <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+           <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+</head>
+
+<body>
+
+    <div id="wrapper">
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">piLogger @ {{ devicename }} {% if isAuthenticated %} - Logged in as Admin{% endif %}{% if isOffline %} - (offline modus){% endif %}</a>
+            </div>
+            <!-- /.navbar-header -->
+           <!-- sidebar menu -->
+            <div class="navbar-default sidebar" role="navigation">
+               <div class="sidebar-nav navbar-collapse">
+                  
+                  <ul class="nav" id="side-menu">
+                     
+                     <li>
+                        <a href="/home"><i class="fa fa-dashboard fa-fw"></i> Home</a>
+                     </li>
+                     
+                     <li>
+                        <a href="/sensors"><i class="fa fa-hdd-o fa-fw"></i> Sensors</a>
+                     </li>
+
+                     <li>
+                        <a href="/config"><i class="fa fa-wrench fa-fw"></i> Config</a>
+                     </li>
+{% if isAuthenticated %}
+                     <li>
+                        <a href="/admin"><i class="fa fa-lock fa-fw"></i> Admin</a>
+                     </li>
+{% endif %}
+
+                     <li>
+						{% if(isAuthenticated) %}
+                        <a href="/logout"><i class="fa fa-user fa-fw"></i> Log out</a>
+						{% else %}
+                        <a href="/login"><i class="fa fa-user fa-fw"></i> Login</a>
+						{% endif %}
+                     </li>
+                                       
+                  </ul>
+                  
+               </div>
+            </div>
+ 
+         </nav>
+   
+         <div id="page-wrapper">
+            {% block div %}{% endblock %}
+         </div>
+
+      </div>
+   
+
+		{% if (isOffline) %}
+
+			<script src="/external/jquery-2.1.3.min.js"></script> -->
+			<script src="/external/bootstrap/3.3.4/js/bootstrap.min.js"></script>  -->
+			<script src="/external/ajax/libs/metisMenu/1.1.3/metisMenu.min.js"></script> -->
+			<script src="/external/ajax/libs/startbootstrap-sb-admin-2/1.0.7/js/sb-admin-2.js"></script> -->
+			<script src="/external/highcharts/highcharts.js"></script>
+			<script src="/external/highcharts/highcharts-more.js"></script>
+			<script src="/external/highcharts/modules/exporting.js"></script>
+			<script src="/external/ajax/libs/jquery-ajaxtransport-xdomainrequest/1.0.3/jquery.xdomainrequest.min.js"></script>
+			<script src="/external/ajax/libs/jquery-sparklines/2.1.2/jquery.sparkline.min.js"></script> 
+			<script type="text/javascript" src="/external/spin.js/spin.js"></script>
+		{% else %}
+   
+			<script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+<!--                        <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script> -->
+			<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/metisMenu/1.1.3/metisMenu.min.js"></script>
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/startbootstrap-sb-admin-2/1.0.7/js/sb-admin-2.js"></script>
+			<script src="https://code.highcharts.com/highcharts.js"></script>
+			<script src="https://code.highcharts.com/highcharts-more.js"></script>
+			<script src="https://code.highcharts.com/modules/exporting.js"></script>
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajaxtransport-xdomainrequest/1.0.3/jquery.xdomainrequest.min.js"></script>
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-sparklines/2.1.2/jquery.sparkline.min.js"></script> 
+			<script type="text/javascript" src="https://fgnass.github.io/spin.js/spin.js"></script>
+		{% endif %}
+ 
+ 	 <!-- These are always local -->
+      <script type="text/javascript" src="/js/log.js"></script>
+      <script type="text/javascript" src="/js/myfunctions.js"></script>
+
+      <!-- place holder for my own java scripts --> 
+      {% block myjavascript %}{% endblock %}      
+
+</body>
+
