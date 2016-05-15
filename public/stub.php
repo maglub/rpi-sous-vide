@@ -29,7 +29,7 @@ switch ($_SERVER['HTTP_HOST']){
 
 		default:
                         error_log("Server: " . $_SERVER['HTTP_HOST']);
-                        $root =  $_SERVER['DOCUMENT_ROOT'] . "/../include/";
+                        $root =  $_SERVER['DOCUMENT_ROOT'] . "/../src/";
                         $logroot =  $_SERVER['DOCUMENT_ROOT'] . "/../log/";
 			define("GOOGLE_ANALYTICS", 0);
 			break;
