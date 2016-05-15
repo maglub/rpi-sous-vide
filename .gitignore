@@ -1,6 +1,6 @@
-*.retry
-group_vars/all
-inventory
+ansible/*.retry
+ansible/group_vars/all
+ansible/inventory
 conf/app.conf
 composer.lock
 vendor
