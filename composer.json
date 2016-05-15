@@ -1,0 +1,19 @@
+{
+    "name": "maglub/piLogger",
+    "description": "Logging data with Raspberry Pi",
+    "type": "library",
+    "license": "GPL-2.0",
+    "authors": [
+        {
+            "name": "maglub",
+            "email": "magnus.lubeck@gmail.com"
+        }
+    ],
+    "require": {
+        "slim/slim": "^2.6",
+        "dogancelik/slim-json": "dev-master",
+        "twig/twig": "1.*",
+        "slim/views": "dev-master"
+    },
+    "minimum-stability": "dev" 
+}
