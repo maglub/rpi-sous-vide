@@ -4,6 +4,11 @@
   template: src=lighttpd.conf.j2 dest=/etc/lighttpd/lighttpd.conf mode=0644 owner=root group=root
   notify: restart lighttpd
 
+- name: set up cgi
+  become: true
+  template: src=lighttpd_10-cgi.conf.j2 dest=/etc/lighttpd/conf-available/10-cgi.conf mode=0644 owner=root group=root
+  notify: restart lighttpd
+
 - name: set up lighttpd access logging
   become: True
   file: state=link src=../conf-available/10-accesslog.conf dest=/etc/lighttpd/conf-enabled/10-accesslog.conf
