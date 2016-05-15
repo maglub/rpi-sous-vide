@@ -2,3 +2,5 @@
 group_vars/all
 inventory
 conf/app.conf
+composer.lock
+vendor
