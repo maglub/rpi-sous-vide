@@ -69,9 +69,9 @@ Raspberry pi based sous vide
 
 Start the three programs:
 
-* bin/input (sends output to /var/lib/rpi-sous-vide/tmp/temperature)
-* bin/pid   (input from /var/lib/rpi-sous-vide/tmp/{temperature, setpoint}, output to /var/lib/rpi-sous-vide/tmp/heaterDuty)
-* bin/heaterDuty (input from /var/lib/rpi-sous-vide/tmp/heaterDuty)
+* bin/input (symlinked to the input of choice in input-available. sends output to /var/lib/rpi-sous-vide/tmp/temperature)
+* bin/control (symlinked to the control program of choice in control-available. input from /var/lib/rpi-sous-vide/tmp/{temperature, setpoint}, output to /var/lib/rpi-sous-vide/tmp/heaterDuty)
+* bin/output (symlinked to the output program of choice in output-available. input from /var/lib/rpi-sous-vide/tmp/heaterDuty)
 
 # References
 
