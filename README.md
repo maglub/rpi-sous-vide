@@ -69,11 +69,11 @@ Raspberry pi based sous vide
 
 Start the three programs:
 
-| Program | Description |
-|---------|-------------|
-| bin/input   | Symlinked to the input of choice in input-available. sends output to /var/lib/rpi-sous-vide/tmp/temperature                                                                               |
-| bin/control | Symlinked to the control program of choice in control-available. input from /var/lib/rpi-sous-vide/tmp/{temperature, setpoint}, output to /var/lib/rpi-sous-vide/tmp/heaterDuty           |
-| bin/output  | Symlinked to the output program of choice in output-available. input from /var/lib/rpi-sous-vide/tmp/heaterDuty                                                                           |
+| Program | Description | Input | Output |
+|---------|-------------|-------|--------|
+| bin/input   | Symlinked to the input of choice in input-available. | Thermometer. 18B20 | /var/lib/rpi-sous-vide/tmp/temperature                                             |
+| bin/control | Symlinked to the control program of choice in control-available. | /var/lib/rpi-sous-vide/tmp/{temperature, setpoint} | /var/lib/rpi-sous-vide/tmp/heaterDuty  |
+| bin/output  | Symlinked to the output program of choice in output-available.   | /var/lib/rpi-sous-vide/tmp/heaterDuty              | Solid state relay over GPIO            |
 
 # References
 
