@@ -1,4 +1,5 @@
 # Introduction
+Raspberry pi based sous vide
 
 2016-05-15, NOTE: This is a work in progress. Wait a few weeks and come back.
 
@@ -34,8 +35,20 @@ Separating the components in that way, I can play around with different ways of 
 
 Already at this stage, I figure that I must either find a good "auto tuning" algorithm to find out the constants for the PID, or tweak the algorithm quite a bit.
 
-# rpi-sous-vide
-Raspberry pi based sous vide
+# Installation
+
+* Clone this repo to your linux/Mac (no idea what to do for Windows users)
+* Install raspbian on an SD card
+* There is some ansible scripts here, that can be used to set up the raspberry pi.
+* Log into your raspberry pi
+* Clone this repo to ~pi
+* Run the setup.sh script (will download and set up php dependencies)
+
+```
+git clone git@github.com:maglub/rpi-sous-vide.git
+cd rpi-sous-vide
+./setup.sh
+```
 
 # BOM (bill of materials)
 
