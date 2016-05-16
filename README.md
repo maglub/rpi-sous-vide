@@ -50,6 +50,29 @@ cd rpi-sous-vide
 ./setup.sh
 ```
 
+# Usage
+
+Most things are hidden in the "functions" file. There is a wrapper that can be used to list the functions, and control them from outside the scripts.
+
+```
+bin/wrapper --list
+```
+
+* Set the target (setpoint) temperature:
+
+```
+bin/wrapper setSetpoint 65
+```
+
+* Turn all off (using an alias)
+
+````
+svBin=/home/pi/rpi-sous-vide/bin
+alias off='$svBin/wrapper setHeaterDuty 0 ; $svBin/wrapper setSetpoint 0 ; $svBin/wrapper setHeater off; $svBin/wrapper setPump off'
+
+off
+````
+
 # BOM (bill of materials)
 
 | Type | Item            | Number | Cost | Where | Link |
