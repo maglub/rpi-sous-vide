@@ -20,9 +20,11 @@ Raspberry pi based sous vide
 
 # Hardware
 
-| What  | Raspberry pi | Notes |
-|-------|--------------|-------|
-| 18B20 | GPIO4        |       |
+| What       | Raspberry pi | Notes |
+|------------|--------------|-------|
+| 18B20      | GPIO4        |       |
+| MPSA05 (1) | base -> 4.7R -> GPIO17       | |
+| MPSA05 (2) | base -> 4.7R -> GPIO27       |
 | SSR-25DA (1)| | Input: +5V, MPSA05 pin 3 |
 | SSR-25DA (1)| | Output: 230V phase, boiler |
 | SSR-25DA (2)| | Input: +5V, MPSA05 pin 3 |
