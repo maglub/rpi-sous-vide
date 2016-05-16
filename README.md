@@ -22,11 +22,11 @@ The system is connected like this:
 
  18B20
    |
-+-------+                       +---------+                      +------------+
-| input | -> tmp/temperature -> | control | -> tmp/heaterDuty -> | output     |
-+-------+                       +---------+                      +------------+
-                                   ^                               |
-                                   |                             Relay
++-------+                       +---------+                      +--------+
+| input | -> tmp/temperature -> | control | -> tmp/heaterDuty -> | output |
++-------+                       +---------+                      +--------+
+                                   ^                                 |
+                                   |                               Relay
              tmp/setpoint ---------+
 ```
 
