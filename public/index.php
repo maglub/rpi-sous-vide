@@ -13,7 +13,7 @@
 
 	require_once("./stub.php");
 
-	require_once($root . "myfunctions.inc.php");
+#	require_once($root . "myfunctions.inc.php");
 	require_once($root."/../vendor/autoload.php");
 #	$config = getAppConfig($root . "/../etc/piLogger.conf");
 
@@ -56,7 +56,7 @@ $twig->addGlobal('isOffline', (isset($config['isOffline']) && $config['isOffline
 #===================================================
 
 $app->get('/:route', function () use ($app) {
-    $app->render('index.html', ['plotConfig' => getDbPlotConfig('default'),'activePlugins' => getListOfActivePlugins()]);
+    $app->render('index.html', []);
 })->conditions(array("route" => "(|home)"));
 
 #=============================================================
@@ -123,7 +123,6 @@ $app->get('/admin', function () use ($app, $root) {
     $crontab = shell_exec("sudo -u pi ${root}/../bin/wrapper getCrontab 2>/dev/null");
    $app->render('admin.html', [ "crontab" => $crontab ]);
 });
-
 
   $app->run();
 

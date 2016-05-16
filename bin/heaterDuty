@@ -5,12 +5,133 @@ this_dir=$(cd $(dirname $0);pwd)
 . $this_dir/../conf/app.conf
 . $this_dir/functions
 
+
+# The basic assumption is that the pulse window is ca 10 seconds, and that the pulse width is set in a percentage of this window
+# the pulse window is dynamically set in the app.conf
+
+# The heaterDutyFile is read once per second
+#--- multiply the heater_configFileReadInterval by sleepTime for how often the heaterDutyFile is read
+[ -z "$heater_dutySleepTime" ] && heater_dutySleepTime=0.1
+[ -z "$heater_timeWindow" ] && heater_timeWindow=10
+
+#=============================================
+# Functions
+#=============================================
+function printStatus(){
+
+  #--- http://misc.flogisoft.com/bash/tip_colors_and_formatting
+  bgColor_default="\e[49m"
+
+  bgColor_heaterDuty=${bgColor_default}
+  bgColor_onState=${bgColor_default}
+  bgColor_readConfigFiles=${bgColor_default}
+  bgColor_dutyWindowCount=${bgColor_default}
+
+  [ $onState -eq 1 ] && bgColor_onState="\e[42m"
+  [ "$heaterDuty" != "$saveHeaterDuty" ] && bgColor_heaterDuty="\e[42m"
+  [ "$readConfigFiles" = "yes" ] && bgColor_readConfigFiles="\e[42m"
+  [ "$heater_dutyWindowCount" -eq 0 ] && bgColor_dutyWindowCount="\e[42m"
+ 
+
+
+  printf "${bgColor_dutyWindowCount}dutyWindowCount: %-5s${bgColor_default} ${bgColor_onState}onState: %-5s${bgColor_default} onCount: %-5s ${bgColor_heaterDuty}heaterDuty: %-5s${bgColor_default} heaterDutyInterval: %-5s heaterDutyFileCount: %-5s ${bgColor_readConfigFiles}readConfig: %-5s${bgColor_default} timeWindow: %-5s\n" \
+       $heater_dutyWindowCount \
+       $onState \
+       $onCount \
+       $heaterDuty \
+       $heater_dutyInterval \
+       $heaterDutyFileCount \
+       $readConfigFiles \
+       $heater_timeWindow
+
+
+  saveHeaterDuty=$heaterDuty
+}
+
+function initialize(){
+  heater_configFileReadInterval=$(echo "scale=0;${heater_configFileReadTime}/${heater_dutySleepTime}" | bc)
+  heater_dutyWindowInterval=$(echo "scale=0;${heater_timeWindow}/${heater_dutySleepTime}" | bc)
+}
+
+#=============================================
+# MAIN
+#=============================================
+[ -z "$heaterDutyFile" ] && heaterDutyFile="$tmpDir/heaterDuty"
+[ -z "$heater_dutyWindowInterval" ] && heater_dutyWindowInterval=100
+
+#--- initial state off
+setHeater off > /dev/null
+
+heaterDuty=$(getHeaterDuty)
+initialize
+
+echo "heater_timeWindow: $heater_timeWindow"
+echo "heater_configFileReadTime: $heater_configFileReadTime"
+echo "heater_configFileReadInterval: $heater_configFileReadInterval"
+
+heaterDutyFileCount=$heater_configFileReadInterval
+heater_dutyWindowCount=0
+onCount=0
+onState=0
+heaterDuty=0
+
 while true
 do
-  $this_dir/heater on
-  sleep $1
-  $this_dir/heater off
-  sleep $2
+  #--- read current config
+  # 
+
+  if [ -f "$heaterDutyFile" ] 
+  then
+    #--- at a sleepTime of 0.1s, and a window of 100 (10s), and a heater_dutyFileReadInterval of 10, the files are read once per second
+    if [ $heaterDutyFileCount -ge $heater_configFileReadInterval ]
+    then  
+      . $this_dir/../conf/app.conf
+      #--- the initialize should only be run when something in app.conf has changed: XXX
+      heaterDuty=$(getHeaterDuty)
+      heater_dutyInterval=$(printf "%.0f" $(echo "scale=2; ${heater_timeWindow} * ${heaterDuty} / 100 / ${heater_dutySleepTime}" | bc))
+
+      initialize
+
+      heaterDutyFileCount=0
+      readConfigFiles=yes
+    else
+      readConfigFiles=no
+    fi
+  else
+    #--- default is off
+    heaterDuty=0
+  fi
+
+  #--- if the heaterDuty is less than 0, we should exit
+  [ $heaterDuty -lt 0 ] && break
+
+  if [[ $heater_dutyWindowCount -lt $heater_dutyInterval ]]
+  then
+    onState=1
+    (( onCount += 1 ))
+  else
+    onState=0
+    onCount=0
+  fi
+
+  case $onState in
+    0)
+      setHeater off > /dev/null
+      ;;
+    1)
+      setHeater on > /dev/null
+      ;;
+    *)
+      exit 1
+      ;;
+  esac
+  printStatus
+  (( heaterDutyFileCount += 1 ))
+  (( heater_dutyWindowCount +=1 ))
+
+  [ $heater_dutyWindowCount -ge $heater_dutyWindowInterval ] && heater_dutyWindowCount=0
+
+  sleep $heater_dutySleepTime
 done
 
-
+setHeater off

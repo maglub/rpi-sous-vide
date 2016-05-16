@@ -10,5 +10,5 @@ this_dir=$(cd $(dirname $0);pwd)
 #=====================================
 TS=$(date "+%Y%m%d_%H%M%S %s")
 curTemperature=$(getTemperature)
-echo "$TS $curTemperature" | tee /var/lib/rpi-sous-vide/tmp/temperature
+echo "$TS $curTemperature" 
 
