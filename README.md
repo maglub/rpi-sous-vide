@@ -15,6 +15,21 @@ One of my design criterias is to separate the problem domain on the low level to
 * pid (temperature control)
 * output heater control
 
+The system is connected like this:
+
+```
+
+ 18B20
+   |
++-------+                       +---------+                      +------------+
+| input | -> tmp/temperature -> | control | -> tmp/heaterDuty -> | output     |
++-------+                       +---------+                      +------------+
+                                   ^                               |
+                                   |                             Relay
+             tmp/setpoint ---------+
+```
+
+
 Separating the components in that way, I can play around with different ways of implementing the different components. I.e the input could be changed to use PT1000 sensors and a different piece of code, the PID code could be any algorithm, and the output could use some sort of PWM or other means of control.
 
 Already at this stage, I figure that I must either find a good "auto tuning" algorithm to find out the constants for the PID, or tweak the algorithm quite a bit.
@@ -49,19 +64,6 @@ Raspberry pi based sous vide
 
 # Runtime
 
-The system is connected like this:
-
-```
-
- 18B20
-   |
-+-------+                       +-----+                      +------------+
-| input | -> tmp/temperature -> | pid | -> tmp/heaterDuty -> | heaterDuty |
-+-------+                       +-----+                      +------------+
-                                   ^                               |
-                                   |                             Relay
-             tmp/setpoint ---------+
-```
 
 
 
