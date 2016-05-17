@@ -42,7 +42,7 @@ The future system is thought to be illustrated like this:
 +-------+            |          +---------+           |          +--------+
 | input | -> tmp/temperature -> | control | -> tmp/heaterDuty -> | output |
 +-------+                       +---------+                      +--------+
-             tmp/setpoint --------^                                  |
+             tmp/setpoint -----------^                               |
                                                                    Relay
 ```
 
