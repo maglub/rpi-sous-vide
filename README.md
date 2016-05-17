@@ -43,7 +43,7 @@ The future system is thought to be illustrated like this:
 | input | -> tmp/temperature -> | control | -> tmp/heaterDuty -> | output |
 +-------+                       +---------+                      +--------+
              tmp/setpoint -----------^                               |
-                                                                   Relay
+                                                                   Relay ---> Boiler/Heater
 ```
 
 Separating the components in that way, I can play around with different ways of implementing the different components. I.e:
