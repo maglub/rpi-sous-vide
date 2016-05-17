@@ -1,33 +1,49 @@
 # Introduction
 Raspberry pi based sous vide
 
-2016-05-15, NOTE: This is a work in progress. Wait a few weeks and come back.
+2016-05-15, NOTE: This is a work in progress. Please wait a few weeks and come back.
 
 
-This was a "one day project" that turned into a weekend project. It is in no state to be used by anyone else than me at the moment, but the basic idea is to have a web-gui based on:
+This was a "one day project" that turned into a weekend project, that turned into... It is in no state to be used by anyone else than me at the moment, but the basic idea is to have a web-gui based on:
+
 
 ````
 lighttpd -> php -> php slim
 ````
 
+The web gui is useful for monitoring and setting constants and setpoints.
+
 One of my design criterias is to separate the problem domain on the low level to three "daemons":
 
 * input (temperature)
-* pid (temperature control)
-* output heater control
+* control (temperature control, i.e PID or other algorithm)
+* output heater control (setting the heater to a range of 0% to 100%)
 
 The system is connected like this:
 
 ```
-
- 18B20
-   |
-+-------+                       +---------+                      +--------+
+          +------------------------------+    +----------+
+          |          web gui             |    | rest api |
+          +------------------------------+    +----------+
+                                      |             |
+                                  +----------------------------+
+ tmp/{temperature, heaterDuty} -> |       app api              |-> tmp/setpoint
+                                  +----------------------------+
+		                                          ^
+		  +---------+                             |
+          |  logger | -------> db/{temperature, heaterDuty, ...}.rrd
+		  +---------+
+                ^
+                |
+                +-------------------------------------+
+                     |                                |
+  18B20              |                                |
+    |                |                                |
++-------+            |          +---------+           |          +--------+
 | input | -> tmp/temperature -> | control | -> tmp/heaterDuty -> | output |
-+-------+                       +---------+                      +--------+
-                                   ^                                 |
-                                   |                               Relay
-             tmp/setpoint ---------+
++-------+        setpoint       +---------+                      +--------+
+                                                                     |
+                                                                   Relay
 ```
 
 
