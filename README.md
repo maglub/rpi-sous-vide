@@ -19,16 +19,16 @@ One of my design criterias is to separate the problem domain on the low level to
 * control (temperature control, i.e PID or other algorithm)
 * output heater control (setting the heater to a range of 0% to 100%)
 
-The system is connected like this:
+The future system is thought to be illustrated like this:
 
 ```
-          +------------------------------+    +----------+
-          |          web gui             |    | rest api |
-          +------------------------------+    +----------+
-                                      |             |
-                                  +----------------------------+
- tmp/{temperature, heaterDuty} -> |       app api              |-> tmp/setpoint
-                                  +----------------------------+
+          +------------------------------+    +----------+   +----------------------+
+          |          web gui             |    | rest api |   | LCD/Display, buttons |
+          +------------------------------+    +----------+   +----------------------+
+                                      |             |          |
+                                  +--------------------------------+
+ tmp/{temperature, heaterDuty} -> |              app api           | -> tmp/setpoint
+                                  +--------------------------------+
 		                                          ^
 		  +---------+                             |
           |  logger | -------> db/{temperature, heaterDuty, ...}.rrd
@@ -41,15 +41,16 @@ The system is connected like this:
     |                |                                |
 +-------+            |          +---------+           |          +--------+
 | input | -> tmp/temperature -> | control | -> tmp/heaterDuty -> | output |
-+-------+        setpoint       +---------+                      +--------+
-                                                                     |
++-------+                       +---------+                      +--------+
+             tmp/setpoint --------^                                  |
                                                                    Relay
 ```
 
+Separating the components in that way, I can play around with different ways of implementing the different components. I.e:
 
-Separating the components in that way, I can play around with different ways of implementing the different components. I.e the input could be changed to use PT1000 sensors and a different piece of code, the PID code could be any algorithm, and the output could use some sort of PWM or other means of control.
-
-Already at this stage, I figure that I must either find a good "auto tuning" algorithm to find out the constants for the PID, or tweak the algorithm quite a bit.
+* The input could be changed to use PT1000 sensors through an AD converter/SPI and a different piece of code
+* The control can be the default PID code, or be could be any algorithm of choice
+* The output could use the default "slow" PWM or other means of control that can accept a range from 0 - 100 as input.
 
 # Installation
 
