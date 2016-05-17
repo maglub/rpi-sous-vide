@@ -22,10 +22,10 @@ One of my design criterias is to separate the problem domain on the low level to
 The future system is thought to be illustrated like this:
 
 ```
-          +------------------------------+    +----------+   +----------------------+
-          |          web gui             |    | rest api |   | LCD/Display, buttons |
-          +------------------------------+    +----------+   +----------------------+
-                                      |             |          |
+          +------------------------------+   +----------+   +----------------------+
+          |          web gui             |   | rest api |   | LCD/Display, buttons |
+          +------------------------------+   +----------+   +----------------------+
+                                      |            |            |
                                   +--------------------------------+
  tmp/{temperature, heaterDuty} -> |              app api           | -> tmp/setpoint
                                   +--------------------------------+
