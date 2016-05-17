@@ -10,7 +10,7 @@
     <meta name="author" content="">
     <link rel="icon" href="/img/favicon.ico">
 
-    <title>piLogger</title>
+    <title>rpi-sous-vide</title>
 
 		{% if (isOffline) %}
 	        <link href="/external/ajax/libs/twitter-bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
@@ -48,7 +48,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="/">piLogger @ {{ devicename }} {% if isAuthenticated %} - Logged in as Admin{% endif %}{% if isOffline %} - (offline modus){% endif %}</a>
+                <a class="navbar-brand" href="/">Sous Vide @ {{ devicename }} {% if isAuthenticated %} - Logged in as Admin{% endif %}{% if isOffline %} - (offline modus){% endif %}</a>
             </div>
             <!-- /.navbar-header -->
            <!-- sidebar menu -->
@@ -61,10 +61,6 @@
                         <a href="/home"><i class="fa fa-dashboard fa-fw"></i> Home</a>
                      </li>
                      
-                     <li>
-                        <a href="/sensors"><i class="fa fa-hdd-o fa-fw"></i> Sensors</a>
-                     </li>
-
                      <li>
                         <a href="/config"><i class="fa fa-wrench fa-fw"></i> Config</a>
                      </li>
