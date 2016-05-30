@@ -36,4 +36,5 @@ setenv.add-response-header += (
       "Cache-Control" => "public, must-revalidate, proxy-revalidate"
 )
 
-url.rewrite-if-not-file = ("/api/(.*)" => "/api/rest.php/$0", "/(.*)" => "/index.php/$0")
+#url.rewrite-if-not-file = ("/api/(.*)" => "/api/rest.php/$0", "/(.*)" => "/index.php/$0")
+url.rewrite-if-not-file = ("/(.*)" => "/index.php/$0")
