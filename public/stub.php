@@ -38,4 +38,3 @@ switch ($_SERVER['HTTP_HOST']){
 
 // Watch out, please no empty lines after closing tag
 ?>
-

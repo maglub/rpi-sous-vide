@@ -22,7 +22,7 @@ function getW1DevicePath(){
 function getTemperature(){
   local devicePath=$(getW1DevicePath)
 
-  cat $devicePath/w1_slave | awk '$NF~/t=/ { gsub(".*=","", $NF); temperature=$NF/1000; printf "%.2f\n", temperature;}'
+  cat $devicePath/w1_slave | awk '$NF~/t=/ { gsub(".*=","", $NF); temperature=$NF/1000; printf "%.2f", temperature;}'
 }
 
 function setPump(){

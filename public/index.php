@@ -13,9 +13,10 @@
 
 	require_once("./stub.php");
 
-#	require_once($root . "myfunctions.inc.php");
+	require_once($root . "myfunctions.inc.php");
+	require_once($root . "auth.inc.php");
 	require_once($root."/../vendor/autoload.php");
-#	$config = getAppConfig($root . "/../etc/piLogger.conf");
+#	$config = getAppConfig($root . "/../etc/rpi-sous-vide.conf");
 
         #--- instantiate Slim and SlimJson
         $app = new \Slim\Slim(array(
@@ -30,6 +31,13 @@
                 ]);
         }
 
+  #===============================================
+  # Authenticate per HTTP AUTH if requested
+  #  - i.e Nothing will happen if the user has not sent any username/password in the headers
+  #  - note: perhaps this should be prohibited if the request is not done per https, as the
+  #          credentials are hashed, but not encrypted
+  #===============================================
+  authenticateHttpAuth();
 
 // define the engine used for the view
 $app->view(new \Slim\Views\Twig());
@@ -49,7 +57,7 @@ $twig = $app->view()->getEnvironment();
 $twig->addGlobal('devicename', gethostname());
 $twig->addGlobal('isOffline', (isset($config['isOffline']) && $config['isOffline'] == "true")?true:false);
 #$twig->addGlobal('config', $config);
-#$twig->addGlobal('isAuthenticated', isAuthenticated());
+$twig->addGlobal('isAuthenticated', isAuthenticated());
 
 #===================================================
 # Main
@@ -96,7 +104,7 @@ $app->map('/login', function () use ($app) {
         $username = "admin";
         $password = $app->request->post('password');
 
-		$result = authenticate($username, $password);
+	$result = authenticate($username, $password);
         #$result = $app->authenticator->authenticate($username, $password);
 
         if ($result) {
@@ -124,7 +132,19 @@ $app->get('/admin', function () use ($app, $root) {
    $app->render('admin.html', [ "crontab" => $crontab ]);
 });
 
+#====================================================
+# Test
+#====================================================
+$app->get('/temperature', function() use ($app, $root){
+
+  if (isAuthenticated()){
+    $curRes = getTemperature();
+    echo "{\"temperature\":\"{$curRes}\", \"status\":\"ok\"}\n";
+  } else {
+    echo "{\"status\":\"error\", \"message\":\"not authenticated\"}\n";
+  }
+});
+
   $app->run();
 
 ?>
-
