@@ -135,7 +135,7 @@ $app->get('/admin', function () use ($app, $root) {
 #====================================================
 # Test
 #====================================================
-$app->get('/temperature', function() use ($app, $root){
+$app->get('/api/temperature', function() use ($app, $root){
 
   if (isAuthenticated()){
     $curRes = getTemperature();
