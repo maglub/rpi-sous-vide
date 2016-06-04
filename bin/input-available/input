@@ -9,6 +9,8 @@ this_dir=$(cd $(dirname $0);pwd)
 # MAIN
 #=====================================
 
+initRelays
+
 while true
 do
   #res=$($this_dir/getTemperature)
