@@ -64,7 +64,8 @@ $twig->addGlobal('isAuthenticated', isAuthenticated());
 #===================================================
 
 $app->get('/:route', function () use ($app) {
-    $app->render('index.html', []);
+  
+  $app->render('index.html', [ "temperature" => getTemperatureByFile(), "setpoint" => getSetpointByFile(), "heaterDuty" => getHeaterDutyByFile() ]);
 })->conditions(array("route" => "(|home)"));
 
 #=============================================================
@@ -137,12 +138,35 @@ $app->get('/admin', function () use ($app, $root) {
 #====================================================
 $app->get('/api/temperature', function() use ($app, $root){
 
-  if (isAuthenticated()){
-    $curRes = getTemperature();
-    echo "{\"temperature\":\"{$curRes}\", \"status\":\"ok\"}\n";
-  } else {
-    echo "{\"status\":\"error\", \"message\":\"not authenticated\"}\n";
-  }
+#  if (isAuthenticated()){
+    #$curRes = [ "temperature" => getTemperature() , "status" => "ok" ];
+  $curRes = [ "temperature" => getTemperatureByFile() , "status" => "ok" ];
+  echo json_encode($curRes);
+
+#    echo "{\"temperature\":\"{$curRes}\", \"status\":\"ok\"}\n";
+#  } else {
+#    echo "{\"status\":\"error\", \"message\":\"not authenticated\"}\n";
+#  }
+  return 0;
+});
+
+$app->get('/api/setpoint', function() use ($app, $root){
+  $curRes = [ "setpoint" => getSetpointByFile() , "status" => "ok" ];
+  echo json_encode($curRes);
+  return 0;
+});
+
+$app->get('/api/heaterduty', function() use ($app, $root){
+  $curRes = [ "heaterduty" => getHeaterDutyByFile() , "status" => "ok" ];
+  echo json_encode($curRes);
+  return 0;
+});
+
+$app->get('/api/pid', function() use ($app, $root){
+  $curPid = getPid();
+  $curRes = [ "kp" => $curPid["pid_kp"], "ki" => $curPid["pid_ki"], "kd" => $curPid["pid_kd"], "outMin" => $curPid["pid_outMin"], "outMax" => $curPid["pid_outMax"],  $curPid, "status" => "ok" ];
+  echo json_encode($curRes);
+  return 0;
 });
 
   $app->run();

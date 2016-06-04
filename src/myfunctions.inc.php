@@ -7,7 +7,7 @@ require_once($root . "dbconfig.inc.php");
 #-----------------------------------
 # getAppConfig()
 #-----------------------------------
-function getAppConfig($configFile = __DIR__ . "/../etc/piLogger.conf"){
+function getAppConfig($configFile = __DIR__ . "/../conf/app.conf"){
 	#--- from http://inthebox.webmin.com/one-config-file-to-rule-them-all
 	$file=$configFile;
 	$lines = file($file);
@@ -35,4 +35,27 @@ function getTemperature(){
 	$curRes = `/home/pi/rpi-sous-vide/bin/wrapper getTemperature`;	
 	return $curRes;
 } 
+
+function getTemperatureByFile(){
+	$curRes = `cat /var/lib/rpi-sous-vide/tmp/temperature`;	
+	return $curRes;
+
+}
+
+function getSetpointByFile(){
+	$curRes = `cat /var/lib/rpi-sous-vide/tmp/setpoint`;	
+	return $curRes;
+
+}
+
+function getHeaterDutyByFile(){
+	$curRes = `cat /var/lib/rpi-sous-vide/tmp/heaterDuty`;	
+	return $curRes;
+
+}
+
+function getPid(){
+  $config = getAppConfig();
+  return $config;
+}
 ?>
