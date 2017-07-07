@@ -4,3 +4,4 @@ ansible/inventory
 conf/app.conf
 composer.lock
 vendor
+*.swp
