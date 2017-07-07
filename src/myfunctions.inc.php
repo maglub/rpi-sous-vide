@@ -37,13 +37,12 @@ function getTemperature(){
 } 
 
 function getTemperatureByFile(){
-	$curRes = `cat /var/lib/rpi-sous-vide/tmp/temperature`;	
+	$curRes = `/home/pi/rpi-sous-vide/bin/wrapper getTemperatureFromFile`;
 	return $curRes;
-
 }
 
 function getSetpointByFile(){
-	$curRes = `cat /var/lib/rpi-sous-vide/tmp/setpoint`;	
+	$curRes = `/home/pi/rpi-sous-vide/bin/wrapper getSetpointFromFile`;
 	return $curRes;
 
 }
