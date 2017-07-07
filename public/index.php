@@ -162,9 +162,19 @@ $app->get('/api/heaterduty', function() use ($app, $root){
   return 0;
 });
 
+$app->get('/api/all', function() use ($app, $root){
+  $curPid = getPid();
+  $curTemperature = getTemperatureByFile();
+  $curSetpoint = getSetpointByFile();
+
+  $curRes = [ "kp" => $curPid["pid_kp"], "ki" => $curPid["pid_ki"], "kd" => $curPid["pid_kd"], "outMin" => $curPid["pid_outMin"], "outMax" => $curPid["pid_outMax"], "temperature" => $curTemperature, "setpoint" => $curSetpoint, "status" => "ok" ];
+  echo json_encode($curRes);
+  return 0;
+});
+
 $app->get('/api/pid', function() use ($app, $root){
   $curPid = getPid();
-  $curRes = [ "kp" => $curPid["pid_kp"], "ki" => $curPid["pid_ki"], "kd" => $curPid["pid_kd"], "outMin" => $curPid["pid_outMin"], "outMax" => $curPid["pid_outMax"],  $curPid, "status" => "ok" ];
+  $curRes = [ "kp" => $curPid["pid_kp"], "ki" => $curPid["pid_ki"], "kd" => $curPid["pid_kd"], "outMin" => $curPid["pid_outMin"], "outMax" => $curPid["pid_outMax"],  "status" => "ok" ];
   echo json_encode($curRes);
   return 0;
 });
