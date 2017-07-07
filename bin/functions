@@ -1,7 +1,7 @@
 [ -z "$tmpDir" ] && tmpDir=/var/lib/rpi-sous-vide/tmp
 [ -z "$temperatureFile" ] && temperatureFile="$tmpDir/temperature"
 [ -z "$setpointFile" ] && setpointFile="$tmpDir/setpoint"
-[ ! -f "$setpointFile" ] && { echo 0 > $setpointFile ; }
+[ ! -f "$setpointFile" ] && { echo 0 > $setpointFile ; chmod 777 $setpointFile ; }
 
 function initRelays(){
   local pin=""
@@ -86,11 +86,11 @@ function setHeater(){
 }
 
 function getSetpointFromFile(){
-  cat $setpointFile | awk '{print $NF}'
+  cat $setpointFile | awk '{printf "%s", $NF}'
 }
 
 function getTemperatureFromFile(){
-  cat $temperatureFile | awk '{print $NF}'
+  cat $temperatureFile | awk '{printf "%s", $NF}'
 }
 
 function setTemperatureToFile(){
