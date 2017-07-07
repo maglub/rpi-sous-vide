@@ -1,0 +1,171 @@
+#!/bin/bash
+
+this_dir=$(cd $(dirname $0);pwd)
+
+. $this_dir/../conf/app.conf
+. $this_dir/functions
+
+
+# The basic assumption is that the pulse window is ca 10 seconds, and that the pulse width is set in a percentage of this window
+# the pulse window is dynamically set in the app.conf
+
+# The heaterDutyFile is read once per second
+#--- multiply the heaterDutyFileInterval by sleepTime for how often the heaterDutyFile is read
+heaterDutyFileInterval=10
+[ -z "$pid_sleepTime" ] && pid_sleepTime=0.1
+
+#=============================================
+# Functions
+#=============================================
+function printStatus(){
+
+  #--- http://misc.flogisoft.com/bash/tip_colors_and_formatting
+  bgColor_default="\e[49m"
+
+  bgColor_heaterDuty=${bgColor_default}
+  bgColor_onState=${bgColor_default}
+
+#  [ $onState -eq 1 ] && bgColor_onState="\e[42m"
+#  [ "$heaterDuty" != "$saveHeaterDuty" ] && bgColor_heaterDuty="\e[42m"
+
+
+  printf "pid_windowCount: %-5s setpoint: %-6.2f input: %-6.2f lastInput: %-6.2f dInput: %-6.2f error: %-6.2f kp: %-5s ki: %-5s kd: %-5s omin: %-5s omax: %-5s kp_error: %-6.2f iTerm: %-6.2f kd_dInput: %-6.2f ${bgColor_output}output: %-5s${bgColor_default}\n" \
+      $pid_windowCount \
+      $pid_setpoint \
+      $pid_computeInput \
+      $pid_lastInput \
+      $pid_dInput \
+      $pid_error \
+      $pid_kp \
+      $pid_ki \
+      $pid_kd \
+      $pid_outMin \
+      $pid_outMax  \
+      $pid_kp_error \
+      $pid_iTerm \
+      $pid_kd_dInput \
+      $pid_output \
+
+}
+
+function compute(){
+  #--- this function should be called once per second (isch)
+  pid_computeInput=$pid_input
+
+  pid_error=$(echo "scale=2;${pid_setpoint} - ${pid_computeInput}" | bc)
+  pid_errSum=$(echo "scale=2;${pid_errSum} + ${pid_error}" | bc)
+
+  pid_iTerm=$(echo "scale=2;${pid_iTerm} + ${pid_ki} * (${pid_error} - ${pid_offset_ki})" | bc)
+
+  #--- iTerm
+  if [ $(echo $pid_iTerm'>='$pid_outMax | bc) -gt 0 ]
+  then
+    pid_iTerm=$pid_outMax
+  elif [ $(echo $pid_iTerm'<='$pid_outMin | bc) -gt 0 ]
+  then
+    pid_iTerm=$pid_outMin 
+  fi
+
+  #--- dInput
+  pid_dInput=$(echo "scale=2;${pid_computeInput} - ${pid_lastInput}" | bc)
+
+  #--- compute PID output
+
+  pid_kp_error=$(echo "scale=4;${pid_kp} * ${pid_error}" | bc)
+  pid_kd_dInput=$(echo "scale=4;${pid_kd} * ${pid_dInput}" | bc)
+
+  if [ $(echo $pid_kd_dInput'<='$pid_outMin | bc) -gt 0 ]
+  then
+    pid_kd_dInput=$pid_outMin 
+  fi
+
+
+  pid_output=$(echo "scale=4;${pid_kp_error} + ${pid_iTerm} - ${pid_kd_dInput}" | bc)
+  
+  #--- pid_output sensibilization
+  if [ $(echo $pid_output'>'$pid_outMax | bc) -gt 0 ]
+  then
+    pid_output=$pid_outMax
+  elif [ $(echo $pid_output'<'$pid_outMin | bc) -gt 0 ]
+  then
+    pid_output=$pid_outMin 
+  fi
+
+
+
+  #--- remember some variables for next time
+  pid_lastInput=$pid_computeInput
+  return 0
+  
+}
+
+function initialize(){
+  pid_lastInput=$(getTemperatureFromFile)
+  pid_input=$pid_lastInput
+  pid_iTerm=$pid_output
+  pid_errSum=0
+
+  if [ $pid_iTerm -gt $pid_outMax ]
+  then
+    pid_iTerm=$pid_outMax
+  elif [ $pid_iTerm -lt $pid_outMin ]
+  then
+    pid_iTerm=$pid_outMin
+  fi
+
+  pid_input=$(getTemperatureFromFile)
+  pid_setpoint=$(getSetpointFromFile)
+
+  pid_output=0
+
+  return 0
+}
+
+#=============================================
+# MAIN
+#=============================================
+
+MANUAL=0
+AUTOMATIC=1
+DIRECT=0
+REVERSE=1
+controllerDirection=$DIRECT
+
+
+#--- sampleTime=10 equals 1 sec when pid_sleepTime=0.1
+pid_sampleTime=10
+
+[ -z "$temperatureFile" ] && temperatureFile="$tmpDir/temperature"
+[ -z "$setpointFile" ] && setpointFile="$tmpDir/setpoint"
+[ ! -f "$setpointFile" ] && { echo 0 > $setpointFile ; }
+
+[ -z "$heaterDutyFile" ] && heaterDutyFile="$tmpDir/heaterDuty"
+[ -z "$heaterDutyWindow" ] && heaterDutyWindow=100
+
+
+#--- init
+pid_output=0
+initialize
+compute
+pid_windowCount=$pid_sampleTime
+
+while true
+do
+  pid_input=$(getTemperatureFromFile)
+  pid_setpoint=$(getSetpointFromFile)
+
+  printStatus
+
+  (( pid_windowCount +=1 ))
+  if [ $pid_windowCount -ge $pid_sampleTime ]
+  then
+    . $this_dir/../conf/app.conf
+    compute 
+    setOutput $pid_output
+    pid_windowCount=0
+    $this_dir/write-influx smoker-output-pwm $pid_output
+  fi
+
+
+  sleep $pid_sleepTime
+done
