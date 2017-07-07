@@ -16,12 +16,19 @@
 
 <div class="row">
    <div class="col-lg-12">
-      <h1 class="page-header">Graphs</h1>
+      <h1 class="page-header">Data</h1>
+      <ul>
+        <li><div id=temperature></div> 
+        <li><div id=setpoint></div>
+      </ul>
+   </div>
+   <div class="col-lg-4">
+      <div id=gauge></div>
    </div>
 </div>
 
+<!--
 <div class="row">
-  
   <div id="graphList">
 	{% for curPlotConfig in plotConfig %}
           {{ graphBox(curPlotConfig) }}
@@ -29,20 +36,8 @@
   </div>
 </div>
 
-{% if "shiftr.io" in activePlugins %} 
-<div class="row">
-	<div class="col-lg-8">
-		<div class="panel panel-default">
-			<div class="panel-heading">shiftr.io</div>
-			<div class="panel-body">
-    <div id="shiftr.io" class="embed-responsive embed-responsive-16by9"> 
-    <iframe src="https://shiftr.io/maglub/demo/embed?zoom=1" class="embed-responsive-item"></iframe>
-    </div> 
-			</div>
-		</div>
-	</div>
-</div>
-{% endif %}
+-->
+
 {% endblock %}
 
 {% block myjavascript %}
@@ -51,133 +46,106 @@
 
 var firstTime = true;
 
-function drawGraphs(){
- 	{% for curPlotConfig in plotConfig %}
-	log.log("Drawing graph: {{ curPlotConfig['plotgroup']}}-{{ curPlotConfig['timespan']}}");
-    var nothing = printGroupGraph('{{ curPlotConfig['plotgroup']}}-{{ curPlotConfig['timespan']}}', '{{ curPlotConfig['plotgroup']}}', '{{ curPlotConfig['timespan']}}', ! firstTime);
-   	{% endfor %}	
+function updateStats(){
 
-	firstTime=false;
-	//#--- reload the cache data after 60 seconds
-//	log.log("Sleeping 600 seconds");
-//    setTimeout('drawGraphs()', 600000);
+  var url="/api/all";
+  d3.json(url, function(data){
+      document.getElementById("temperature").innerHTML = "Temperature: " + data["temperature"];
+      document.getElementById("setpoint").innerHTML = "Setpoint: " + data["setpoint"];
+      //drawBar(data);
+      drawArc(data);
+  });
+
+  setTimeout('updateStats()', 5000);
 }
 
- $(document).ready(function(){
+function setupArc(){
 
-	 drawGraphs();
+  var canvas = d3.select("#gauge").append("svg").attr("width",1000).attr("height",50).attr("id", "bar");
+  var canvas = d3.select("#gauge").append("svg").attr("width",200).attr("height",200).append("g").attr("transform", "translate(100,100)").attr("id", "arc");
+
+}
+
+function drawBar(d){
+
+  var data = [100, d["setpoint"], d["temperature"] ];
+  var color = d3.scale.ordinal().range(["red", "blue", "orange"]);
+
+  var canvas = d3.select("#bar");
+
+  canvas.selectAll("rect").remove();
+
+  var bars = canvas.selectAll("rect").data(data).enter()
+               .append("rect")
+               .attr("width", function(d) {return d * 10;})
+               .attr("height", function(d,i){ return 50 - 10*i; } )
+               .attr("y", function(d, i) { return 5*i; })
+               .attr("fill", function(d, i) { return color(i);})
+               .attr("id", function(d,i){ return "niklas"+i;});
+}
+
+function drawArc(d){
+
+  //#--- we only need a bit of data from the json
+  var data = [100, d["setpoint"], d["temperature"] ];
+  var color = d3.scale.ordinal().range(["#ddd", "#d00", "#0d0"]);
+  var arcScale = d3.scale.linear()
+                   .domain([0,100])
+                   .range([0,2*Math.PI]);
+
+  var canvas = d3.select("#arc");
+  canvas.selectAll("arc").remove();
+  canvas.selectAll("path").remove();
+
+  log.log("debug!");
+
+  var arc = d3.svg.arc()
+    .innerRadius(50)
+    .outerRadius(100)
+    .startAngle(0);
+
+  canvas.append("path").datum({endAngle: arcScale(100)})
+    .style("fill", color(0))
+    .attr("d", arc)
+    .attr("id", "path-background");
+               
+  canvas.append("path").datum({endAngle: arcScale(d["setpoint"]) })
+    .style("fill", "#d00")
+    .attr("d", arc)
+    .attr("id", "path-setpoint");
+               
+  arc.innerRadius(55);
+  arc.outerRadius(95);
+  canvas.append("path").datum({endAngle: arcScale(d["temperature"]) })
+    .style("fill", "#0d0")
+    .attr("d", arc)
+    .attr("id", "path-temperature");
+               
+  canvas.selectAll("text").remove();
+  var addText = canvas.selectAll("text").data([ d["temperature"], d["setpoint"] ]).enter().append("text");
+  var textElements = addText
+      .attr("x", function(d,i){ return 0; })
+      .attr("y", function(d,i){ return 15-i*20; })
+      .text(function(d,i){ log.log(d); return d;})
+      .attr("text-anchor", "middle")
+      .attr("font-family", "Arial Black")
+      .attr("font-size", "20px")
+      .attr("fill", "black");
+
+//  log.log("Temperature: " + d["temperature"] + " Setpoint: " + d["setpoint"] );
+  return 0;
+}
+
+
+ $(document).ready(function(){
+        setupArc();
+	updateStats();
+       //  drawArc(25,45);
  });
 
 
 
 {% if isAuthenticated %}
-//#==========================================
-//# Functions for drag and drop
-//#   - Based on: http://www.html5rocks.com/en/tutorials/dnd/basics/
-//#
-//# Description:
-//#
-//# This will allow you to move the graphs on a web page. The moved graph will
-//# be placed before the destination.
-//#
-//#==========================================
-
-var dragSrcEl = null;
-
-function handleDragStart(e) {
-  dragSrcEl = this;
-
-/*
-  e.dataTransfer.effectAllowed = 'move';
-  e.dataTransfer.setData('text/html', this.innerHTML);
-  e.dataTransfer.setData('id', this.id);
-  e.dataTransfer.setData('className', this.className);
-  e.dataTransfer.setData('sourceObject',this);
-*/
-
-  log.log('Started dragging with dragSrcEl: ' + dragSrcEl.id);
-  this.classList.add('transparent');
-}
-
-function handleDragOver(e) {
-  if (e.preventDefault) {
-    e.preventDefault(); // Necessary. Allows us to drop.
-  }
-
-  e.dataTransfer.dropEffect = 'move';  // See the section on the DataTransfer object.
-
-  return false;
-}
-
-function handleDragEnter(e) {
-  // this / e.target is the current hover target.
-  this.classList.add('over');
-  this.parentNode.classList.add('over');
-}
-
-function handleDragLeave(e) {
-  this.classList.remove('over');  // this / e.target is previous target element.
-  this.parentNode.classList.remove('over');
-}
-
-function handleDrop(e) {
-  // this / e.target is current target element.
-
-  this.classList.remove('over');
-  log.log('I am in handleDrop');
-  if (e.stopPropagation) {
-    e.stopPropagation(); // stops the browser from redirecting.
-  }
-
-  // if the element land on itself, don't do anything
-  if (dragSrcEl != this) {
-    // Set the source column's HTML, id, class to the HTML,id, class of the column we dropped on.
-
-/*
-    //--- this switches the place between the src and dst
-    dragSrcEl.innerHTML = this.innerHTML;
-    dragSrcEl.id = this.id;
-    dragSrcEl.className = this.className;
-    this.innerHTML = e.dataTransfer.getData('text/html');
-    this.id = e.dataTransfer.getData('id');
-    this.className = e.dataTransfer.getData('className');
-*/
-
-    //--- this puts src before dst
-    myTopElement.insertBefore( dragSrcEl, this);
-
-  }
-
-  // See the section on the DataTransfer object.
-
-  return false;
-}
-
-function handleDragEnd(e) {
-  // this/e.target is the source node.
-  log.log('Handling dragEnd');
-
-  dragSrcEl.classList.remove('transparent');
-
-  [].forEach.call(cols, function (col) {
-    col.classList.remove('over');
-  });
-}
-
-//#--- this is the top level element of the graphs
-var myTopElement = document.getElementById("graphList");
-
-var cols = document.querySelectorAll('#graphList  .graphItem');
-  log.log('Setting up event listeners');
-[].forEach.call(cols, function(col) {
-  col.addEventListener('dragstart', handleDragStart, false);
-  col.addEventListener('dragenter', handleDragEnter, false)
-  col.addEventListener('dragover', handleDragOver, false);
-  col.addEventListener('dragleave', handleDragLeave, false);
-  col.addEventListener('drop', handleDrop, false);
-  log.log('  - Setting up dragend for: ' + col.id);
-  col.addEventListener('dragend', handleDragEnd, false);
-});
 {% endif %}
 
   </script>
