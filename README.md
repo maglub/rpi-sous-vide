@@ -62,6 +62,7 @@ Separating the components in that way, I can play around with different ways of 
 * Run the setup.sh script (will download and set up php dependencies)
 
 ```
+sudo apt-get install git
 git clone git@github.com:maglub/rpi-sous-vide.git
 cd rpi-sous-vide
 ./setup.sh
