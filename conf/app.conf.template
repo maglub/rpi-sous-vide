@@ -36,3 +36,13 @@ pid_kd=500
 pid_outMin=0
 pid_outMax=100
 
+#--- remote logging
+#influxHost=192.168.1.10
+#influxPort=8086
+#influxDb=smokerWue
+#influxSenderId=wue-smoker
+
+influxHost=null
+influxPort=8086
+influxDb=DB_NAME
+influxSenderId=SENDER_ID
