@@ -4,7 +4,7 @@
 * 2017-07-08, NOTE: This is still a work in progress. It is slowly getting into a state where normal people can install it and use it.
 
 
-Raspberry pi based sous vide is a PID controller for a home built sous vide machinery, or a home built smoker (to smoke meat, fish, etc). The basic principle is the same. You measure the media (water or air), and decide to turn on or off a heating element. I have used this setup successfully for both.
+rpi-sous-vide is a Raspberry pi based PID controller for a home built sous vide machinery, or a home built smoker (to smoke meat, fish, etc). The basic principle is the same. You measure the media (water or air), and decide to turn on or off a heating element. I have used this setup successfully for both. Currently it supports two output relays, to control a heating element and a motor to stir water.
 
 This was a "one day project" that turned into a weekend project, that turned into... It is not really in a state to be used by anyone else than me at the moment, but the basic idea is to have a web-gui based on:
 
@@ -50,7 +50,7 @@ The future system is thought to be illustrated like this:
 
 Separating the components in that way, I can play around with different ways of implementing the different components. I.e:
 
-* The input could be changed to use PT1000 sensors through an AD converter/SPI and a different piece of code
+* The input could potentially be changed to use PT1000 sensors or k-type sensors through an AD converter/SPI and a different piece of code
 * The control can be the default PID code, or be could be any algorithm of choice
 * The output could use the default "slow" PWM or other means of control that can accept a range from 0 - 100 as input.
 
