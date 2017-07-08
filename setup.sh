@@ -7,6 +7,23 @@ configDir=$this_dir/conf
 cat<<EOT
 
 #================================
+# setup directories
+#================================
+EOT
+
+baseDir=/var/lib/rpi-sous-vide
+
+dbDir=${baseDir}/db
+tmpDir=${baseDir}/tmp
+
+for dir in $baseDir $dbDir $tmpDir
+do
+  [ ! -d "$dir" ]     && { echo "Creating directory: $dir"           ; sudo mkdir -p "$dir"     ; }
+done
+
+cat<<EOT
+
+#================================
 # Config file etc/app.conf
 #================================
 EOT
@@ -19,6 +36,17 @@ echo "* Checking for config file $this_dir/etc/app.conf"
   cp $this_dir/conf/app.conf.template $this_dir/conf/app.conf 
 
 }
+
+cat<<EOT
+
+#================================
+# Setup input dependencies
+#================================
+EOT
+
+echo "* Running $this_dir/bin/input --setup"
+
+$this_dir/bin/input --setup
 
 cat<<EOT
 
