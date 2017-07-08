@@ -76,6 +76,25 @@ cd rpi-sous-vide
 sudo shutdown -r now
 ```
 
+## Different input/control/output possibilities
+
+The way the system figures out which input/control/output script to use, is set by symbolic links in ./bin, where the default symlinks are set as follows:
+
+```
+bin/control -> control-available/pid.enhanced
+bin/input -> input-available/input-18b20
+bin/output -> output-available/heaterOutput
+```
+
+You can copy these scripts and adapt them in any way you like. In particular the input script might need different setup on your Raspberry Pi, and the setup script will try and satisfy this by calling the input script with the "--setup" parameter.
+
+```
+bin/input --setup
+```
+
+So if you have some esoteric hardware that need special configuration (like the 1wire sensors), you can put that in your input file in the doSetup() function.
+
+
 # Usage
 
 Most things are hidden in the "functions" file. There is a wrapper that can be used to list the functions, and control them from outside the scripts.
