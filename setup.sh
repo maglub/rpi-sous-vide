@@ -45,17 +45,6 @@ echo "* Checking for config file $this_dir/etc/app.conf"
 cat<<EOT
 
 #================================
-# Setup input dependencies
-#================================
-EOT
-
-echo "* Running $this_dir/bin/input --setup"
-
-$this_dir/bin/input --setup
-
-cat<<EOT
-
-#================================
 # packages for php5 and lighttpd
 #================================
 EOT
@@ -144,4 +133,15 @@ curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/loca
 cd $this_dir
 composer install
 cd -
+
+cat<<EOT
+
+#================================
+# Setup input dependencies
+#================================
+EOT
+
+echo "* Running $this_dir/bin/input --setup"
+
+$this_dir/bin/input --setup
 
