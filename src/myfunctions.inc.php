@@ -48,7 +48,7 @@ function getSetpointByFile(){
 }
 
 function getHeaterDutyByFile(){
-	$curRes = `cat /var/lib/rpi-sous-vide/tmp/heaterDuty`;	
+	$curRes = `/home/pi/rpi-sous-vide/bin/wrapper getHeaterDuty`;
 	return $curRes;
 
 }

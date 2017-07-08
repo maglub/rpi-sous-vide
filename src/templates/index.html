@@ -20,6 +20,7 @@
       <ul>
         <li><div id=temperature></div> 
         <li><div id=setpoint></div>
+        <li><div id=heaterDuty></div>
       </ul>
    </div>
    <div class="col-lg-4">
@@ -52,6 +53,7 @@ function updateStats(){
   d3.json(url, function(data){
       document.getElementById("temperature").innerHTML = "Temperature: " + data["temperature"];
       document.getElementById("setpoint").innerHTML = "Setpoint: " + data["setpoint"];
+      document.getElementById("heaterDuty").innerHTML = "HeaterDuty: 0" + data["heaterDuty"];
       //drawBar(data);
       drawArc(data);
   });
