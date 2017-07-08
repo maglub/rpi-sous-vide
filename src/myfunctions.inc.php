@@ -88,7 +88,7 @@ function killProcesses(){
 }
 
 function startProcesses(){
-	$curRes = `sudo -u pi /home/pi/rpi-sous-vide/bin/startup.sh`;
+	$curRes = `sudo -u pi /home/pi/rpi-sous-vide/bin/wrapper startProcesses`;
 	return $curRes;
 }
 

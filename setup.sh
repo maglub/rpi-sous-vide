@@ -116,7 +116,7 @@ cat<<EOT
 EOT
 
 echo "* setting up the sudoers file"
-visudo -c -f conf/sudoers.d/rpi-sous-vide  && {
+visudo -c -f $configDir/sudoers.d/rpi-sous-vide  && {
   sudo cp $configDir/sudoers.d/rpi-sous-vide /etc/sudoers.d/rpi-sous-vide 
   sudo chown root:root /etc/sudoers.d/rpi-sous-vide 
   sudo chmod 0440 /etc/sudoers.d/rpi-sous-vide 
