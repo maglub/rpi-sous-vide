@@ -1,8 +1,8 @@
-[ -z "$tmpDir" ] && tmpDir=/var/lib/rpi-sous-vide/tmp
+[ -z "$tmpDir" ]          && tmpDir=/var/lib/rpi-sous-vide/tmp
 [ -z "$temperatureFile" ] && temperatureFile="$tmpDir/temperature"
-[ -z "$setpointFile" ] && setpointFile="$tmpDir/setpoint"
-[ -z "$heaterDutyFile" ] && heaterDutyFile="$tmpDir/heaterDuty"
-[ ! -f "$setpointFile" ] && { echo 0 > $setpointFile ; chmod 777 $setpointFile ; }
+[ -z "$setpointFile" ]    && setpointFile="$tmpDir/setpoint"
+[ -z "$heaterDutyFile" ]  && heaterDutyFile="$tmpDir/heaterDuty"
+[ ! -f "$setpointFile" ]  && { echo 0 > $setpointFile ; chmod 777 $setpointFile ; }
 
 function initRelays(){
   local pin=""
@@ -119,3 +119,63 @@ function getHeaterDuty(){
 function setSetpoint(){
   echo $1 > $setpointFile
 }
+
+function isInputRunning(){
+  if [ $(ps -ef | grep "SCREEN" | grep input | wc -l) -gt 0 ]
+  then
+    echo -n 0
+    return 0
+  else
+    echo -n 1
+    return 1
+  fi
+}
+
+function isControlRunning(){
+  if [ $(ps -ef | grep "SCREEN" | grep control | wc -l) -gt 0 ]
+  then
+    echo -n 0
+    return 0
+  else
+    echo -n 1
+    return 1
+  fi
+}
+
+function isOutputRunning(){
+  if [ $(ps -ef | grep "SCREEN" | grep output | wc -l) -gt 0 ]
+  then
+    echo -n 0
+    return 0
+  else
+    echo -n 1
+    return 1
+  fi
+}
+
+function getProcessId(){
+  local process="$1"
+  local pid=$(ps -ef | grep -E "[S]CREEN.*${process}" | awk '{print $2}')
+  echo $pid
+  return 0
+}
+
+function getProcessIds(){
+  local processes="input control output"
+  for process in $processes
+  do
+    getProcessId $process
+  done
+  return 0
+}
+
+
+
+function killProcesses(){
+  for processId in $(getProcessIds)
+  do
+    #kill -9 $processId 
+    screen -X -S $processId quit
+  done
+}
+
