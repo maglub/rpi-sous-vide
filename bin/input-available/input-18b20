@@ -1,0 +1,70 @@
+#!/bin/bash
+
+this_dir=$(cd $(dirname $0);pwd)
+this_script=$(basename $0)
+
+. $this_dir/../conf/app.conf
+. $this_dir/functions
+
+#=====================================
+# Functions
+#=====================================
+function doSetup(){
+
+  #--- /boot/config.txt
+  echo "* Checking /boot/config.txt"
+  [ -z "$(grep -v "^#" /boot/config.txt | grep "dtoverlay=w1-gpio") ] && {
+    echo "  - Adding config to /boot/config.txt"
+    echo "dtoverlay=w1-gpio" | sudo tee -a /boot/config.txt
+    echo "  - Reboot required!"
+  }
+
+  #--- /boot/config.txt
+  local module=""
+  local modules="w1-gpio w1-therm"
+
+  echo "* Checking /etc/modules"
+  for module in $modules
+  do
+    [ -z "$(grep -v "^#" /etc/modules | grep $module) ] && {
+      echo "  - Adding module to module to /etc/modules"
+      echo "$module" | sudo tee -a /etc/modules
+      echo "  - Reboot required!"
+    }
+  done
+
+  return 0
+}
+
+#=====================================
+# MAIN
+#=====================================
+
+if [ -n "$1" ]
+then
+  case $1 in
+    --setup)
+      echo "* Setup of requirements for $this_script"
+      doSetup
+    ;;
+  esac
+fi
+
+initRelays
+
+while true
+do
+  #res=$($this_dir/getTemperature)
+
+  TS=$(date "+%Y%m%d_%H%M%S %s")
+
+  curTemperature=$(getTemperature)
+  setTemperatureToFile $curTemperature
+
+  curSetpoint=$(getSetpointFromFile)
+  curPumpStatus=$(getPumpStatus)
+  curHeaterStatus=$(getHeaterStatus)
+
+  printf "${TS} setpoint: %-6.2f temperature: %-6.2f pump: %-5s heater: %-5s\n" $curSetpoint $curTemperature $curPumpStatus $curHeaterStatus
+  sleep 0.1
+done
