@@ -1,6 +1,7 @@
 [ -z "$tmpDir" ] && tmpDir=/var/lib/rpi-sous-vide/tmp
 [ -z "$temperatureFile" ] && temperatureFile="$tmpDir/temperature"
 [ -z "$setpointFile" ] && setpointFile="$tmpDir/setpoint"
+[ -z "$heaterDutyFile" ] && heaterDutyFile="$tmpDir/heaterDuty"
 [ ! -f "$setpointFile" ] && { echo 0 > $setpointFile ; chmod 777 $setpointFile ; }
 
 function initRelays(){
