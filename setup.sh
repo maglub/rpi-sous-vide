@@ -30,6 +30,10 @@ EOT
 echo "* Checking installed packages"
 
 curInstallPackages=""
+
+#--- note, php5-cgi has to come before php5. Otherwise apt-get will install apache2 to satisfy dependencies
+#--- https://wildlyinaccurate.com/installing-php-on-debian-without-apache/
+
 for package in php5-cgi php5 php5-sqlite php5-cli php5-rrd php5-curl lighttpd
 do
   echo "  - Checking $package"
