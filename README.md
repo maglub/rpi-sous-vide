@@ -71,6 +71,8 @@ git clone git@github.com:maglub/rpi-sous-vide.git
 
 cd rpi-sous-vide
 ./setup.sh
+# reboot
+sudo shutdown -r now
 ```
 
 # Usage
