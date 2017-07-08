@@ -101,7 +101,11 @@ So if you have some esoteric hardware that need special configuration (like the 
 
 ## Influxdb logging
 
-If you have an influxdb server available, you can redirect the logging to it and create a new database for it. Update the influxdb variables in conf/app.conf, and symlink the logging script. In the influxdb script, there is an exampla curl call to create the database.
+If you have an influxdb server available, you can redirect the logging to it and create a new database for it. Update the influxdb variables in conf/app.conf, and symlink the logging script. In the influxdb script, there is an exampla curl call to create the database. There are three values logged at the moment:
+
+* control: smoker-output-pwm
+* input: smoker-setpoint
+* input: smoker-temp
 
 ```
 cd bin
