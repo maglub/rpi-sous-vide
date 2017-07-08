@@ -168,7 +168,16 @@ $app->get('/api/all', function() use ($app, $root){
   $curSetpoint = getSetpointByFile();
   $curHeaterDuty = getHeaterDutyByFile();
 
-  $curRes = [ "kp" => $curPid["pid_kp"], "ki" => $curPid["pid_ki"], "kd" => $curPid["pid_kd"], "outMin" => $curPid["pid_outMin"], "outMax" => $curPid["pid_outMax"], "temperature" => $curTemperature, "setpoint" => $curSetpoint, "status" => "ok" , "heaterDuty"=> $curHeaterDuty ];
+  $curRes = [ "kp"          => isset($curPid["pid_kp"])?$curPid["pid_kp"]:0,
+              "ki"          => isset($curPid["pid_ki"])?$curPid["pid_ki"]:0,
+              "kd"          => isset($curPid["pid_kd"])?$curPid["pid_kd"]:0,
+              "outMin"      => isset($curPid["pid_outMin"])?$curPid["pid_outMin"]:0,
+              "outMax"      => isset($curPid["pid_outMax"])?$curPid["pid_outMax"]:0,
+              "temperature" => $curTemperature,
+              "setpoint"    => $curSetpoint,
+              "status"      => "ok" ,
+              "heaterDuty"  => $curHeaterDuty ];
+
   echo json_encode($curRes);
   return 0;
 });
