@@ -11,15 +11,20 @@ cat<<EOT
 #================================
 EOT
 
-baseDir=/var/lib/rpi-sous-vide
+[ -z "$baseDir" ] && baseDir=/var/lib/rpi-sous-vide
 
-dbDir=${baseDir}/db
-tmpDir=${baseDir}/tmp
+[ -z "$dbDir" ]   && dbDir=${baseDir}/db
+[ -z "$tmpFile" ] && tmpDir=${baseDir}/tmp
 
+echo "* Setting up directories"
 for dir in $baseDir $dbDir $tmpDir
 do
-  [ ! -d "$dir" ]     && { echo "Creating directory: $dir"           ; sudo mkdir -p "$dir"     ; }
+  [ ! -d "$dir" ]     && { echo "  - Creating directory: $dir"           ; sudo mkdir -p "$dir"     ; sudo chown pi:pi "$dir" ; }
 done
+
+echo "  - Initializing the setpoint file"
+[ -z "$setpointFile" ] && setpointFile="$tmpDir/setpoint"
+[ ! -f "$setpointFile" ] && { echo 0 > $setpointFile ; chmod 777 $setpointFile ; }
 
 cat<<EOT
 
