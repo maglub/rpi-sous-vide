@@ -50,7 +50,46 @@ function getSetpointByFile(){
 function getHeaterDutyByFile(){
 	$curRes = `/home/pi/rpi-sous-vide/bin/wrapper getHeaterDuty`;
 	return $curRes;
+}
 
+function getInputRunning(){
+	$curRes = `/home/pi/rpi-sous-vide/bin/wrapper isInputRunning`;
+	return ($curRes == "0" )?true:false;
+}
+
+function getControlRunning(){
+	$curRes = `/home/pi/rpi-sous-vide/bin/wrapper isControlRunning`;
+	return ($curRes == 0 )?true:false;
+}
+
+function getOutputRunning(){
+	$curRes = `/home/pi/rpi-sous-vide/bin/wrapper isOutputRunning`;
+	return ($curRes == 0 )?true:false;
+}
+
+function getInputPid(){
+	$curRes = `/home/pi/rpi-sous-vide/bin/wrapper getProcessId input`;
+	return $curRes;
+}
+
+function getControlPid(){
+	$curRes = `/home/pi/rpi-sous-vide/bin/wrapper getProcessId control`;
+	return $curRes;
+}
+
+function getOutputPid(){
+	$curRes = `/home/pi/rpi-sous-vide/bin/wrapper getProcessId output`;
+	return $curRes;
+}
+
+function killProcesses(){
+	$curRes = `sudo -u pi /home/pi/rpi-sous-vide/bin/wrapper killProcesses`;
+	return $curRes;
+}
+
+function startProcesses(){
+	$curRes = `sudo -u pi /home/pi/rpi-sous-vide/bin/startup.sh`;
+	return $curRes;
 }
 
 function getPid(){

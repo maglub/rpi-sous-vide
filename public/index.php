@@ -73,25 +73,33 @@ $app->get('/:route', function () use ($app) {
 #=============================================================
 $app->map('/config', function () use ($app,$root) {
   if ($app->request()->isPost()) {
-    $action = $app->request->post('actionCrontab');
+    $action = $app->request->post('actionProcesses');
     switch ($action) {
-      case "Disable":
-        $res = shell_exec("sudo -u pi ${root}/../bin/wrapper disableCrontab > /dev/null 2>&1");
+      case "Start":
+        $res = startProcesses(); 
         break;
 
-      case "Enable":
-        $res = shell_exec("sudo -u pi ${root}/../bin/wrapper enableCrontab > /dev/null 2>&1");
+      case "Stop":
+        $res = killProcesses(); 
         break;
 
     }
     $app->redirect('/config');
   }
 
+  $processes['input']['status'] = getInputRunning();
+  $processes['input']['pid'] = getInputPid();
+  $processes['control']['status'] = getControlRunning();
+  $processes['control']['pid'] = getControlPid();
+  $processes['output']['status'] = getOutputRunning();
+  $processes['output']['pid'] = getOutputPid();
 
 
-    $crontab = shell_exec("sudo -u pi ${root}/../bin/wrapper getCrontab 2>/dev/null");
+#    $crontab = shell_exec("sudo -u pi ${root}/../bin/wrapper getCrontab 2>/dev/null");
 
-    $app->render('config.html', ['plotConfig' => getDbPlotConfig(), 'sensorGroups' => getSensorGroupsAll(), 'plotGroups' => getPlotGroups(), 'installedPlugins' => getListOfInstalledPlugins(), 'activePlugins' => getListOfActivePlugins(), 'plugininfo' => getPluginInfos(), "crontab" => $crontab ]);
+    $app->render('config.html', ["processes"=>$processes]);
+
+#    $app->render('config.html', ['plotConfig' => getDbPlotConfig(), 'sensorGroups' => getSensorGroupsAll(), 'plotGroups' => getPlotGroups(), 'installedPlugins' => getListOfInstalledPlugins(), 'activePlugins' => getListOfActivePlugins(), 'plugininfo' => getPluginInfos(), "crontab" => $crontab ]);
 })->via('GET', 'POST')->name('config');
 
 #=============================================================
@@ -134,7 +142,7 @@ $app->get('/admin', function () use ($app, $root) {
 });
 
 #====================================================
-# Test
+# REST API
 #====================================================
 $app->get('/api/temperature', function() use ($app, $root){
 
@@ -167,6 +175,9 @@ $app->get('/api/all', function() use ($app, $root){
   $curTemperature = getTemperatureByFile();
   $curSetpoint = getSetpointByFile();
   $curHeaterDuty = getHeaterDutyByFile();
+  $inputRunning = getInputRunning();
+  $controlRunning = getControlRunning();
+  $outputRunning = getOutputRunning();
 
   $curRes = [ "kp"          => isset($curPid["pid_kp"])?$curPid["pid_kp"]:0,
               "ki"          => isset($curPid["pid_ki"])?$curPid["pid_ki"]:0,
@@ -176,6 +187,9 @@ $app->get('/api/all', function() use ($app, $root){
               "temperature" => $curTemperature,
               "setpoint"    => $curSetpoint,
               "status"      => "ok" ,
+              "inputRunning"    => $inputRunning,
+              "controlRunning"  => $controlRunning,
+              "outputRunning"   => $outputRunning,
               "heaterDuty"  => $curHeaterDuty ];
 
   echo json_encode($curRes);
