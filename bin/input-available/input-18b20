@@ -11,7 +11,7 @@ this_script=$(basename $0)
 #=====================================
 function doSetup(){
 
-  local rebootNeeded=""
+  local rebootRequired=""
 
   #--- /boot/config.txt
   echo "* Checking /boot/config.txt"
@@ -19,7 +19,7 @@ function doSetup(){
     echo "  - Adding config to /boot/config.txt"
     echo "dtoverlay=w1-gpio" | sudo tee -a /boot/config.txt
     echo "  - Reboot required!"
-    rebootNeeded=true
+    rebootRequired=true
   }
 
   #--- /boot/config.txt
@@ -33,12 +33,12 @@ function doSetup(){
       echo "  - Adding module to module to /etc/modules"
       echo "$module" | sudo tee -a /etc/modules
       echo "  - Reboot required!"
-      rebootNeeded=true
+      rebootRequired=true
     }
   done
 
 
-  [ -n "$rebootNeeded" ] && { echo ; echo "NOTE: Reboot needed!" ; }
+  [ -n "$rebootRequired" ] && { echo ; echo "NOTE: Reboot required!" ; }
 
   return 0
 }
