@@ -60,6 +60,9 @@ fi
 
 initRelays
 
+windowCount=0
+windowCountMax=10
+
 while true
 do
   #res=$($this_dir/getTemperature)
@@ -75,4 +78,13 @@ do
 
   printf "${TS} setpoint: %-6.2f temperature: %-6.2f pump: %-5s heater: %-5s\n" $curSetpoint $curTemperature $curPumpStatus $curHeaterStatus
   sleep 0.1
+
+  (( windowCount +=1 ))
+  if [ $windowCount -ge $windowCountMax ]
+  then
+    windowCount=0
+    $this_dir/logging smoker-setpoint $curSetpoint
+    $this_dir/logging smoker-temp $curTemperature
+  fi
+
 done
