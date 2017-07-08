@@ -63,7 +63,12 @@ Separating the components in that way, I can play around with different ways of 
 
 ```
 sudo apt-get install git
+
+#https
+git clone https://github.com/maglub/rpi-sous-vide.git
+#or ssh
 git clone git@github.com:maglub/rpi-sous-vide.git
+
 cd rpi-sous-vide
 ./setup.sh
 ```
