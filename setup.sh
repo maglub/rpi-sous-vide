@@ -28,9 +28,9 @@ done
 [ -n "$curInstallPackages" ] && { echo "  - Installing packages: $curInstallPackages" ; sudo apt-get -q -y install $curInstallPackages ; }
 
 [ -f /etc/lighttpd/lighttpd.conf ]  && { sudo mv /etc/lighttpd/lighttpd.conf /etc/lighttpd/lighttpd.conf.org ; sudo ln -s $configDir/lighttpd/lighttpd.conf /etc/lighttpd ; }
+[ ! -h /etc/lighttpd/conf-enabled/10-cgi.conf ] && sudo ln -s $configDir/lighttpd/10-cgi.conf /etc/lighttpd/conf-enabled
 [ ! -h /etc/lighttpd/conf-enabled/10-accesslog.conf ] && sudo ln -s ../conf-available/10-accesslog.conf /etc/lighttpd/conf-enabled
 [ ! -h /etc/lighttpd/conf-enabled/10-dir-listing.conf ] && sudo ln -s ../conf-available/10-dir-listing.conf /etc/lighttpd/conf-enabled
-[ ! -h /etc/lighttpd/conf-enabled/10-cgi.conf ] && sudo ln -s $configDir/lighttpd/conf-enabled/10-cgi.conf /etc/lighttpd/conf-enabled
 
 #--- make sure Apache2 is disabled, if installed
 
