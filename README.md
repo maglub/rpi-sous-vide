@@ -145,7 +145,7 @@ off
 
 ## DS18s20
 
-<img src=pics/git@github.com:maglub/rpi-sous-vide.git>
+<img src=pics/raspberry-pi-ds18b20-connections.jpg >
 
 # Runtime
 
