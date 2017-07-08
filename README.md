@@ -80,7 +80,7 @@ cd rpi-sous-vide
 sudo shutdown -r now
 ```
 
-## Different input/control/output possibilities
+## Different input/control/output/logging possibilities
 
 The way the system figures out which input/control/output script to use, is set by symbolic links in ./bin, where the default symlinks are set as follows:
 
@@ -88,6 +88,7 @@ The way the system figures out which input/control/output script to use, is set 
 bin/control -> control-available/pid.enhanced
 bin/input -> input-available/input-18b20
 bin/output -> output-available/heaterOutput
+bin/logging -> logging-available/none
 ```
 
 You can copy these scripts and adapt them in any way you like. In particular the input script might need different setup on your Raspberry Pi, and the setup script will try and satisfy this by calling the input script with the "--setup" parameter.
@@ -97,6 +98,18 @@ bin/input --setup
 ```
 
 So if you have some esoteric hardware that need special configuration (like the 1wire sensors), you can put that in your input file in the doSetup() function.
+
+## Influxdb logging
+
+If you have an influxdb server available, you can redirect the logging to it and create a new database for it. Update the influxdb variables in conf/app.conf, and symlink the logging script. In the influxdb script, there is an exampla curl call to create the database.
+
+```
+cd bin
+ln -sf logging-available/influxdb logging
+
+ls -l logging
+lrwxrwxrwx 1 pi pi 26 Jul  8 19:35 logging -> logging-available/influxdb
+```
 
 
 # Usage
