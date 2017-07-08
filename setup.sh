@@ -125,12 +125,14 @@ visudo -c -f conf/sudoers.d/rpi-sous-vide  && {
 cat<<EOT
 
 #================================
-# Run composer
+# Run composer to install php slim and its dependencies
 #================================
 EOT
 
-echo "* Fetching composer"
-[ ! -f /usr/local/bin/composer ] && { curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer ; }
+[ ! -f /usr/local/bin/composer ] && {
+  echo "* Fetching composer"
+  curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer ;
+}
 cd $this_dir
 composer install
 cd -
