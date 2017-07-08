@@ -1,10 +1,12 @@
 # Introduction
-Raspberry pi based sous vide
 
 2016-05-15, NOTE: This is a work in progress. Please wait a few weeks and come back.
+2017-07-08, NOTE: This is still a work in progress. It is slowly getting into a state where normal people can install it and use it.
 
 
-This was a "one day project" that turned into a weekend project, that turned into... It is in no state to be used by anyone else than me at the moment, but the basic idea is to have a web-gui based on:
+Raspberry pi based sous vide is a PID controller for a home built sous vide machinery, or a home built smoker (to smoke meat, fish, etc). The basic principle is the same. You measure the media (water or air), and decide to turn on or off a heating element. I have used this setup successfully for both.
+
+This was a "one day project" that turned into a weekend project, that turned into... It is not really in a state to be used by anyone else than me at the moment, but the basic idea is to have a web-gui based on:
 
 
 ````
@@ -54,12 +56,13 @@ Separating the components in that way, I can play around with different ways of 
 
 # Installation
 
-* Clone this repo to your linux/Mac (no idea what to do for Windows users)
 * Install raspbian on an SD card
-* There is some ansible scripts here, that can be used to set up the raspberry pi.
 * Log into your raspberry pi
+* Install git
 * Clone this repo to ~pi
 * Run the setup.sh script (will download and set up php dependencies)
+
+On the raspberry pi:
 
 ```
 sudo apt-get update
