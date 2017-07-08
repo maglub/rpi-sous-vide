@@ -80,6 +80,18 @@ cd rpi-sous-vide
 sudo shutdown -r now
 ```
 
+Start the input, control, and output processes in the web GUI. You can also do it on the command line:
+
+```
+bin/wrapper startProcesses
+```
+
+Set a target temperature:
+
+```
+bin/wrapper setSetpoint 65
+```
+
 ## Different input/control/output/logging possibilities
 
 The way the system figures out which input/control/output script to use, is set by symbolic links in ./bin, where the default symlinks are set as follows:
@@ -115,6 +127,19 @@ ls -l logging
 lrwxrwxrwx 1 pi pi 26 Jul  8 19:35 logging -> logging-available/influxdb
 ```
 
+Influxdb examples:
+
+* Create database "smoker" on server 192.168.4.55
+
+```
+curl -G http://192.168.4.55:8086/query --data-urlencode "q=CREATE DATABASE smoker"
+```
+
+* Query all values from table "sensor_data" in the database "smoker" server 192.168.4.55
+
+```
+curl -G 'http://192.168.4.55:8086/query?pretty=true' --data-urlencode "db=smoker" --data-urlencode "q=SELECT * FROM sensor_data"
+```
 
 # Usage
 
