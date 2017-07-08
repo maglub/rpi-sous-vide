@@ -16,7 +16,7 @@ configDir=$this_dir/conf
 
 cat<<EOT
 #================================
-# php5 lighttpd
+# packages for php5 and lighttpd
 #================================
 EOT
 curInstallPackages=""
@@ -27,6 +27,14 @@ done
 
 [ -n "$curInstallPackages" ] && { echo "  - Installing packages: $curInstallPackages" ; sudo apt-get -q -y install $curInstallPackages ; }
 
+
+cat<<EOT
+#================================
+# Configuring lighttpd
+#================================
+EOT
+
+echo "* Setting up symlinks"
 [ -f /etc/lighttpd/lighttpd.conf ]  && { sudo mv /etc/lighttpd/lighttpd.conf /etc/lighttpd/lighttpd.conf.org ; sudo ln -s $configDir/lighttpd/lighttpd.conf /etc/lighttpd ; }
 [ ! -h /etc/lighttpd/conf-enabled/10-cgi.conf ] && sudo ln -s $configDir/lighttpd/10-cgi.conf /etc/lighttpd/conf-enabled
 [ ! -h /etc/lighttpd/conf-enabled/10-accesslog.conf ] && sudo ln -s ../conf-available/10-accesslog.conf /etc/lighttpd/conf-enabled
@@ -35,8 +43,12 @@ done
 #--- make sure Apache2 is disabled, if installed
 
 dpkg -s apache2 >/dev/null 2>&1 && {
-  sudo service apache2 stop
+  echo -n "* Disabling apache2"
+  sudo service apache2 stop >/dev/null 2>&1
   sudo update-rc.d apache2 disable > /dev/null
+  echo " - Done!"
+
+  echo "* Restarting lighttpd"
   sudo service lighttpd restart
 }
 
@@ -44,6 +56,7 @@ cat<<EOT
 #================================
 # Run composer
 #================================
+echo "* Fetching composer"
 EOT
 curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
 cd $this_dir
