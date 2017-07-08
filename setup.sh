@@ -4,15 +4,21 @@ this_dir=$(cd `dirname $0`; pwd)
 binDir=$this_dir/bin
 configDir=$this_dir/conf
 
-#cat<<EOT
-##================================
-## Install ansible
-##================================
-#EOT
-#sudo apt-get install gcc libffi-dev libssl-dev python-dev
-#sudo easy_install pip
-#sudo pip install ansible
-#sudo apt-get -y install ansible
+cat<<EOT
+
+#================================
+# Config file etc/app.conf
+#================================
+EOT
+
+echo "* Checking for config file $this_dir/etc/app.conf"
+
+[ ! -f $this_dir/conf/app.conf ] && {
+
+  echo "  - Copying template to $this_dir/etc/app.conf"
+  cp $this_dir/conf/app.conf.template $this_dir/conf/app.conf 
+
+}
 
 cat<<EOT
 
