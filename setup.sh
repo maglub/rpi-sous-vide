@@ -15,6 +15,7 @@ configDir=$this_dir/conf
 #sudo apt-get -y install ansible
 
 cat<<EOT
+
 #================================
 # packages for php5 and lighttpd
 #================================
@@ -33,6 +34,7 @@ done
 
 
 cat<<EOT
+
 #================================
 # Configuring lighttpd
 #================================
@@ -57,11 +59,13 @@ dpkg -s apache2 >/dev/null 2>&1 && {
 }
 
 cat<<EOT
+
 #================================
 # Run composer
 #================================
-echo "* Fetching composer"
 EOT
+
+echo "* Fetching composer"
 curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
 cd $this_dir
 composer install
