@@ -46,6 +46,9 @@ echo "* Setting up symlinks"
 [ ! -h /etc/lighttpd/conf-enabled/10-accesslog.conf ] && sudo ln -s ../conf-available/10-accesslog.conf /etc/lighttpd/conf-enabled
 [ ! -h /etc/lighttpd/conf-enabled/10-dir-listing.conf ] && sudo ln -s ../conf-available/10-dir-listing.conf /etc/lighttpd/conf-enabled
 
+echo "* Relaxing file permissions on logfiles"
+sudo chmod 755 /var/log/lighttpd
+
 #--- make sure Apache2 is disabled, if installed
 
 dpkg -s apache2 >/dev/null 2>&1 && {
