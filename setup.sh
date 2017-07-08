@@ -51,7 +51,7 @@ echo "* Setting up symlinks"
 dpkg -s apache2 >/dev/null 2>&1 && {
   echo -n "* Disabling apache2"
   sudo service apache2 stop >/dev/null 2>&1
-  sudo update-rc.d apache2 disable > /dev/null
+  sudo update-rc.d apache2 disable > /dev/null 2>&1
   echo " - Done!"
 
   echo "* Restarting lighttpd"
