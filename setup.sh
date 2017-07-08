@@ -56,7 +56,7 @@ curInstallPackages=""
 #--- note, php5-cgi has to come before php5. Otherwise apt-get will install apache2 to satisfy dependencies
 #--- https://wildlyinaccurate.com/installing-php-on-debian-without-apache/
 
-for package in php5-cgi php5 php5-sqlite php5-cli php5-rrd php5-curl lighttpd sqlite3 screen
+for package in php5-cgi php5 php5-sqlite php5-cli php5-rrd php5-curl lighttpd sqlite3 bc screen
 do
   echo "  - Checking $package"
   sudo dpkg -s $package >/dev/null 2>&1 || { echo "  - Adding package $package to the install list" ; curInstallPackages="$curInstallPackages $package" ; }
@@ -129,7 +129,7 @@ cat<<EOT
 EOT
 
 echo "* Fetching composer"
-curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
+[ ! -f /usr/local/bin/composer ] && { curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer ; }
 cd $this_dir
 composer install
 cd -
