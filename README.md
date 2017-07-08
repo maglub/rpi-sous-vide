@@ -161,6 +161,12 @@ Start the three programs:
 * Main inspiration: https://learn.adafruit.com/sous-vide-powered-by-arduino-the-sous-viduino/pid
 * Arduino PID library: http://brettbeauregard.com/blog/2011/04/improving-the-beginners-pid-introduction/
 
+* Adafruit tutorial for 1wire 18b20: https://learn.adafruit.com/adafruits-raspberry-pi-lesson-11-ds18b20-temperature-sensing/hardware
+* DS18b20 datasheet: https://datasheets.maximintegrated.com/en/ds/DS18B20.pdf 
+
+* https://socomponents.co.uk/raspberry-pi-ds18b20-temperature-sensing/
+* http://www.reuk.co.uk/wordpress/raspberry-pi/ds18b20-temperature-sensor-with-raspberry-pi/
+
 * https://developer-blog.net/wp-content/uploads/2013/09/raspberry-pi-rev2-gpio-pinout.jpg
 * http://pdf1.alldatasheet.com/datasheet-pdf/view/228064/ONSEMI/MPSA05.html
 
