@@ -67,7 +67,7 @@ curInstallPackages=""
 #--- note, php5-cgi has to come before php5. Otherwise apt-get will install apache2 to satisfy dependencies
 #--- https://wildlyinaccurate.com/installing-php-on-debian-without-apache/
 
-for package in php5-cgi php5 php5-sqlite php5-cli php5-rrd php5-curl lighttpd
+for package in php5-cgi php5 php5-sqlite php5-cli php5-rrd php5-curl lighttpd sqlite3
 do
   echo "  - Checking $package"
   sudo dpkg -s $package >/dev/null 2>&1 || { echo "  - Adding package $package to the install list" ; curInstallPackages="$curInstallPackages $package" ; }
@@ -102,6 +102,20 @@ dpkg -s apache2 >/dev/null 2>&1 && {
 
   echo "* Restarting lighttpd"
   sudo service lighttpd restart
+}
+
+cat<<EOT
+
+#================================
+# Set up sqlite3 database
+#================================
+EOT
+
+echo "* Checking if the database exists"
+
+[ ! -f $dbDir/app.sqlite3 ] && {
+  echo "  - Creating new sqlite3 database"
+  sqlite3 /var/lib/rpi-sous-vide/db/app.sqlite3 "CREATE TABLE a(a number);"
 }
 
 cat<<EOT
