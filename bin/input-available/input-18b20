@@ -46,6 +46,7 @@ then
     --setup)
       echo "* Setup of requirements for $this_script"
       doSetup
+      exit 0
     ;;
   esac
 fi
