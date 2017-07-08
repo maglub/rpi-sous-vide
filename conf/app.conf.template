@@ -1,4 +1,38 @@
+#--- system
+libDir=/var/lib/rpi-sous-vide
+tmpDir=${libDir}/tmp
+
+#--- GPIO
 heaterPin=17
 pumpPin=27
 
 gpioPins="$heaterPin $pumpPin"
+
+#--- heater related variables
+
+heaterDutyFile="$tmpDir/heaterDuty"
+
+#--- ms
+heater_timeWindow=2
+heater_dutySleepTime=0.05
+#--- in seconds
+heater_configFileReadTime=0.05
+
+#--- pid variables
+
+#pid_kp=150
+#pid_ki=0.1
+#pid_kd=0.45
+
+pid_kp=30
+pid_ki=10
+pid_offset_ki=3
+pid_kd=500
+
+#pid_kp=84.55
+#pid_ki=598798
+#pid_kd=174699.5
+
+pid_outMin=0
+pid_outMax=100
+
