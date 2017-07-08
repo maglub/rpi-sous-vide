@@ -13,7 +13,7 @@ function doSetup(){
 
   #--- /boot/config.txt
   echo "* Checking /boot/config.txt"
-  [ -z "$(grep -v "^#" /boot/config.txt | grep "dtoverlay=w1-gpio") ] && {
+  [ -z "$(grep -v "^#" /boot/config.txt | grep "dtoverlay=w1-gpio")" ] && {
     echo "  - Adding config to /boot/config.txt"
     echo "dtoverlay=w1-gpio" | sudo tee -a /boot/config.txt
     echo "  - Reboot required!"
@@ -26,7 +26,7 @@ function doSetup(){
   echo "* Checking /etc/modules"
   for module in $modules
   do
-    [ -z "$(grep -v "^#" /etc/modules | grep $module) ] && {
+    [ -z "$(grep -v "^#" /etc/modules | grep $module)" ] && {
       echo "  - Adding module to module to /etc/modules"
       echo "$module" | sudo tee -a /etc/modules
       echo "  - Reboot required!"
