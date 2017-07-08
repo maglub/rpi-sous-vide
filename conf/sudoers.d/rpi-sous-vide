@@ -1,0 +1,6 @@
+User_Alias PILOGGER_HTTPD = www-data
+Cmnd_Alias PILOGGER_HTTPD_CMD = /home/pi/rpi-sous-vide/bin/wrapper killProcesses , /home/pi/piLogger/bin/startup.sh
+
+PILOGGER_HTTPD ALL=(ALL) NOPASSWD: PILOGGER_HTTPD_CMD
+
+pi ALL=(ALL) NOPASSWD: ALL
