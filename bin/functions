@@ -86,11 +86,13 @@ function setHeater(){
 }
 
 function getSetpointFromFile(){
-  cat $setpointFile | awk '{printf "%s", $NF}'
+  [ -f ${setpointFile} ] && { cat $setpointFile | awk '{printf "%s", $NF}' ; return 0 ; }
+  echo 0
 }
 
 function getTemperatureFromFile(){
-  cat $temperatureFile | awk '{printf "%s", $NF}'
+  [ -f ${temperatureFile} ] && { cat $temperatureFile | awk '{printf "%s", $NF}' ; return 0 ; }
+  echo 0
 }
 
 function setTemperatureToFile(){
@@ -109,7 +111,8 @@ function setOutput(){
 }
 
 function getHeaterDuty(){
-  cat ${heaterDutyFile} | grep -vE "^#|^$"
+  [ -f ${heaterDutyFile} ] && { cat ${heaterDutyFile} | grep -vE "^#|^$" ; return 0 ; }
+  echo 0
 }
 
 function setSetpoint(){
