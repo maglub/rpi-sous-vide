@@ -31,10 +31,10 @@ The future system is thought to be illustrated like this:
                                   +--------------------------------+
  tmp/{temperature, heaterDuty} -> |              app api           | -> tmp/setpoint
                                   +--------------------------------+
-		                                          ^
-		  +---------+                             |
-          |  logger | -------> db/{temperature, heaterDuty, ...}.rrd
-		  +---------+
+	                                           ^
+           +---------+                             |
+           |  logger | -------> db/{temperature, heaterDuty, ...}.rrd
+           +---------+
                 ^
                 |
                 +-------------------------------------+
