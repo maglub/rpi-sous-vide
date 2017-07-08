@@ -53,7 +53,7 @@ function updateStats(){
   d3.json(url, function(data){
       document.getElementById("temperature").innerHTML = "Temperature: " + data["temperature"];
       document.getElementById("setpoint").innerHTML = "Setpoint: " + data["setpoint"];
-      document.getElementById("heaterDuty").innerHTML = "HeaterDuty: 0" + data["heaterDuty"];
+      document.getElementById("heaterDuty").innerHTML = "HeaterDuty: " + data["heaterDuty"];
       //drawBar(data);
       drawArc(data);
   });
