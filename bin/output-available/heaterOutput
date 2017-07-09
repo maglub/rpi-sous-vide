@@ -49,6 +49,7 @@ function printStatus(){
 }
 
 function initialize(){
+  initRelays
   heater_configFileReadInterval=$(echo "scale=0;${heater_configFileReadTime}/${heater_dutySleepTime}" | bc)
   heater_dutyWindowInterval=$(echo "scale=0;${heater_timeWindow}/${heater_dutySleepTime}" | bc)
 }
