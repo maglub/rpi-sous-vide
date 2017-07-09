@@ -2,7 +2,10 @@
 [ -z "$temperatureFile" ] && temperatureFile="$tmpDir/temperature"
 [ -z "$setpointFile" ]    && setpointFile="$tmpDir/setpoint"
 [ -z "$heaterDutyFile" ]  && heaterDutyFile="$tmpDir/heaterDuty"
-[ ! -f "$setpointFile" ]  && { echo 0 > $setpointFile ; chmod 777 $setpointFile ; }
+
+[ ! -f "$temperatureFile" ]  && { echo 0 > $temperatureFile ; }
+[ ! -f "$heaterDutyFile" ]   && { echo 0 > $heaterDutyFile ; }
+[ ! -f "$setpointFile" ]     && { echo 0 > $setpointFile ; }
 
 function initRelays(){
   local pin=""
