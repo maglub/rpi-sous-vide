@@ -96,6 +96,25 @@ function startProcesses(){
 	return $curRes;
 }
 
+function getProcesses(){
+
+        $ret['input']   = array("status"=>"not running", "pid"=>"");
+        $ret['control'] = array("status"=>"not running", "pid"=>"");
+        $ret['output']  = array("status"=>"not running", "pid"=>"");
+
+        exec('ps ahxwwo pid:1,command:1 | grep -E "[S]CREEN.*(input|control|output)" | sed -e "s/SCREEN -d -m \.\///"', $curRes);
+
+        foreach ($curRes as $row) {
+          $exp = explode(" ", $row);
+          $ret[$exp[1]]['pid'] = $exp[0] ;
+          $ret[$exp[1]]['status'] = "running"; 
+        }
+
+        return $ret;
+
+}
+
+
 function getPid(){
   $config = getAppConfig();
   return $config;

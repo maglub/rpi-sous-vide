@@ -117,21 +117,21 @@ $app->map('/config', function () use ($app,$root) {
    $app->redirect($app->urlFor($returnTo));
   }
 
+/*
   $processes['input']['status'] = getInputRunning();
   $processes['input']['pid'] = getInputPid();
   $processes['control']['status'] = getControlRunning();
   $processes['control']['pid'] = getControlPid();
   $processes['output']['status'] = getOutputRunning();
   $processes['output']['pid'] = getOutputPid();
+*/
+
+  $processes = getProcesses();
 
   $setpoint = getSetpointByFile();
 
+  $app->render('config.html', ["processes"=>$processes, "setpoint"=>$setpoint]);
 
-#    $crontab = shell_exec("sudo -u pi ${root}/../bin/wrapper getCrontab 2>/dev/null");
-
-    $app->render('config.html', ["processes"=>$processes, "setpoint"=>$setpoint]);
-
-#    $app->render('config.html', ['plotConfig' => getDbPlotConfig(), 'sensorGroups' => getSensorGroupsAll(), 'plotGroups' => getPlotGroups(), 'installedPlugins' => getListOfInstalledPlugins(), 'activePlugins' => getListOfActivePlugins(), 'plugininfo' => getPluginInfos(), "crontab" => $crontab ]);
 })->via('GET', 'POST')->name('config');
 
 #=============================================================
