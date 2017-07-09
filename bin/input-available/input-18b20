@@ -11,6 +11,10 @@ this_script=$(basename $0)
 #=====================================
 function doSetup(){
 
+  #=============================================
+  # This function will set up the 1wire requirements
+  # when called
+  #=============================================
   local rebootRequired=""
 
   #--- /boot/config.txt
@@ -58,32 +62,25 @@ then
   esac
 fi
 
-initRelays
+#initRelays
 
 windowCount=0
 windowCountMax=10
 
 while true
 do
-  #res=$($this_dir/getTemperature)
-
   TS=$(date "+%Y%m%d_%H%M%S %s")
 
   curTemperature=$(getTemperature)
   setTemperatureToFile $curTemperature
 
-  curSetpoint=$(getSetpointFromFile)
-  curPumpStatus=$(getPumpStatus)
-  curHeaterStatus=$(getHeaterStatus)
-
-  printf "${TS} setpoint: %-6.2f temperature: %-6.2f pump: %-5s heater: %-5s\n" $curSetpoint $curTemperature $curPumpStatus $curHeaterStatus
+  printf "${TS} temperature: %-6.2f\n" $curTemperature
   sleep 0.1
 
   (( windowCount +=1 ))
   if [ $windowCount -ge $windowCountMax ]
   then
     windowCount=0
-    $this_dir/logging smoker-setpoint $curSetpoint
     $this_dir/logging smoker-temp $curTemperature
   fi
 
