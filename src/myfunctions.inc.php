@@ -102,6 +102,7 @@ function getProcesses(){
         $ret['control'] = array("status"=>"not running", "pid"=>"");
         $ret['output']  = array("status"=>"not running", "pid"=>"");
 
+        #--- find all processes in the form "SCREEN -d -m input" for input, control, and output
         exec('ps ahxwwo pid:1,command:1 | grep -E "[S]CREEN.*(input|control|output)" | sed -e "s/SCREEN -d -m \.\///"', $curRes);
 
         foreach ($curRes as $row) {
@@ -111,7 +112,6 @@ function getProcesses(){
         }
 
         return $ret;
-
 }
 
 

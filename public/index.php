@@ -113,18 +113,9 @@ $app->map('/config', function () use ($app,$root) {
         break;
 
     }
-   $returnTo = ($app->request->post('returnTo') != null)?$app->request->post('returnTo'):"config"; 
-   $app->redirect($app->urlFor($returnTo));
+    $returnTo = ($app->request->post('returnTo') != null)?$app->request->post('returnTo'):"config"; 
+    $app->redirect($app->urlFor($returnTo));
   }
-
-/*
-  $processes['input']['status'] = getInputRunning();
-  $processes['input']['pid'] = getInputPid();
-  $processes['control']['status'] = getControlRunning();
-  $processes['control']['pid'] = getControlPid();
-  $processes['output']['status'] = getOutputRunning();
-  $processes['output']['pid'] = getOutputPid();
-*/
 
   $processes = getProcesses();
 
