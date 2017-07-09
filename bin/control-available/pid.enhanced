@@ -163,7 +163,10 @@ do
     compute 
     setOutput $pid_output
     pid_windowCount=0
+
+    $this_dir/logging smoker-setpoint $curSetpoint
     $this_dir/logging smoker-output-pwm $pid_output
+
   fi
 
   sleep $pid_sleepTime
