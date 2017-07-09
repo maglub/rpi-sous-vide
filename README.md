@@ -65,6 +65,7 @@ Separating the components in that way, I can play around with different ways of 
 * Install git
 * Clone this repo to ~pi
 * Run the setup.sh script (will download and set up php dependencies)
+* Reboot (since setup.sh will add items to /boot/config.txt and /etc/modules.conf)
 
 On the raspberry pi:
 
