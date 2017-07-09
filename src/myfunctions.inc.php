@@ -44,7 +44,11 @@ function getTemperatureByFile(){
 function getSetpointByFile(){
 	$curRes = `../bin/wrapper getSetpointFromFile`;
 	return $curRes;
+}
 
+function setSetpoint($temperature = 0){
+	$curRes = `../bin/wrapper setSetpoint {$temperature}`;
+	return $curRes;
 }
 
 function getHeaterDutyByFile(){

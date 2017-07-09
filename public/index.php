@@ -63,17 +63,21 @@ $twig->addGlobal('isAuthenticated', isAuthenticated());
 # Main
 #===================================================
 
-$app->get('/:route', function () use ($app) {
+$app->get('/', function () use ($app) {
   
   $app->render('index.html', [ "temperature" => getTemperatureByFile(), "setpoint" => getSetpointByFile(), "heaterDuty" => getHeaterDutyByFile() ]);
-})->conditions(array("route" => "(|home)"));
+})->name("root");
 
 #=============================================================
 # /config
 #=============================================================
 $app->map('/config', function () use ($app,$root) {
   if ($app->request()->isPost()) {
-    $action = $app->request->post('actionProcesses');
+
+    #--- actionTemperature
+
+    #--- actionProcesses
+    $action = $app->request->post('action');
     switch ($action) {
       case "Start":
         $res = startProcesses(); 
@@ -83,8 +87,34 @@ $app->map('/config', function () use ($app,$root) {
         $res = killProcesses(); 
         break;
 
+      case "Temperature":
+        $temperature = $app->request->post('temperature');
+        $res = setSetpoint($temperature);
+        break;
+
+      case "Temperature0":
+        $res = setSetpoint(0);
+        break;
+
+      case "Temperature70":
+        $res = setSetpoint(70);
+        break;
+
+      case "Temperature80":
+        $res = setSetpoint(80);
+        break;
+
+      case "Temperature90":
+        $res = setSetpoint(90);
+        break;
+
+      case "Temperature100":
+        $res = setSetpoint(100);
+        break;
+
     }
-    $app->redirect('/config');
+   $returnTo = ($app->request->post('returnTo') != null)?$app->request->post('returnTo'):"config"; 
+   $app->redirect($app->urlFor($returnTo));
   }
 
   $processes['input']['status'] = getInputRunning();
@@ -94,10 +124,12 @@ $app->map('/config', function () use ($app,$root) {
   $processes['output']['status'] = getOutputRunning();
   $processes['output']['pid'] = getOutputPid();
 
+  $setpoint = getSetpointByFile();
+
 
 #    $crontab = shell_exec("sudo -u pi ${root}/../bin/wrapper getCrontab 2>/dev/null");
 
-    $app->render('config.html', ["processes"=>$processes]);
+    $app->render('config.html', ["processes"=>$processes, "setpoint"=>$setpoint]);
 
 #    $app->render('config.html', ['plotConfig' => getDbPlotConfig(), 'sensorGroups' => getSensorGroupsAll(), 'plotGroups' => getPlotGroups(), 'installedPlugins' => getListOfInstalledPlugins(), 'activePlugins' => getListOfActivePlugins(), 'plugininfo' => getPluginInfos(), "crontab" => $crontab ]);
 })->via('GET', 'POST')->name('config');
