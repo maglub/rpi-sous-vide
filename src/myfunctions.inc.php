@@ -47,7 +47,7 @@ function getSetpointByFile(){
 }
 
 function setSetpoint($temperature = 0){
-	$curRes = `../bin/wrapper setSetpoint {$temperature}`;
+	$curRes = `sudo -u pi ../bin/wrapper setSetpoint {$temperature}`;
 	return $curRes;
 }
 

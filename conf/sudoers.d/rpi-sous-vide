@@ -1,5 +1,5 @@
 User_Alias PILOGGER_HTTPD = www-data
-Cmnd_Alias PILOGGER_HTTPD_CMD = /home/pi/rpi-sous-vide/bin/wrapper killProcesses , /home/pi/rpi-sous-vide/bin/wrapper startProcesses
+Cmnd_Alias PILOGGER_HTTPD_CMD = /home/pi/rpi-sous-vide/bin/wrapper killProcesses , /home/pi/rpi-sous-vide/bin/wrapper startProcesses , /home/pi/rpi-sous-vide/bin/wrapper setSetpoint *
 
 PILOGGER_HTTPD ALL=(ALL) NOPASSWD: PILOGGER_HTTPD_CMD
 
