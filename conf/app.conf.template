@@ -1,6 +1,7 @@
 #--- system
 libDir=/var/lib/rpi-sous-vide
-tmpDir=${libDir}/tmp
+#tmpDir=${libDir}/tmp
+tmpDir=/dev/shm
 
 #--- GPIO
 heaterPin=17
