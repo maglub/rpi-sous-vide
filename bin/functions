@@ -180,6 +180,7 @@ function killProcesses(){
     #kill -9 $processId 
     screen -X -S $processId quit
   done
+  setHeater off
 }
 
 function startProcesses(){

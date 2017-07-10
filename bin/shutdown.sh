@@ -8,8 +8,6 @@ echo 0 > $temperatureFile
 echo 0 > $heaterDutyFile
 echo 0 > $setpointFile 
 
-cd /home/pi/rpi-sous-vide/bin
+/home/pi/rpi-sous-vide/bin/wrapper killProcesses
+/home/pi/rpi-sous-vide/bin/wrapper setHeater off
 
-screen -d -m ./input
-screen -d -m ./control
-screen -d -m ./output
