@@ -164,7 +164,7 @@ do
     setOutput $pid_output
     pid_windowCount=0
 
-    $this_dir/logging smoker-setpoint $curSetpoint
+    $this_dir/logging smoker-setpoint $pid_setpoint
     $this_dir/logging smoker-output-pwm $pid_output
 
   fi
