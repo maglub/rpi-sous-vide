@@ -2,6 +2,7 @@
 
 this_dir=$(cd $(dirname $0); pwd)
 . $this_dir/../conf/app.conf
+. $this_dir/functions
 
 #--- Zero the control files, to avoid accidents
 echo 0 > $temperatureFile
