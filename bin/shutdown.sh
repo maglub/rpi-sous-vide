@@ -10,6 +10,6 @@ echo 0 > $heaterDutyFile
 echo 0 > $setpointFile 
 
 #--- call functions in the functions file
-killProcesses
-setHeater off
+killProcesses > /dev/null
+setHeater off > /dev/null
 
