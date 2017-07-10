@@ -3,9 +3,9 @@
 [ -z "$setpointFile" ]    && setpointFile="$tmpDir/setpoint"
 [ -z "$heaterDutyFile" ]  && heaterDutyFile="$tmpDir/heaterDuty"
 
-[ ! -f "$temperatureFile" ]  && { echo 0 > $temperatureFile ; sudo chown pi:pi $temperatureFile ; }
-[ ! -f "$heaterDutyFile" ]   && { echo 0 > $heaterDutyFile ; sudo chown pi:pi $heaterDutyFile ; }
-[ ! -f "$setpointFile" ]     && { echo 0 > $setpointFile ; sudo chown pi:pi $heaterDutyFile ; }
+[ ! -f "$temperatureFile" ]  && { echo 0 > $temperatureFile ; sudo /bin/chown pi:pi $temperatureFile ; }
+[ ! -f "$heaterDutyFile" ]   && { echo 0 > $heaterDutyFile ; sudo /bin/chown pi:pi $heaterDutyFile ; }
+[ ! -f "$setpointFile" ]     && { echo 0 > $setpointFile ; sudo /bin/chown pi:pi $setpointFile ; }
 
 function initRelays(){
   local pin=""
