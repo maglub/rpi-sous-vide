@@ -198,9 +198,14 @@ $app->get('/api/all', function() use ($app, $root){
   $curTemperature = getTemperatureByFile();
   $curSetpoint = getSetpointByFile();
   $curHeaterDuty = getHeaterDutyByFile();
+
+  $processes = getProcesses();
+
+/*
   $inputRunning = getInputRunning();
   $controlRunning = getControlRunning();
   $outputRunning = getOutputRunning();
+*/
 
   $curRes = [ "kp"          => isset($curPid["pid_kp"])?$curPid["pid_kp"]:0,
               "ki"          => isset($curPid["pid_ki"])?$curPid["pid_ki"]:0,
@@ -210,10 +215,9 @@ $app->get('/api/all', function() use ($app, $root){
               "temperature" => $curTemperature,
               "setpoint"    => $curSetpoint,
               "status"      => "ok" ,
-              "inputRunning"    => $inputRunning,
-              "controlRunning"  => $controlRunning,
-              "outputRunning"   => $outputRunning,
-              "heaterDuty"  => $curHeaterDuty ];
+              "processes"   => $processes,
+              "heaterDuty"  => $curHeaterDuty
+            ];
 
   echo json_encode($curRes);
   return 0;
