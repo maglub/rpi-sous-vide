@@ -190,9 +190,9 @@ off
 | SSR-25DA (2)| | Input: +5V, MPSA05 pin 3 |
 | SSR-25DA (2)| | Output: 230V phase, pump |
 
-## DS18s20
+## Wiring it up
 
-<img src=pics/raspberry-pi-ds18b20-connections.jpg >
+<img src=pics/schematics.png >
 
 # Runtime
 
