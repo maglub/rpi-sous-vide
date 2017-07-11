@@ -167,32 +167,20 @@ off
 
 # BOM (bill of materials)
 
-| Type | Item            | Number | Cost | Where | Link |
+| Type | Item            | Pcs    | Cost | Where | Link |
 |-------|----------------|--------|------|-------|------|
 | SOC   | Raspberry Pi 3 |      1 |      |       |      |
-| Relay | SSR-25DA       |      2 |      |       |      |
+| Relay | SSR-25DA       |      1 |      |       |      |
 | Thermometer | 18B20    |      1 |      |       |      |
-| Resistor | 4.7k        |      3 |      |       |      |
-| Transistor| MPSA05     |      2 |      |       |      |
-| Aquarium pump |
-| Old water boiler |
+| Resistor | 4.7k        |      2 |      |       |      |
+| Transistor| MPSA05     |      1 |      |       |      |
 
 
-# Hardware
+## Wiring it up
 
-| What       | Raspberry pi | Notes |
-|------------|--------------|-------|
-| 18B20      | GPIO4        |       |
-| MPSA05 (1) | base -> 4.7R -> GPIO17       | |
-| MPSA05 (2) | base -> 4.7R -> GPIO27       |
-| SSR-25DA (1)| | Input: +5V, MPSA05 pin 3 |
-| SSR-25DA (1)| | Output: 230V phase, boiler |
-| SSR-25DA (2)| | Input: +5V, MPSA05 pin 3 |
-| SSR-25DA (2)| | Output: 230V phase, pump |
+* Note: I could not find an SSR-25 DA in the Fritzing library.
 
-## DS18s20
-
-<img src=pics/raspberry-pi-ds18b20-connections.jpg >
+<img src=pics/schematics.png >
 
 # Runtime
 
