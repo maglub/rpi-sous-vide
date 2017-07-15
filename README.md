@@ -21,40 +21,44 @@ The web gui is useful for monitoring and setting constants and setpoints.
 
 One of my design criterias is to separate the problem domain on the low level to three "daemons":
 
-* input (temperature)
-* control (temperature control, i.e PID or other algorithm)
-* output heater control (setting the heater to a range of 0% to 100%)
+* input (temperature) => Gets input from your hardware (i.e ds18s20 or MAX6675), writes to tmp/temperature
+* control (temperature control, i.e PID or other algorithm) => reads from tmp/temperature and tmp/setpoint, writes to tmp/heaterDuty 
+* output heater control (setting the heater to a range of 0% to 100%) reads from tmp/heaterDuty, controls the relay(s)
 
-The future system is thought to be illustrated like this:
+Conceptual view:
 
 ```
-          +------------------------------+   +----------+   +----------------------+
-          |          web gui             |   | rest api |   | LCD/Display, buttons |
-          +------------------------------+   +----------+   +----------------------+
-                                      |            |            |
-                                  +--------------------------------+
- tmp/{temperature, heaterDuty} -> |              app api           | -> tmp/setpoint
-                                  +--------------------------------+
-	                                           ^
-           +---------+                             |
-           |  logger | -------> db/{temperature, heaterDuty, ...}.rrd
-           +---------+
-                ^
-                |
-                +-------------------------------------+
-                     |                                |
-  18B20              |                                |
-    |                |                                |
+      +------------------------------+   +----------+   +----------------------+
+      |          web gui             |   | rest api |   | LCD/Display, buttons |
+      +------------------------------+   +----------+   +----------------------+
+                                  |            |            |
+                              +--------------------------------+
+                              |              app api           | 
+                              |          (bin/functions)       | 
+                              +--------+-----------------------+
+	                               |           ^
+           +---------+                 |           |
+           |  logger |-> i.e influx    |           | 
+           +---------+                 |           |
+                ^                      |           |
+                |                      |           |
+                +----+-----------------)----+------+--+
+                     |                 |    |         |
+                     |                 V    |         |
+                     |              tmp/setpoint      |
+  18B20              |                 |              |
+    |                |                 V              |
 +-------+            |          +---------+           |          +--------+
 | input | -> tmp/temperature -> | control | -> tmp/heaterDuty -> | output |
 +-------+                       +---------+                      +--------+
-             tmp/setpoint -----------^                               |
-                                                                   Relay ---> Boiler/Heater
+                                                                      |
+                                                                      V
+                                                                   Relay ---> Boiler/Heater/Pump
 ```
 
 Separating the components in that way, I can play around with different ways of implementing the different components. I.e:
 
-* The input could potentially be changed to use PT1000 sensors or k-type sensors through an AD converter/SPI and a different piece of code
+* The input could potentially be changed to use PT1000 sensors or k-type sensors through an AD converter/SPI and a different piece of code. The only thing you need to do, is to write a looping script that reads the temperature(s) from your device, and writes it to the tmp/temperature file.
 * The control can be the default PID code, or be could be any algorithm of choice
 * The output could use the default "slow" PWM or other means of control that can accept a range from 0 - 100 as input.
 
