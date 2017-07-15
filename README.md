@@ -188,9 +188,6 @@ off
 
 # Runtime
 
-
-
-
 Start the three programs:
 
 | Program | Description | Input | Output |
@@ -198,6 +195,12 @@ Start the three programs:
 | bin/input   | Symlinked to the input of choice in input-available. | Thermometer. 18B20 | /var/lib/rpi-sous-vide/tmp/temperature                                             |
 | bin/control | Symlinked to the control program of choice in control-available. | /var/lib/rpi-sous-vide/tmp/{temperature, setpoint} | /var/lib/rpi-sous-vide/tmp/heaterDuty  |
 | bin/output  | Symlinked to the output program of choice in output-available.   | /var/lib/rpi-sous-vide/tmp/heaterDuty              | Solid state relay over GPIO            |
+
+# Notes
+
+## DS18s20
+
+* One sample take ca 0.9 seconds on a Raspberry Pi Zero, and 0.8 seconds on a Raspberry Pi 3B, so don't expect this to work in very fast changing environments. 
 
 # References
 
