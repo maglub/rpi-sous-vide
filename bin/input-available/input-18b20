@@ -88,7 +88,7 @@ echo "* Setting up symlink for ${temperatureFile} to the proper PID input"
   echo "  - There is only one 1wire device available, symlinking $temperatureFile -> $curDevice" 
   ln -sf $curDevice $temperatureFile
 }
-[ $(getW1DevicePaths | wc -l) -ge 1 ] && {
+[ $(getW1DevicePaths | wc -l) -gt 1 ] && {
   curDevice=$(basename $(getW1DevicePaths 2>/dev/null | head -1 ))
   echo "  - There are multiple 1wire device available, symlinking to the first found: $temperatureFile -> $curDevice" 
   [ -f $temperatureFile ] && rm $temperatureFile
