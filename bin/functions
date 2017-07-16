@@ -19,13 +19,16 @@ function initRelays(){
 
 function getW1DevicePath(){
   [ -z "$1" ] && local curDevice=$(ls /sys/bus/w1/devices | grep "^2" | head -1)
-  
   echo "/sys/bus/w1/devices/$curDevice"
 }
 
-function getTemperature(){
-  local devicePath=$(getW1DevicePath)
+function getW1DevicePaths(){
+  ls /sys/bus/w1/devices | grep "^2" | xargs -L1 -IX echo /sys/bus/w1/devices/X
+}
 
+function getTemperature(){
+  local devicePath=$1
+  [ -z "$devicePath" ] && devicePath=$(getW1DevicePath)
   cat $devicePath/w1_slave | awk '$NF~/t=/ { gsub(".*=","", $NF); temperature=$NF/1000; printf "%.2f", temperature;}'
 }
 
