@@ -32,6 +32,15 @@ function getTemperature(){
   cat $devicePath/w1_slave | awk '$NF~/t=/ { gsub(".*=","", $NF); temperature=$NF/1000; printf "%.2f", temperature;}'
 }
 
+function getTemperatures(){
+  local devicePath
+
+  for devicePath in $(getW1DevicePaths)
+  do
+    getTemperature $devicePath | xargs -L1 -IX echo $devicePath: X
+  done
+}
+
 function setPump(){
   case $1 in
     on)
