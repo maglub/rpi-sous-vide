@@ -71,7 +71,7 @@ while true
 do
   TS=$(date "+%Y%m%d_%H%M%S %s")
 
-  curTemperature=$(getTemperature)
+  curTemperature=$(getW1Temperature)
   setTemperatureToFile $curTemperature
 
   printf "${TS} temperature: %-6.2f\n" $curTemperature

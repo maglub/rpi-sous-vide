@@ -26,7 +26,7 @@ function getW1DevicePaths(){
   ls /sys/bus/w1/devices | grep "^2" | xargs -L1 -IX echo /sys/bus/w1/devices/X
 }
 
-function getTemperature(){
+function getW1Temperature(){
   local devicePath=$1
   [ -z "$devicePath" ] && devicePath=$(getW1DevicePath)
   cat $devicePath/w1_slave | awk '$NF~/t=/ { gsub(".*=","", $NF); temperature=$NF/1000; printf "%.2f", temperature;}'
@@ -37,7 +37,7 @@ function getTemperatures(){
 
   for devicePath in $(getW1DevicePaths)
   do
-    getTemperature $devicePath | xargs -L1 -IX echo $devicePath: X
+    getW1Temperature $devicePath | xargs -L1 -IX echo $devicePath: X
   done
 }
 

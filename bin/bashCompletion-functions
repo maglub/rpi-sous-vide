@@ -15,7 +15,7 @@ _wrapper() {
       COMPREPLY=( $(compgen -f ${cur} ) )
       return 0
       ;;
-    "getTemperature")
+    "getW1Temperature")
       devices=$(/home/pi/rpi-sous-vide/bin/wrapper getW1DevicePaths)
       COMPREPLY=( $(compgen  -W "${devices}"  -- ${cur} ) )
       return 0
