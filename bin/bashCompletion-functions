@@ -1,5 +1,5 @@
 _wrapper() {
-  local cur prev opts base
+  local cur prev opts base functions devices
 
   COMPREPLY=()
   cur="${COMP_WORDS[COMP_CWORD]}"
@@ -8,11 +8,16 @@ _wrapper() {
   #--- options to complete
   opt="-l --list"
 
-  local functions=$(grep ^function /home/pi/rpi-sous-vide/bin/functions | sed -e 's/^function //' -e 's/(){$//')
+  functions=$(grep ^function /home/pi/rpi-sous-vide/bin/functions | sed -e 's/^function //' -e 's/(){$//')
 
   case "${prev}" in
     ">"|">>")
       COMPREPLY=( $(compgen -f ${cur} ) )
+      return 0
+      ;;
+    "getTemperature")
+      devices=$(/home/pi/rpi-sous-vide/bin/wrapper getW1DevicePaths)
+      COMPREPLY=( $(compgen  -W "${devices}"  -- ${cur} ) )
       return 0
       ;;
   esac
