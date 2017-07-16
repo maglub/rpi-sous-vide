@@ -64,24 +64,64 @@ fi
 
 #initRelays
 
+totalCount=0
 windowCount=0
 windowCountMax=10
 
+#--- set up symlinks
+#--- if only one device is available, log to tmp/temperature
+echo "* Setting up symlinks for aliases to ${temperatureFile}.DEVICEID"
+for curDevice in $(getW1DevicePaths)
+do
+  curAlias=$(getAlias $curDevice)
+  srcDevice=$(basename $curDevice)
+  [ "$curAlias" != "$srcDevice" ] && {
+    echo "  - $temperatureFile.$curAlias -> $temperatureFile.$(basename $curDevice)"
+    ln -sf $temperatureFile.$(basename $curDevice) $temperatureFile.$curAlias
+  }
+done
+
+echo "* Setting up symlink for ${temperatureFile} to the proper PID input" 
+[ $(getW1DevicePaths | wc -l) -eq 0 ] && { echo "  - Error: could not find any 1wire devices" ; exit 1 ; }
+[ $(getW1DevicePaths | wc -l) -eq 1 ] && {
+  curDevice=$(basename $(getW1DevicePaths 2>/dev/null | head -1 ))
+  echo "  - There is only one 1wire device available, symlinking $temperatureFile -> $curDevice" 
+  ln -sf $curDevice $temperatureFile
+}
+[ $(getW1DevicePaths | wc -l) -ge 1 ] && {
+  curDevice=$(basename $(getW1DevicePaths 2>/dev/null | head -1 ))
+  echo "  - There are multiple 1wire device available, symlinking to the first found: $temperatureFile -> $curDevice" 
+  [ -f $temperatureFile ] && rm $temperatureFile
+  ln -sf $temperatureFile.$curDevice $temperatureFile
+}
+
 while true
 do
+  (( windowCount +=1 ))
+  (( totalCount +=1 ))
   TS=$(date "+%Y%m%d_%H%M%S %s")
 
-  curTemperature=$(getW1Temperature)
-  setTemperatureToFile $curTemperature
+  for curDevice in $(getW1DevicePaths)
+  do
+    curAlias=$(getAlias $curDevice)
+    curTemperature=$(getW1Temperature $curDevice)
 
-  printf "${TS} temperature: %-6.2f\n" $curTemperature
-  sleep 0.1
+    setTemperatureToFile $curTemperature $(basename $curDevice)
 
-  (( windowCount +=1 ))
+    printf "${TS} device: %s temperature: %-6.2f\n" $curDevice $curTemperature
+
+    if [[ $windowCount -ge $windowCountMax || $totalCount -eq 1 ]]
+    then
+      printf "${TS} logging device: %s - %s temperature: %-6.2f\n" $curAlias $curDevice $curTemperature
+      $this_dir/logging ${curAlias} $curTemperature
+    fi
+
+  done
+
   if [ $windowCount -ge $windowCountMax ]
   then
     windowCount=0
-    $this_dir/logging smoker-temp $curTemperature
   fi
 
+  sleep 0.1
 done
