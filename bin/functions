@@ -34,8 +34,12 @@ function getW1Temperature(){
 
 function getAlias(){
   local curDevice=$1
+  local curAlias
+
   [ ! -f $this_dir/../conf/aliases.conf ] && { echo $(basename $curDevice) ; return 0 ; }
-  grep "^$1" $this_dir/../conf/aliases.conf | awk -F";" '{print $NF}'
+  curAlias=$(grep "^$1" $this_dir/../conf/aliases.conf | awk -F";" '{print $NF}')
+  [ -z "$curAlias" ] && curAlias=$(basename $curDevice)
+  echo $curAlias
   return 0
 }
 
