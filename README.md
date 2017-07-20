@@ -176,6 +176,7 @@ off
 | SOC            | Raspberry Pi 3                        |      1 | 34.29 chf |             | http://ch.farnell.com/raspberry-pi/raspberrypi3-modb-1gb/sbc-raspberry-pi-3-model-b-1gb/dp/2525225    |
 | SOC            | Raspberry Pi 3 case                   |      1 | 7.00 chf  |             | https://ch.farnell.com/raspberry-pi/raspberry-pi3-case/geh-use-raspberry-pi-3-model-b/dp/2519567 |
 | SOC            | (alternative) Raspberry Pi Zero W     |    (1) | 32.94 EUR |             | https://buyzero.de/collections/boards-kits/products/copy-of-raspberry-pi-zero-w?variant=31485043154   |
+| SD card        | SD Card, 16GB (more than enough)      |      1 | 16.00 chf | Digitec.ch  |      |
 | PSU            | USB charger, 2.5A                     |      1 | 7.99 Eur  |             | https://buyzero.de/collections/raspberry-pi-zubehor/products/netzteil-2-5-a    |
 | Relay          | SSR-25DA                              |      1 | $2.70     |             | https://www.aliexpress.com/item/1-pcs-SSR-25DA-25A-3-32V-DC-TO-24-380V-AC-SSR-25DA-relay-solid/32712665772.html   |
 | Rail clip      | SSR-25DA                              |      2 | $2.32     |             | https://www.aliexpress.com/item/single-phase-SSR-35MM-DIN-rail-fixed-solid-state-relay-clip-clamp-with-2-mounting-screws/32679765326.html | 
@@ -189,11 +190,11 @@ off
 
 Ca cost for a Raspberry Pi 3 based system:
 
-* Subtotal CHF: 77.59 chf
+* Subtotal CHF: 95.00 chf
 * Subtotal EUR: 7.99 EUR => ca 9.00 chf
 * Subtotal USD: $6.52 => 6.50 chf
 
-Total (ca) in CHF: ca 95.00 chf
+Total (ca) in CHF: ca 110.00 chf
 
 
 ## Wiring it up
