@@ -184,7 +184,7 @@ off
 | Transistor| MPSA05     |      1 |    0.10 chf  |       |      |
 | Box| IP55, F-Tronic, including DIN rail |      1 | 35.00 chf    |       |      |
 | Connector | Dupont crimp connectors, 1 pin, 4 pin | 6 | 0.10 chf | | | 
-| Connector | WAGO  compact splicing connector | 0.5 chf | | https://www.aliexpress.com/item/221-413-Original-WAGO-connector-led-splice-connector-COMPACT-Splicing-Connectors-3-conductor-connector-100-Original/32681506587.html |
+| Connector | WAGO  compact splicing connector | 1 | 0.5 chf | | https://www.aliexpress.com/item/221-413-Original-WAGO-connector-led-splice-connector-COMPACT-Splicing-Connectors-3-conductor-connector-100-Original/32681506587.html |
 | Cable | 20AWG silicon wire | 1m | 0.50 chf | | https://www.aliexpress.com/item/UL-3135-20AWG-high-temperature-Silicone-wire-3135-20-silica-gel-wires-Conductor-construction-100-0/32260276471.html |
 
 
