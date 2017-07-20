@@ -175,9 +175,11 @@ off
 |-------|----------------|--------|------|-------|------|
 | SOC   | Raspberry Pi 3 |      1 |      |       |      |
 | Relay | SSR-25DA       |      1 |      |       |      |
+| Rail clip | SSR-25DA       |      2 | $2.32     |  https://www.aliexpress.com/item/single-phase-SSR-35MM-DIN-rail-fixed-solid-state-relay-clip-clamp-with-2-mounting-screws/32679765326.html |      |
 | Thermometer | 18B20    |      1 |      |       |      |
 | Resistor | 4.7k        |      2 |      |       |      |
 | Transistor| MPSA05     |      1 |      |       |      |
+| Box| IP55, F-Tronic     |      1 | 35 chf    |       |      |
 
 
 ## Wiring it up
