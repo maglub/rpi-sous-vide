@@ -173,13 +173,20 @@ off
 
 | Type | Item            | Pcs    | Cost | Where | Link |
 |-------|----------------|--------|------|-------|------|
-| SOC   | Raspberry Pi 3 |      1 |      |       |      |
-| Relay | SSR-25DA       |      1 |      |       |      |
-| Rail clip | SSR-25DA       |      2 | $2.32     |  https://www.aliexpress.com/item/single-phase-SSR-35MM-DIN-rail-fixed-solid-state-relay-clip-clamp-with-2-mounting-screws/32679765326.html |      |
-| Thermometer | 18B20    |      1 |      |       |      |
-| Resistor | 4.7k        |      2 |      |       |      |
-| Transistor| MPSA05     |      1 |      |       |      |
-| Box| IP55, F-Tronic     |      1 | 35 chf    |       |      |
+| SOC   | Raspberry Pi 3 |      1 |  34.29 chf   |       |  http://ch.farnell.com/raspberry-pi/raspberrypi3-modb-1gb/sbc-raspberry-pi-3-model-b-1gb/dp/2525225    |
+| SOC   | Raspberry Pi 3 case |      1 |  7.00 chf   |       |  https://ch.farnell.com/raspberry-pi/raspberry-pi3-case/geh-use-raspberry-pi-3-model-b/dp/2519567 |
+| SOC   | (alternative) Raspberry Pi Zero W |      (1) |  32.94 EUR   |       |   https://buyzero.de/collections/boards-kits/products/copy-of-raspberry-pi-zero-w?variant=31485043154   |
+| PSU   | USB charger, 2.5A |      1 |  7.99 Eur  |       |  https://buyzero.de/collections/raspberry-pi-zubehor/products/netzteil-2-5-a    |
+| Relay | SSR-25DA       |      1 |  $2.70    |       |   https://www.aliexpress.com/item/1-pcs-SSR-25DA-25A-3-32V-DC-TO-24-380V-AC-SSR-25DA-relay-solid/32712665772.html   |
+| Rail clip | SSR-25DA       |      2 | $2.32     |      | https://www.aliexpress.com/item/single-phase-SSR-35MM-DIN-rail-fixed-solid-state-relay-clip-clamp-with-2-mounting-screws/32679765326.html | 
+| Thermometer | 18B20, with 3m cable    |      1 |  $1.50    |  Ali Express     |      |
+| Resistor | 4.7k        |      2 |  0.10 chf    |       |      |
+| Transistor| MPSA05     |      1 |    0.10 chf  |       |      |
+| Box| IP55, F-Tronic, including DIN rail |      1 | 35.00 chf    |       |      |
+| Connector | Dupont crimp connectors, 1 pin, 4 pin | 6 | 0.10 chf | | | 
+| Connector | WAGO  compact splicing connector | 0.5 chf | | https://www.aliexpress.com/item/221-413-Original-WAGO-connector-led-splice-connector-COMPACT-Splicing-Connectors-3-conductor-connector-100-Original/32681506587.html |
+| Cable | 20AWG silicon wire | 1m | 0.50 chf | | https://www.aliexpress.com/item/UL-3135-20AWG-high-temperature-Silicone-wire-3135-20-silica-gel-wires-Conductor-construction-100-0/32260276471.html |
+
 
 
 ## Wiring it up
