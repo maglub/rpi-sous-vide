@@ -23,26 +23,29 @@ function printStatus(){
   bgColor_default="\e[49m"
 
   bgColor_heaterDuty=${bgColor_default}
-  bgColor_onState=${bgColor_default}
+  bgColor_outputState=${bgColor_default}
   bgColor_readConfigFiles=${bgColor_default}
   bgColor_dutyWindowCount=${bgColor_default}
+  bgColor_stateChange=${bgColor_default}
 
-  [ $onState -eq 1 ] && bgColor_onState="\e[42m"
+  [ $outputState -eq 1 ] && bgColor_outputState="\e[42m"
+  [ $changedState -eq 1 ] && bgColor_stateChange="\e[42m"
   [ "$heaterDuty" != "$saveHeaterDuty" ] && bgColor_heaterDuty="\e[42m"
   [ "$readConfigFiles" = "yes" ] && bgColor_readConfigFiles="\e[42m"
   [ "$heater_dutyWindowCount" -eq 0 ] && bgColor_dutyWindowCount="\e[42m"
  
 
 
-  printf "${bgColor_dutyWindowCount}dutyWindowCount: %-5s${bgColor_default} ${bgColor_onState}onState: %-5s${bgColor_default} onCount: %-5s ${bgColor_heaterDuty}heaterDuty: %-5s${bgColor_default} heaterDutyInterval: %-5s heaterDutyFileCount: %-5s ${bgColor_readConfigFiles}readConfig: %-5s${bgColor_default} timeWindow: %-5s\n" \
+  printf "${bgColor_dutyWindowCount}dutyWindowCount: %-5s${bgColor_default} ${bgColor_outputState}outputState: %-5s${bgColor_default} onCount: %-5s ${bgColor_heaterDuty}heaterDuty: %-5s${bgColor_default} heaterDutyInterval: %-5s heaterDutyFileCount: %-5s ${bgColor_readConfigFiles}readConfig: %-5s${bgColor_default} timeWindow: %-5s changedState: ${bgColor_stateChange}%s${bgColor_default}\n" \
        $heater_dutyWindowCount \
-       $onState \
+       $outputState \
        $onCount \
        $heaterDuty \
        $heater_dutyInterval \
        $heaterDutyFileCount \
        $readConfigFiles \
-       $heater_timeWindow
+       $heater_timeWindow \
+       $changedState
 
 
   saveHeaterDuty=$heaterDuty
@@ -59,13 +62,14 @@ function initialize(){
 [ -z "$heaterDutyFile" ] && heaterDutyFile="$tmpDir/heaterDuty"
 [ -z "$heater_dutyWindowInterval" ] && heater_dutyWindowInterval=100
 
-#--- initial state off
-setHeater off > /dev/null
-
 heaterDuty=$(getHeaterDuty)
 initRelays
 initialize
 
+#--- initial state off
+setHeater off > /dev/null
+
+echo "heater_dutySleepTime: $heater_dutySleepTime"
 echo "heater_timeWindow: $heater_timeWindow"
 echo "heater_configFileReadTime: $heater_configFileReadTime"
 echo "heater_configFileReadInterval: $heater_configFileReadInterval"
@@ -73,8 +77,10 @@ echo "heater_configFileReadInterval: $heater_configFileReadInterval"
 heaterDutyFileCount=$heater_configFileReadInterval
 heater_dutyWindowCount=0
 onCount=0
-onState=0
+outputState=0
 heaterDuty=0
+
+lastOutputState=$outputState
 
 while true
 do
@@ -108,29 +114,39 @@ do
 
   if [[ $heater_dutyWindowCount -lt $heater_dutyInterval ]]
   then
-    onState=1
+    outputState=1
     (( onCount += 1 ))
   else
-    onState=0
+    outputState=0
     onCount=0
   fi
 
-  case $onState in
-    0)
-      setHeater off > /dev/null
-      ;;
-    1)
-      setHeater on > /dev/null
-      ;;
-    *)
-      exit 1
-      ;;
-  esac
+  #--- only call the relay switching if there actually is a change in state
+  if [ $lastOutputState -ne $outputState ]
+  then
+    changedState=1
+    case $outputState in
+      0)
+        setHeater off > /dev/null
+        ;;
+      1)
+        setHeater on > /dev/null
+        ;;
+      *)
+        exit 1
+        ;;
+    esac
+  else
+    changedState=0
+  fi
+
   printStatus
   (( heaterDutyFileCount += 1 ))
   (( heater_dutyWindowCount +=1 ))
 
   [ $heater_dutyWindowCount -ge $heater_dutyWindowInterval ] && heater_dutyWindowCount=0
+
+  lastOutputState=$outputState
 
   sleep $heater_dutySleepTime
 done
