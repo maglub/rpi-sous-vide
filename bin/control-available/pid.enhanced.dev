@@ -1,0 +1,214 @@
+#!/usr/bin/python
+
+import os
+import glob
+import time
+ 
+#os.system('modprobe w1-gpio')
+#os.system('modprobe w1-therm')
+ 
+temperatureFile = '/dev/shm/temperature'
+setpointFile    = '/dev/shm/setpoint'
+heaterDutyFile  = '/dev/shm/heaterDuty'
+
+heaterDutyWindow = 100
+
+pid_input             = 0
+pid_windowCount       = 0
+pid_setpoint          = 0
+pid_computeInput      = 0
+pid_lastInput         = 0
+pid_dInput            = 0
+pid_error             = 0
+pid_kp                = 0
+pid_ki                = 0
+pid_kd                = 0
+pid_outMin            = 0
+pid_outMax            = 0
+pid_kp_error          = 0
+pid_iTerm             = 0
+pid_kd_dInput         = 0
+pid_output            = 0
+pid_errSum            = 0
+
+pid_sleepTime         = 0.1
+
+onState               = 0
+heaterDuty            = 0
+saveHeaterDuty        = 0
+
+pid_kp=30
+pid_ki=10
+pid_offset_ki=3
+pid_kd=500
+
+#pid_kp=84.55
+#pid_ki=598798
+#pid_kd=174699.5
+
+pid_outMin=0
+pid_outMax=100
+
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+    NORMAL = '\033[49m'
+    ON = '\033[42m'
+
+def compute():
+  global pid_input
+  global pid_output
+  global pid_error
+  global pid_errSum
+  global pid_iTerm
+  global pid_dInput
+  global pid_kp_error
+  global pid_kd_dInput
+  global pid_lastInput
+  global pid_computeInput
+
+  pid_computeInput = pid_input
+
+  pid_error  = pid_setpoint - pid_computeInput
+  pid_errSum = pid_errSum + pid_error
+
+  #--- iTerm
+  if pid_iTerm >= pid_outMax:
+    pid_iTerm = pid_outMax
+  elif pid_iTerm <= pid_outMin:
+    pid_iTerm = pid_outMin
+
+  #--- dInput
+  pid_dInput = pid_computeInput - pid_lastInput
+
+  #--- compute PID output
+  pid_kp_error = pid_kp * pid_error
+  pid_kd_dInput = pid_kd * pid_dInput
+
+  if pid_kd_dInput <= pid_outMin:
+    pid_kd_dInput = pid_outMin  
+
+  pid_output = pid_kp_error + pid_iTerm - pid_kd_dInput
+
+  #--- pid_output sensibilization
+  if  pid_output > pid_outMax:
+    pid_output = pid_outMax
+  elif pid_output < pid_outMin:
+    pid_output = pid_outMin
+
+
+  #--- remember some variables for next time
+  pid_lastInput = pid_computeInput
+
+  return(0)
+  #----------------------------
+  # end compute()
+  #----------------------------
+
+def getTemperatureFromFile():
+    f = open(temperatureFile, 'r')
+    lines = f.readlines()
+    f.close()
+    return float(lines[0].rstrip())
+
+def getSetpointFromFile():
+    f = open(setpointFile, 'r')
+    lines = f.readlines()
+    f.close()
+    return float(lines[0].rstrip())
+
+def initialize():
+
+  global pid_lastInput
+  global pid_input
+  global pid_output
+  global pid_iTerm
+
+  pid_lastInput = getTemperatureFromFile()
+  pid_input     = pid_lastInput
+  pid_iTerm     = pid_output
+  pid_errSum    = 0
+  pid_output=0
+
+  if pid_iTerm > pid_outMax:
+    pid_iTerm = pid_outMax
+  elif pid_iTerm < pid_outMin:
+    pid_iTerm = pid_outMin
+
+  pid_input = getTemperatureFromFile()
+  pid_setpoint= getSetpointFromFile()
+
+  return(0)
+ 
+def printStatus():
+    #--- http://misc.flogisoft.com/bash/tip_colors_and_formatting
+
+    bgColor_default = bcolors.NORMAL
+
+    bgColor_heaterDuty = bgColor_default
+    bgColor_onState    = bgColor_default
+    bgColor_output     = bgColor_default
+
+    if onState == 1:
+      bgColor_onState = bcolors.ON
+
+    if heaterDuty != saveHeaterDuty:
+      bgColor_heaterDuty = bcolors.ON
+
+    if pid_output > 0:
+      bgColor_output = bcolors.ON
+
+    print( ("pid_windowCount: %5i setpoint: %-6.2f input: %-6.2f computeInput: %-6.2f lastInput: %-6.2f dInput: %-6.2f error: %-6.2f kp: %-5f ki: %-5f kd: %-5f omin: %-5f omax: %-5f kp_error: %-6.2f iTerm: %-6.2f kd_dInput: %-6.2f " + bgColor_output + "output: %-5f" + bgColor_default ) % (
+      pid_windowCount, 
+      pid_setpoint, 
+      pid_input, 
+      pid_computeInput, 
+      pid_lastInput, 
+      pid_dInput, 
+      pid_error, 
+      pid_kp, 
+      pid_ki, 
+      pid_kd, 
+      pid_outMin, 
+      pid_outMax, 
+      pid_kp_error, pid_iTerm, 
+      pid_kd_dInput,
+      pid_output
+      )
+    )
+
+    return(0)
+
+
+#--- init
+initialize()
+printStatus()
+
+pid_computeInput = getTemperatureFromFile()
+
+#--- sampleTime=10 equals 1 sec when pid_sleepTime=0.1
+pid_sampleTime=10
+pid_windowCount = pid_sampleTime
+
+while True:
+  pid_input    = getTemperatureFromFile()
+  pid_setpoint = getSetpointFromFile()
+
+  printStatus()
+
+  pid_windowCount += 1
+
+  #--- sampleTime=10 equals 1 sec when pid_sleepTime=0.1
+  if pid_windowCount >= pid_sampleTime:
+    compute()
+    pid_windowCount = 0
+
+  time.sleep(pid_sleepTime)
+
+exit(0)
