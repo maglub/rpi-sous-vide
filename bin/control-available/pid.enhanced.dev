@@ -185,6 +185,9 @@ def printStatus():
 
     return(0)
 
+#==============================================================
+# MAIN
+#==============================================================
 
 #--- init
 initialize()
@@ -193,7 +196,9 @@ printStatus()
 pid_computeInput = getTemperatureFromFile()
 
 #--- sampleTime=10 equals 1 sec when pid_sleepTime=0.1
-pid_sampleTime=10
+#--- sampleTime=5 equals 5 sec when pid_sleepTime=1
+pid_sleepTime  = 1
+pid_sampleTime = 5
 pid_windowCount = pid_sampleTime
 
 while True:
