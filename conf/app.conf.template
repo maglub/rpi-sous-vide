@@ -16,8 +16,8 @@ heaterDutyFile="$tmpDir/heaterDuty"
 #--- ms
 heater_timeWindow=2
 heater_dutySleepTime=0.05
-#--- in seconds
-heater_configFileReadTime=0.05
+#--- in seconds (how often will bin/output re-read this app.conf file)
+heater_configFileReadTime=5
 
 #--- pid variables
 
