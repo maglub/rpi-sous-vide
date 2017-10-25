@@ -15,7 +15,7 @@ echo "  - Done!"
 echo -n "* Checking for repo key for grafana: "
 apt-key list | grep "Bintray" --silent || {
   echo -n "* Installing repo key for grafana: "
-  curl https://bintray.com/user/downloadSubjectPublicKey?username=bintray | sudo apt-key add -
+  curl --silent https://bintray.com/user/downloadSubjectPublicKey?username=bintray | sudo apt-key add -
 }
 echo "  - Done!"
 
