@@ -29,7 +29,8 @@ echo "  - Done!"
 echo -n "* Checking if grafana is installed"
 dpkg -s grafana >/dev/null 2>&1 || {
   echo "  - Installing grafana"
-  sudo apt-get update && sudo apt-get -y install grafana
+  sudo apt-get update
+  sudo apt-get -y install grafana
 
 }
 echo "  - Done!"

@@ -33,7 +33,8 @@ echo "  - Done!"
 echo -n "* Checking if influxdb is installed"
 dpkg -s influxdb >/dev/null 2>&1 || {
   echo "  - Installing influxdb"
-  sudo apt-get update && sudo apt-get -y install influxdb
+  sudo apt-get update
+  sudo apt-get -y install influxdb
 }
 echo "  - Done!"
 
