@@ -12,8 +12,11 @@ dpkg -s apt-transport-https >/dev/null 2>&1 || {
 }
 echo "  - Done!"
 
-echo -n "* Installing repo key for influxdb: "
-curl -sL https://repos.influxdata.com/influxdb.key  | sudo apt-key add -
+echo -n "* Checking for repo key for influxdb: "
+apt-key list | grep "InfluxDB" --silent || {
+  echo -n "* Installing repo key for influxdb: "
+  curl -sL https://repos.influxdata.com/influxdb.key  | sudo apt-key add -
+}
 echo "  - Done!"
 
 
