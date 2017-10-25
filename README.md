@@ -97,6 +97,23 @@ Set a target temperature:
 bin/wrapper setSetpoint 65
 ```
 
+## Install influxdb and grafana
+
+Note, the installation of influxdb and grafana will take a while. I only show the installation for Raspberry Pi 3 (or newer), since it does not make sense to install it on the older ones.
+
+* Influxdb
+
+```
+./setup-influxdb.sh
+```
+
+* Grafana
+
+```
+./setup-grafana.sh
+```
+
+
 ## Different input/control/output/logging possibilities
 
 The way the system figures out which input/control/output script to use, is set by symbolic links in ./bin, where the default symlinks are set as follows:
@@ -245,22 +262,6 @@ Start the three programs:
 * http://hobbybrauer.de/forum/viewtopic.php?f=58&t=3959
 * https://github.com/egiust/SousVideAdaptativeArduino/blob/master/README.md
 * https://portfolium.com/entry/arduino-sous-vide-cooker
-
-# Install influxdb and grafana
-
-Note, the installation of influxdb and grafana will take a while. I only show the installation for Raspberry Pi 3 (or newer), since it does not make sense to install it on the older ones.
-
-* Influxdb
-
-```
-./setup-influxdb.sh
-```
-
-* Grafana
-
-```
-./setup-grafana.sh
-```
 
 Now you will be able to browse your new dashboard on:
 
