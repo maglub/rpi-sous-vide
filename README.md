@@ -6,6 +6,7 @@ I make mistakes, very often. Build this on your own risk.
 
 * 2016-05-15, NOTE: This is a work in progress. Please wait a few weeks and come back.
 * 2017-07-08, NOTE: This is still a work in progress. It is slowly getting into a state where normal people can install it and use it.
+* 2017-10-25, Added installation scripts for influxdb and grafana
 
 
 rpi-sous-vide is a Raspberry pi based PID controller for a home built sous vide machinery, a home built smoker (to smoke meat, fish, etc), or anything else that you need to control depending on the current temperature, and a setpoint temperature that you wish to reach. The basic principle is the same. I even use it to control the solar heating for my pool. You measure the media (water or air), and decide to turn on or off a heating element or a pump. Currently it supports two output relays, to control a heating element and a motor to stir water.
@@ -70,6 +71,8 @@ Separating the components in that way, I can play around with different ways of 
 * Clone this repo to ~pi
 * Run the setup.sh script (will download and set up php dependencies)
 * Reboot (since setup.sh will add items to /boot/config.txt and /etc/modules.conf)
+* Go to http://YOUR_PI_IP for the web gui
+* Go to http://YOUR_PI_IP:3000 for grafana (if installed)
 
 On the raspberry pi:
 
