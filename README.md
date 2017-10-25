@@ -288,7 +288,7 @@ ln -s ../logging-available/influxdb.local bin/logging-enabled/influxdb.local
 
 ```
 sudo apt-get update
-sudo apt-get -y install apt-transport-https
+sudo apt-get -y install apt-transport-https jq
 
 curl https://bintray.com/user/downloadSubjectPublicKey?username=bintray | sudo apt-key add -
 
@@ -320,7 +320,22 @@ case $VERSION_ID in
     ;;
 esac
 
+#--- add datasource (this works without cookies, since we removed authentification above)
+curl --silent -H 'Content-Type: application/json;charset=UTF-8' -X POST --data-binary '{"Name":"smoker","Type":"influxdb","Access":"proxy","url":"http://localhost:8086","database":"smoker","basicAuth":false,"isDefault":true}' http://localhost:3000/api/datasources/
+
+#--- add dashboard (id 99)
+curl --silent -H 'Content-Type: application/json;charset=UTF-8' 'http://localhost:3000/api/dashboards/db/' -X POST -d @./bin/smoker.dashboard.json
+
+#--- set the dashboard  as Home
+curl --silent -H 'Content-Type: application/json;charset=UTF-8' 'http://localhost:3000/api/user/preferences/' -X PUT --data-binary '{"homeDashboardId":'$(curl --silent http://localhost:3000/api/dashboards/db/smoker | jq '.dashboard.id')'}'
+
+#--- delete dashboard
+curl --silent -X DELETE 'http://localhost:3000/api/dashboards/db/smoker'
 ```
+
+Now you will be able to browse your new dashboard on:
+
+* http://yourPi-IP:3000/dashboard/db/smoker?refresh=10s&orgId=1
 
 # License
 
