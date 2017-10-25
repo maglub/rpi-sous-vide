@@ -1,0 +1,23 @@
+#!/bin/bash
+
+n=1
+for device in $(ls /sys/bus/w1/devices | grep 28)
+do
+  case $n in
+    1)
+      echo "/sys/bus/w1/devices/$device;smoker-temp"
+      ;; 
+    2)
+      echo "/sys/bus/w1/devices/$device;air-temp"
+      ;; 
+    3)
+      echo "/sys/bus/w1/devices/$device;smoke-generator-temp"
+      ;; 
+  esac
+  (( n = $n + 1 ))
+done
+
+#/sys/bus/w1/devices/28-0000054dd803;smoker-temp
+#/sys/bus/w1/devices/28-0000054e25dd;air-temp
+#/sys/bus/w1/devices/28-0000054e64c2;smoke-generator-temp
+
