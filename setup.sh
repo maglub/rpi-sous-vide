@@ -82,7 +82,13 @@ EOT
 
 echo "* Setting up symlinks"
 [ -f /etc/lighttpd/lighttpd.conf ]  && { sudo mv /etc/lighttpd/lighttpd.conf /etc/lighttpd/lighttpd.conf.org ; sudo ln -s $configDir/lighttpd/lighttpd.conf /etc/lighttpd ; }
-[ ! -h /etc/lighttpd/conf-enabled/10-cgi.conf ] && sudo ln -s $configDir/lighttpd/10-cgi.conf /etc/lighttpd/conf-enabled
+if [ -n "$(grep stretch /etc/os-release)" ]
+then
+  [ ! -h /etc/lighttpd/conf-enabled/10-cgi.conf ] && sudo ln -s $configDir/lighttpd/10-cgi.stretch.conf /etc/lighttpd/conf-enabled
+else
+  [ ! -h /etc/lighttpd/conf-enabled/10-cgi.conf ] && sudo ln -s $configDir/lighttpd/10-cgi.jessie.conf /etc/lighttpd/conf-enabled
+fi
+
 [ ! -h /etc/lighttpd/conf-enabled/10-accesslog.conf ] && sudo ln -s ../conf-available/10-accesslog.conf /etc/lighttpd/conf-enabled
 [ ! -h /etc/lighttpd/conf-enabled/10-dir-listing.conf ] && sudo ln -s ../conf-available/10-dir-listing.conf /etc/lighttpd/conf-enabled
 
