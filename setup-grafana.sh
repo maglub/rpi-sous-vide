@@ -5,7 +5,7 @@ this_dir=$(cd $(dirname $0);pwd)
 . /etc/os-release 
 
 echo -n "* Checking pre requisites apt-transport-https jq"
-dpkg -s apt-transport-https >/dev/null 2>&1 || {
+dpkg -s apt-transport-https jq >/dev/null 2>&1 || {
   echo "  - Installing apt-transport-https and jq"
   sudo apt-get update
   sudo apt-get -y install apt-transport-https jq
