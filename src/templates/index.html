@@ -87,7 +87,56 @@
       </div>
     </div>
   </div>
+
+<div class="row"><!-- List processes -->
+	<div class="col-lg-8">
+		<div class="panel panel-default">
+			<div class="panel-heading">Processes</div>
+			<div class="panel-body">
+                          <div class="table-responsive">
+				<table class="table table-condensed table-hover"> 
+					<thead>
+						<tr>
+							<th>Function</th>
+							<th>Running</th>
+							<th>Process Id</th>
+						</tr>
+					</thead>
+					<tbody>
+                                                <tr>
+							<td>Input</td>
+							<td>{{ processes['input']['status'] }}</td>
+							<td>{{ processes['input']['pid'] }}</td>
+                                                </tr>
+                                                <tr>
+							<td>Control</td>
+							<td>{{ processes['control']['status'] }}</td>
+							<td>{{ processes['control']['pid'] }}</td>
+                                                </tr>
+                                                <tr>
+							<td>Output</td>
+							<td>{{ processes['output']['status'] }}</td>
+							<td>{{ processes['output']['pid'] }}</td>
+                                                </tr>
+					</tbody>
+				</table>
+                          </div>
+
+                          <!-- Only visible if logged in -->
+                          {% if isAuthenticated %}
+                          {% endif %}
+                          Start/stop processes:
+                          <form role="form" action="/config" method="POST">
+                            <input type="submit" name="action" value="Start" class="btn btn-success">
+                            <input type="submit" name="action" value="Stop" class="btn btn-danger">
+                          </form>
+
+			</div>
+		</div>
+	</div>
 </div>
+</div>
+
 
 {% endblock %}
 

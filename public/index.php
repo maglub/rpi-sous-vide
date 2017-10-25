@@ -65,7 +65,9 @@ $twig->addGlobal('isAuthenticated', isAuthenticated());
 
 $app->get('/', function () use ($app) {
   
-  $app->render('index.html', [ "temperature" => getTemperatureByFile(), "setpoint" => getSetpointByFile(), "heaterDuty" => getHeaterDutyByFile() ]);
+  $processes = getProcesses();
+
+  $app->render('index.html', [ "temperature" => getTemperatureByFile(), "setpoint" => getSetpointByFile(), "heaterDuty" => getHeaterDutyByFile() , "processes" => $processes ]);
 })->name("root");
 
 #=============================================================
