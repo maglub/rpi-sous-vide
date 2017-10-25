@@ -50,6 +50,10 @@ case $VERSION_ID in
 esac
 echo "  - Done!"
 
+echo -n "* Waiting 3 seconds for influxdb to start properly"
+sleep 3
+echo -n "  - Done!"
+
 #--- create the database
 echo -n "* Checking for database: smoker"
 influx -execute "show databases;" | grep -w smoker --silent || {
