@@ -12,11 +12,8 @@ dpkg -s apt-transport-https jq >/dev/null 2>&1 || {
 }
 echo "  - Done!"
 
-echo -n "* Checking for repo key for grafana: "
-apt-key list | grep "Bintray" --silent || {
-  echo -n "* Installing repo key for grafana: "
-  curl --silent https://bintray.com/user/downloadSubjectPublicKey?username=bintray | sudo apt-key add -
-}
+echo -n "* Installing repo key for grafana: "
+curl --silent https://bintray.com/user/downloadSubjectPublicKey?username=bintray | sudo apt-key add -
 echo "  - Done!"
 
 echo -n "* Checking for grafana repo source"
