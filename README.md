@@ -88,6 +88,13 @@ cd rpi-sous-vide
 sudo shutdown -r now
 ```
 
+After the reboot, you should give your sensors names.
+
+```
+cd rpi-sous-vide
+./bin/genAliases | tee conf/aliases.conf
+```
+
 Start the input, control, and output processes in the web GUI. You can also do it on the command line:
 
 ```
