@@ -52,7 +52,7 @@ echo "  - Done!"
 
 echo -n "* Waiting 3 seconds for influxdb to start properly"
 sleep 3
-echo -n "  - Done!"
+echo "  - Done!"
 
 #--- create the database
 echo -n "* Checking for database: smoker"
