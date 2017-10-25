@@ -7,6 +7,13 @@
 [ ! -f "$heaterDutyFile" ]   && { echo 0 > $heaterDutyFile ; sudo /bin/chown pi:pi $heaterDutyFile ; }
 [ ! -f "$setpointFile" ]     && { echo 0 > $setpointFile ; sudo /bin/chown pi:pi $setpointFile ; }
 
+function logData(){
+  for logScript in $this_dir/logging-enabled/*
+  do
+    $logScript $1 $2
+  done
+}
+
 function initRelays(){
   local pin=""
 

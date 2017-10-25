@@ -241,9 +241,86 @@ Start the three programs:
 
 ## Misc
 
+* https://www.circuits.dk/install-grafana-influxdb-raspberry/
 * http://hobbybrauer.de/forum/viewtopic.php?f=58&t=3959
 * https://github.com/egiust/SousVideAdaptativeArduino/blob/master/README.md
 * https://portfolium.com/entry/arduino-sous-vide-cooker
+
+# Install influxdb and grafana
+
+Note, the installation of influxdb and grafana will take a while. I only show the installation for Raspberry Pi 3 (or newer), since it does not make sense to install it on the older ones.
+
+* Influxdb
+
+```
+sudo apt-get update
+sudo apt-get -y install apt-transport-https
+
+curl -sL https://repos.influxdata.com/influxdb.key  | sudo apt-key add -
+. /etc/os-release 
+
+test $VERSION_ID = "7" && echo "deb https://repos.influxdata.com/debian wheezy stable" | sudo tee /etc/apt/sources.list.d/influxdb.list
+test $VERSION_ID = "8" && echo "deb https://repos.influxdata.com/debian jessie stable" | sudo tee /etc/apt/sources.list.d/influxdb.list
+test $VERSION_ID = "9" && echo "deb https://repos.influxdata.com/debian stretch stable" | sudo tee /etc/apt/sources.list.d/influxdb.list
+
+sudo apt-get update && sudo apt-get -y install influxdb
+
+case $VERSION_ID in
+  7)
+    sudo update-rc.d influxdb defaults
+    sudo service influxdb start
+    ;;
+  *)
+    sudo systemctl enable influxdb.service
+    sudo systemctl start influxdb.service
+    ;;
+esac
+
+#--- create the database
+influx -execute "create database smoker;"
+
+#--- enable logging of metrics to the influxdb
+ln -s ../logging-available/influxdb.local bin/logging-enabled/influxdb.local
+
+```
+
+* Grafana
+
+```
+sudo apt-get update
+sudo apt-get -y install apt-transport-https
+
+curl https://bintray.com/user/downloadSubjectPublicKey?username=bintray | sudo apt-key add -
+
+. /etc/os-release 
+
+test $VERSION_ID = "7" && echo "deb https://dl.bintray.com/fg2it/deb wheezy main" | sudo tee -a /etc/apt/sources.list.d/grafana.list
+test $VERSION_ID = "8" && echo "deb https://dl.bintray.com/fg2it/deb jessie main" | sudo tee -a /etc/apt/sources.list.d/grafana.list
+test $VERSION_ID = "9" && echo "deb https://dl.bintray.com/fg2it/deb stretch main" | sudo tee -a /etc/apt/sources.list.d/grafana.list
+
+sudo apt-get update && sudo apt-get -y install grafana
+
+#--- remove login page (no authentication, beware of internetz)
+cat<<EOT | sudo tee -a /etc/grafana/grafana.ini
+[auth.anonymous]
+enabled = true
+org_name = Main Org.
+org_role = Admin
+EOT
+
+case $VERSION_ID in
+  7)
+    sudo update-rc.d grafana-server defaults
+    sudo service grafana-server start
+    ;;
+  *)
+    sudo /bin/systemctl daemon-reload
+    sudo systemctl enable grafana-server.service
+    sudo systemctl start grafana-server.service
+    ;;
+esac
+
+```
 
 # License
 

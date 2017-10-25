@@ -1,0 +1,40 @@
+#!/bin/bash
+
+this_dir=$(cd $(dirname $0);pwd)
+this_script=$(basename $0)
+
+case $(basename $this_dir) in
+  bin)
+    configDir=$this_dir/../conf
+    ;;
+  *)
+    configDir=$this_dir/../../conf
+    ;;
+esac
+
+#--- read config files
+. $configDir/../conf/app.conf
+[ -f $configDir/../conf/${this_script}.conf ] && . $configDir/../conf/${this_script}.conf
+
+#----------------------------
+# influx
+#----------------------------
+#--- set these variables in conf/app.conf - default below works in my (Magnus) environment
+#[ -z "$influxHost" ]     && influxHost=192.168.4.55
+#[ -z "$influxPort" ]     && influxPort=8086
+#[ -z "$influxDb" ]       && influxDb=smokerWue
+#[ -z "$influxSenderId" ] && influxSenderId=wue-smoker
+
+influxHost=localhost
+influxPort=8086
+influxDb=smoker
+influxSenderId=wue-smoker
+
+PILOGGER_SENSOR=$1
+PILOGGER_DATA=$2
+
+curl -i -XPOST "http://${influxHost}:${influxPort}/write?db=${influxDb}" --data-binary "sensor_data,sensor=${PILOGGER_SENSOR} value=${PILOGGER_DATA}" > /dev/null 2>&1
+
+#--- Example curl calls, helps for debugging.
+#--- create database "smoker": curl -G http://192.168.4.55:8086/query --data-urlencode "q=CREATE DATABASE smoker"
+#--- example query:  curl -G 'http://192.168.4.55:8086/query?pretty=true' --data-urlencode "db=smoker" --data-urlencode "q=SELECT * FROM sensor_data"

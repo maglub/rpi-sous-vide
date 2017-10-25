@@ -113,7 +113,7 @@ do
     if [[ $windowCount -ge $windowCountMax || $totalCount -eq 1 ]]
     then
       printf "${TS} logging device: %s - %s temperature: %-6.2f\n" $curAlias $curDevice $curTemperature
-      $this_dir/logging ${curAlias} $curTemperature
+      logData ${curAlias} $curTemperature
     fi
 
   done
