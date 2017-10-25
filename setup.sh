@@ -53,18 +53,25 @@ echo "* Checking installed packages"
 
 curInstallPackages=""
 
-#--- note, php5-cgi has to come before php5. Otherwise apt-get will install apache2 to satisfy dependencies
-#--- https://wildlyinaccurate.com/installing-php-on-debian-without-apache/
-
-for package in php5-cgi php5 php5-sqlite php5-cli php5-rrd php5-curl lighttpd sqlite3 bc screen
-do
-  echo -n "  - Checking $package"
-  sudo dpkg -s $package >/dev/null 2>&1 || { echo -n " - Adding package $package to the install list" ; curInstallPackages="$curInstallPackages $package" ; }
-  echo ""
-done
+if [ -n "$(grep stretch /etc/os-release)" ]
+then
+for package in php-cgi php php-sqlite3 php-cli php-rrd php-curl lighttpd sqlite3 bc screen
+  do
+    echo -n "  - Checking $package"
+    sudo dpkg -s $package >/dev/null 2>&1 || { echo "  - Adding package $package to the install list" ; curInstallPackages="$curInstallPackages $package" ; }
+  done
+else
+  #--- older raspbian
+  #--- note, php5-cgi has to come before php5. Otherwise apt-get will install apache2 to satisfy dependencies
+  #--- https://wildlyinaccurate.com/installing-php-on-debian-without-apache/
+  for package in php5-cgi php5 php5-sqlite php5-cli php5-rrd php5-curl lighttpd sqlite3 bc screen
+  do
+    echo -n "  - Checking $package"
+    sudo dpkg -s $package >/dev/null 2>&1 || { echo "  - Adding package $package to the install list" ; curInstallPackages="$curInstallPackages $package" ; }
+  done
+fi
 
 [ -n "$curInstallPackages" ] && { echo "  - Installing packages: $curInstallPackages" ; sudo apt-get -q -y install $curInstallPackages ; }
-
 
 cat<<EOT
 
