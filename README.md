@@ -88,7 +88,7 @@ cd rpi-sous-vide
 sudo shutdown -r now
 ```
 
-After the reboot, you should give your sensors names.
+After the reboot, the 1wire interface is enabled and you should be able to see your devices. You should give your sensors names in the conf/aliases.conf file now.
 
 ```
 cd rpi-sous-vide
