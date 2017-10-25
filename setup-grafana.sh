@@ -34,17 +34,20 @@ dpkg -s grafana >/dev/null 2>&1 || {
   echo "  - Installing grafana"
   sudo apt-get update && sudo apt-get -y install grafana
 
-  echo "  - Configuring grafana"
-  #--- remove login page (no authentication, beware of internetz)
-  cat<<EOT | sudo tee -a /etc/grafana/grafana.ini
+}
+echo "  - Done!"
+
+sudo tail -5 /etc/grafana/grafana.ini | grep "auth.anonymous" --silent || {
+echo "  - Configuring grafana"
+#--- remove login page (no authentication, beware of internetz)
+cat<<EOT | sudo tee -a /etc/grafana/grafana.ini
 [auth.anonymous]
 enabled = true
 org_name = Main Org.
 org_role = Admin
 EOT
-
 }
-echo "  - Done!"
+
 
 echo -n "* Enabling grafana at boot"
 case $VERSION_ID in
