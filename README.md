@@ -125,8 +125,10 @@ The way the system figures out which input/control/output script to use, is set 
 bin/control -> control-available/pid.enhanced
 bin/input -> input-available/input-18b20
 bin/output -> output-available/heaterOutput
-bin/logging -> logging-available/none
+bin/logging-enabled/none -> logging-available/none
 ```
+
+For control, input, and output you can only link to one script. For logging, any symlink in bin/logging-enabled will be executed, hence you can log to multiple destinations if you like.
 
 You can copy these scripts and adapt them in any way you like. In particular the input script might need different setup on your Raspberry Pi, and the setup script will try and satisfy this by calling the input script with the "--setup" parameter.
 
