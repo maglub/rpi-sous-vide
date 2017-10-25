@@ -58,9 +58,11 @@ case $VERSION_ID in
     sudo systemctl start grafana-server.service
     ;;
 esac
-
 echo "  - Done!"
 
+echo -n "* Waiting 3 seconds for grafana to start properly"
+sleep 3
+echo "  - Done!"
 
 echo "* Setting up datasource and dashboard"
 
