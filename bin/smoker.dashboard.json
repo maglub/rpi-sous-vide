@@ -12,6 +12,15 @@
     "id": null,
     "title": "Smoker",
     "refresh": "10s",
+    "links": [
+        {
+          "icon": "external link",
+          "tags": [],
+          "title": "GUI",
+          "type": "link",
+          "url": "/"
+        }
+      ],
     "rows": [
       {
         "collapse": false,

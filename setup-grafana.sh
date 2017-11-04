@@ -39,12 +39,23 @@ sudo tail -5 /etc/grafana/grafana.ini | grep "auth.anonymous" --silent || {
 echo "  - Configuring grafana"
 #--- remove login page (no authentication, beware of internetz)
 cat<<EOT | sudo tee -a /etc/grafana/grafana.ini
+[server]
+http_addr = 127.0.0.1
+root_url = %(protocol)s://%(domain)s:%(http_port)s/grafana
+
 [auth.anonymous]
 enabled = true
 org_name = Main Org.
 org_role = Admin
 EOT
 }
+echo "  - Done!"
+
+echo -n "  - Configuring lighttpd"
+configDir=$this_dir/conf
+[ ! -h /etc/lighttpd/conf-enabled/10-proxy.conf ] && sudo ln -s $configDir/lighttpd/10-proxy.conf /etc/lighttpd/conf-enabled
+echo "  - Done!"
+
 
 
 echo -n "* Enabling grafana at boot"
