@@ -1,4 +1,10 @@
-//var firstTime = true;
+function setupArc(){
+
+//  var canvas = d3.select("#gauge").append("svg").attr("width",1000).attr("height",50).attr("id", "bar");
+  // ugly centering of the gauge on an iphone
+  var canvas = d3.select("#gauge").append("svg").attr("width",600).attr("height",200).append("g").attr("transform", "translate(145,100)").attr("id", "arc");
+
+}
 
 function updateStats(){
 
@@ -12,32 +18,6 @@ function updateStats(){
   });
 
   setTimeout('updateStats()', 5000);
-}
-
-function setupArc(){
-
-//  var canvas = d3.select("#gauge").append("svg").attr("width",1000).attr("height",50).attr("id", "bar");
-  // ugly centering of the gauge on an iphone
-  var canvas = d3.select("#gauge").append("svg").attr("width",600).attr("height",200).append("g").attr("transform", "translate(145,100)").attr("id", "arc");
-
-}
-
-function drawBar(d){
-
-  var data = [100, d["setpoint"], d["temperature"] ];
-  var color = d3.scale.ordinal().range(["red", "blue", "orange"]);
-
-  var canvas = d3.select("#bar");
-
-  canvas.selectAll("rect").remove();
-
-  var bars = canvas.selectAll("rect").data(data).enter()
-               .append("rect")
-               .attr("width", function(d) {return d * 10;})
-               .attr("height", function(d,i){ return 50 - 10*i; } )
-               .attr("y", function(d, i) { return 5*i; })
-               .attr("fill", function(d, i) { return color(i);})
-               .attr("id", function(d,i){ return "niklas"+i;});
 }
 
 function drawArc(d){
