@@ -2,6 +2,7 @@
 
 I make mistakes, very often. Build this on your own risk.
 
+
 # Introduction
 
 * 2016-05-15, NOTE: This is a work in progress. Please wait a few weeks and come back.
@@ -70,6 +71,8 @@ Separating the components in that way, I can play around with different ways of 
 * Install git
 * Clone this repo to ~pi
 * Run the setup.sh script (will download and set up php dependencies)
+* Run the setup-influddb.sh script (will download and set up influxdb)
+* Run the setup-grafana.sh script (will download and set up php dependencies)
 * Reboot (since setup.sh will add items to /boot/config.txt and /etc/modules.conf)
 * Go to http://YOUR_PI_IP for the web gui
 * Go to http://YOUR_PI_IP:3000 for grafana (if installed)
@@ -84,6 +87,8 @@ git clone https://github.com/maglub/rpi-sous-vide.git
 
 cd rpi-sous-vide
 ./setup.sh
+./setup-influxdb.sh
+./setup-grafana.sh
 
 sudo shutdown -r now
 ```
