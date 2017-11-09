@@ -128,6 +128,12 @@ Note, the installation of influxdb and grafana will take a while. I only show th
 ./setup-grafana.sh
 ```
 
+## Upgrade
+
+```
+git pull
+./setup.sh
+```
 
 ## Different input/control/output/logging possibilities
 
