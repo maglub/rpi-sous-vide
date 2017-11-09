@@ -58,7 +58,7 @@ echo "  - Done!"
 
 
 
-echo -n "* Enabling grafana at boot"
+echo -n "* Enabling grafana at boot and restarting lighttpd"
 case $VERSION_ID in
   7)
     sudo update-rc.d grafana-server defaults
