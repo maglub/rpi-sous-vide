@@ -63,11 +63,13 @@ case $VERSION_ID in
   7)
     sudo update-rc.d grafana-server defaults
     sudo service grafana-server start
+    sudo service lighttpd restart
     ;;
   *)
     sudo /bin/systemctl daemon-reload
     sudo systemctl enable grafana-server.service
     sudo systemctl start grafana-server.service
+    sudo systemctl restart lighttpd.service
     ;;
 esac
 echo "  - Done!"
