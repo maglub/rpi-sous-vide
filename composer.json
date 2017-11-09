@@ -10,10 +10,9 @@
         }
     ],
     "require": {
-        "slim/slim": "^2.6",
-        "dogancelik/slim-json": "dev-master",
-        "twig/twig": "1.*",
-        "slim/views": "dev-master"
+        "slim/slim": "^3.3",
+        "slim/twig-view": "^2.1",
+        "dogancelik/slim-json": "dev-master"
     },
     "minimum-stability": "dev" 
 }

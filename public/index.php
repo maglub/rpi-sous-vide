@@ -1,5 +1,6 @@
 <?php
 	session_start();
+        ini_set ( 'display_errors', 'On' );
 
         //set up environment for cli
         if (!(isset($_SERVER['DOCUMENT_ROOT']) && $_SERVER['DOCUMENT_ROOT'] !== "")) {
@@ -13,23 +14,42 @@
 
 	require_once("./stub.php");
 
+// SLIM v3.3 Middleware PSR7 Request-Response Objects
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\ResponseInterface;
+
+
 	require_once($root . "myfunctions.inc.php");
 	require_once($root . "auth.inc.php");
 	require_once($root."/../vendor/autoload.php");
+
 #	$config = getAppConfig($root . "/../etc/rpi-sous-vide.conf");
 
-        #--- instantiate Slim and SlimJson
-        $app = new \Slim\Slim(array(
-             'templates.path' => $root . '/templates')
-        );
+// ------------------------------------------------------
+// --- instantiate Slim
+// ------------------------------------------------------
+$configuration = [
+	'settings' => [
+		'displayErrorDetails' => true,
+		'debug' => true
+	]
+];
+$container = new \Slim\Container ( $configuration );
 
-        //if run from the command-line
-        if ($_SERVER['HTTP_HOST'] === "cron"){
-                // Set up the environment so that Slim can route
-                $app->environment = Slim\Environment::mock([
-                    'PATH_INFO'   => $pathInfo
-                ]);
-        }
+
+$app = new \Slim\App ( $container );
+$tpath = $root. '/templates';
+
+
+
+
+#        //if run from the command-line
+#        if ($_SERVER['HTTP_HOST'] === "cron"){
+#                // Set up the environment so that Slim can route
+#                $app->environment = Slim\Environment::mock([
+#                    'PATH_INFO'   => $pathInfo
+#                ]);
+#        }
 
   #===============================================
   # Authenticate per HTTP AUTH if requested
@@ -39,58 +59,57 @@
   #===============================================
   authenticateHttpAuth();
 
-// define the engine used for the view
-$app->view(new \Slim\Views\Twig());
+// Register component on container
+$container ['view'] = function ($container) {
+	global $tpath;
+	$view = new \Slim\Views\Twig ($tpath);
+	$view->addExtension ( new \Slim\Views\TwigExtension ( $container ['router'], $container ['request']->getUri () ) );
+	return $view;
+};
 
-// configure Twig template engine
-$app->view->parserOptions = array(
-   'charset' => 'utf-8',
-   'cache' => realpath('templates/cache'),
-   'auto_reload' => true,
-   'strict_variables' => false,
-   'autoescape' => true
-);
-
-$app->view->parserExtensions = array(new \Slim\Views\TwigExtension());
-
-$twig = $app->view()->getEnvironment();
-$twig->addGlobal('devicename', gethostname());
-$twig->addGlobal('isOffline', (isset($config['isOffline']) && $config['isOffline'] == "true")?true:false);
-#$twig->addGlobal('config', $config);
-$twig->addGlobal('isAuthenticated', isAuthenticated());
 
 #===================================================
 # Main
 #===================================================
 
-$app->get('/', function () use ($app) {
+//$app->get('/', function (ServerRequestInterface $request, ResponseInterface $response, $args = []) use ($app) {
+$app->any('/', function (ServerRequestInterface $request, ResponseInterface $response, $args = []) {
   
   $processes = getProcesses();
 
-  $app->render('index.html', [ "temperature" => getTemperatureByFile(), "setpoint" => getSetpointByFile(), "heaterDuty" => getHeaterDutyByFile() , "processes" => $processes ]);
-})->name("root");
+  return $this->view->render($response, 'index.html', [ "temperature" => getTemperatureByFile(),
+                                                        "setpoint" => getSetpointByFile(),
+                                                        "heaterDuty" => getHeaterDutyByFile() ,
+                                                        "processes" => $processes ]);
+} )->setName('root');
 
 #=============================================================
 # /config
 #=============================================================
-$app->map('/config', function () use ($app,$root) {
-  if ($app->request()->isPost()) {
+//$app->map('/config', function () use ($app,$root) {
+$app->map( ['GET','POST'],'/config', function (ServerRequestInterface $request, ResponseInterface $response, $args = []) use ($app,$root) {
 
-    #--- actionTemperature
 
-    #--- actionProcesses
-    $action = $app->request->post('action');
+  if ($request->isPost() ) {
+
+    //POST or PUT
+    $allPostPutVars = $request->getParsedBody();
+    foreach($allPostPutVars as $key => $param){
+       //POST or PUT parameters list
+    }
+
+    $action = $allPostPutVars['action'];
     switch ($action) {
       case "Start":
-        $res = startProcesses(); 
+        $res = startProcesses();
         break;
 
       case "Stop":
-        $res = killProcesses(); 
+        $res = killProcesses();
         break;
 
       case "Temperature":
-        $temperature = $app->request->post('temperature');
+        $temperature = $request->post('temperature');
         $res = setSetpoint($temperature);
         break;
 
@@ -115,71 +134,28 @@ $app->map('/config', function () use ($app,$root) {
         break;
 
     }
-    $returnTo = ($app->request->post('returnTo') != null)?$app->request->post('returnTo'):"config"; 
-    $app->redirect($app->urlFor($returnTo));
+
+    $returnTo = (isset($allPostPutVars['returnTo']))?$allPostPutVars['returnTo']:"config";
+    return $response->withStatus(302)->withHeader('Location',$request->getUri()->withPath($this->router->pathFor($returnTo)));
+
+
   }
 
   $processes = getProcesses();
+  $setpoint  = getSetpointByFile();
 
-  $setpoint = getSetpointByFile();
+  return $this->view->render($response, 'config.html', ["processes"=>$processes, "setpoint"=>$setpoint]);
 
-  $app->render('config.html', ["processes"=>$processes, "setpoint"=>$setpoint]);
-
-})->via('GET', 'POST')->name('config');
-
-#=============================================================
-# /login
-#=============================================================
-$app->map('/login', function () use ($app) {
-
-    $username = null;
-
-    if ($app->request()->isPost()) {
-        $username = "admin";
-        $password = $app->request->post('password');
-
-	$result = authenticate($username, $password);
-        #$result = $app->authenticator->authenticate($username, $password);
-
-        if ($result) {
-			$_SESSION["username"] = "admin";
-			$_SESSION["role"] = "admin";
-            $app->redirect('/');
-        } else {
-            $messages = "Wrong password";
-            $app->flashNow('error', $messages);
-        }
-    }
-
-    $app->render('login.html', []);
-})->via('GET', 'POST')->name('login');
-
-$app->get('/logout', function() use ($app){
-	$_SESSION = array();
-	session_destroy();
-    $app->redirect('/');
-	
-});
-
-$app->get('/admin', function () use ($app, $root) {
-    $crontab = shell_exec("sudo -u pi ${root}/../bin/wrapper getCrontab 2>/dev/null");
-   $app->render('admin.html', [ "crontab" => $crontab ]);
-});
+})->setName('config');
 
 #====================================================
 # REST API
 #====================================================
 $app->get('/api/temperature', function() use ($app, $root){
 
-#  if (isAuthenticated()){
-    #$curRes = [ "temperature" => getTemperature() , "status" => "ok" ];
   $curRes = [ "temperature" => getTemperatureByFile() , "status" => "ok" ];
   echo json_encode($curRes);
 
-#    echo "{\"temperature\":\"{$curRes}\", \"status\":\"ok\"}\n";
-#  } else {
-#    echo "{\"status\":\"error\", \"message\":\"not authenticated\"}\n";
-#  }
   return 0;
 });
 
@@ -198,16 +174,10 @@ $app->get('/api/heaterduty', function() use ($app, $root){
 $app->get('/api/all', function() use ($app, $root){
   $curPid = getPid();
   $curTemperature = getTemperatureByFile();
-  $curSetpoint = getSetpointByFile();
-  $curHeaterDuty = getHeaterDutyByFile();
+  $curSetpoint    = getSetpointByFile();
+  $curHeaterDuty  = getHeaterDutyByFile();
 
   $processes = getProcesses();
-
-/*
-  $inputRunning = getInputRunning();
-  $controlRunning = getControlRunning();
-  $outputRunning = getOutputRunning();
-*/
 
   $curRes = [ "kp"          => isset($curPid["pid_kp"])?$curPid["pid_kp"]:0,
               "ki"          => isset($curPid["pid_ki"])?$curPid["pid_ki"]:0,
@@ -227,7 +197,12 @@ $app->get('/api/all', function() use ($app, $root){
 
 $app->get('/api/pid', function() use ($app, $root){
   $curPid = getPid();
-  $curRes = [ "kp" => $curPid["pid_kp"], "ki" => $curPid["pid_ki"], "kd" => $curPid["pid_kd"], "outMin" => $curPid["pid_outMin"], "outMax" => $curPid["pid_outMax"],  "status" => "ok" ];
+  $curRes = [ "kp"     => $curPid["pid_kp"],
+              "ki"     => $curPid["pid_ki"],
+              "kd"     => $curPid["pid_kd"],
+              "outMin" => $curPid["pid_outMin"],
+              "outMax" => $curPid["pid_outMax"],
+              "status" => "ok" ];
   echo json_encode($curRes);
   return 0;
 });
