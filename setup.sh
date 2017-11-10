@@ -4,6 +4,27 @@ this_dir=$(cd `dirname $0`; pwd)
 binDir=$this_dir/bin
 configDir=$this_dir/conf
 
+setupLocale=true
+
+cat<<EOT
+
+#================================
+# correctly configure locales
+#================================
+EOT
+
+#--- setting up the locale
+[ -n "$setupLocale" ] && {
+  echo "  - setting up locale (if not already set up)"
+  [[ -z "$(grep -v '^#' /etc/locale.gen | grep 'en_US.UTF-8')" ]] && {
+    sudo sed -ie  's/^# en_US.UTF-8/en_US.UTF-8/' /etc/locale.gen
+    sudo locale-gen
+    sudo update-locale LANG=en_US.UTF-8
+    sudo update-locale LANGUAGE=en_US.UTF-8
+    sudo update-locale LC_ALL=en_US.UTF-8
+  }
+}
+
 cat<<EOT
 
 #================================
