@@ -147,7 +147,14 @@ EOT
   curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer ;
 }
 cd $this_dir
-composer install
+
+if [ ! -f ./composer.lock ] 
+then
+  composer install
+else
+  composer update
+fi
+
 cd -
 
 cat<<EOT
