@@ -109,7 +109,7 @@ $app->map( ['GET','POST'],'/config', function (ServerRequestInterface $request, 
         break;
 
       case "Temperature":
-        $temperature = $request->post('temperature');
+        $temperature = $allPostPutVars['temperature'];
         $res = setSetpoint($temperature);
         break;
 
