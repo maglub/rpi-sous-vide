@@ -29,6 +29,14 @@ function getAppConfig($configFile = __DIR__ . "/../conf/app.conf"){
 
 
 #=============================================================
+# Maintenance functions
+#=============================================================
+function gitPull(){
+        $curRes = `sudo -u pi 'sh -c "cd ~/rpi-sous-vide ; git pull"'`;
+        return $curRes;
+}
+
+#=============================================================
 # Sous vide specific functions
 #=============================================================
 function getTemperature(){
