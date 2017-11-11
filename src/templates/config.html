@@ -183,7 +183,7 @@
               {% if gitresult['output'] %}
               Result:<br><p>
               <div class="well">
-                {{ gitresult['output'] }}
+                {{ gitresult['parsedOutput'] | raw }}
               </div>
               {% endif %}
             </div>

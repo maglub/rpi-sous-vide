@@ -153,6 +153,14 @@ $app->map( ['GET','POST'],'/config', function (ServerRequestInterface $request, 
   $logscripts = getLoggingAvailable();
   $devices = getDevices();
 
+  if (isset($gitResult['output'])) {
+    $gitResult['parsedOutput'] = Parsedown::instance()->parse(
+                  '```\n' .
+                  $gitResult['output'] .
+                  '\n```'
+		);
+  }
+
   return $this->view->render($response, 'config.html',
                             [ "processes"=>$processes,
                               "setpoint"=>$setpoint,

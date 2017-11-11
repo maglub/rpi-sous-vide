@@ -12,6 +12,7 @@
     "require": {
         "slim/slim": "^3.3",
         "slim/twig-view": "^2.1",
+        "erusev/parsedown": "dev-master",
         "dogancelik/slim-json": "dev-master"
     },
     "minimum-stability": "dev" 
