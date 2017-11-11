@@ -96,7 +96,16 @@ function getDevices($type = "18s20"){
 #=============================================================
 function gitPull(){
 	$curRes = `sudo -u pi ../bin/wrapper gitPull`;	
-        return $curRes;
+
+        if ($curRes == "Already up-to-date.\n") {
+          $result['changed'] = false;
+        } else {
+          $result['changed'] = true;
+        }
+
+        $result['output'] = $curRes;
+
+        return $result;
 }
 
 #=============================================================

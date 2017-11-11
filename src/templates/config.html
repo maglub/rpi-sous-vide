@@ -174,11 +174,12 @@
               <form role="form" action="/config" method="POST">
                 <button type="submit" name="action" value="git-pull" class="btn btn-success">Git pull</button>
               </form>
-
+              {% if gitresult['changed'] %}
               Result:<br><p>
               <div class="well">
-                {{ gitresult }}
+                {{ gitresult['output'] }}
               </div>
+              {% endif %}
             </div>
           </div>
         </div>
