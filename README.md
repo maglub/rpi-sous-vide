@@ -130,10 +130,14 @@ Note, the installation of influxdb and grafana will take a while. I only show th
 
 ## Upgrade
 
+* On the command line
+
 ```
 git pull
 ./setup.sh
 ```
+
+* You can also do a git pull from the GUI, which does not automatically run the ./setup.sh script
 
 ## Different input/control/output/logging possibilities
 
