@@ -7,9 +7,9 @@
    </div>
 </div>
 
-<div class="col-lg-8 col-sm-4">
+<div class="col-lg-6 col-md-12 col-sm-12">
   <div class="row"><!-- Set temperature -->
-    <div class="col-lg-8">
+    <div class="col-lg-12">
       <div class="panel panel-default">
         <div class="panel-heading">Temprature Setpoint</div>
         <div class="panel-body">
@@ -55,7 +55,7 @@
   </div><!-- End Set temperature -->
 
 <div class="row"><!-- List processes -->
-	<div class="col-lg-8">
+	<div class="col-lg-12">
 		<div class="panel panel-default">
 			<div class="panel-heading">Processes</div>
 			<div class="panel-body">
@@ -102,36 +102,90 @@
 	</div>
 </div>
 
-<div class="row"><!-- List of Plugins -->
-        <div class="col-lg-8">
-                <div class="panel panel-default">
-                        <div class="panel-heading">Plugins</div>
-                        <div class="panel-body">
-                          <div class="table-responsive">
-                                <table class="table table-condensed table-hover">
-                                        <thead>
-                                                <tr>
-                                                        <th>Plugin</th>
-                                                        <th>Type</th>
-                                                        <th>Active</th>
-                                                        <th>Info</th>
-                                                </tr>
-                                        </thead>
-                                        <tbody>
-                                        {% for plugin in installedPlugins %}
-                                                <tr>
-                                                        <td> {{ plugin }} </td>
-                                                        <td> {% if plugin in activePlugins %} Yes {% else %} No {% endif %} </td>
-                                                        <td> {{ plugininfo[plugin] }} </td>
-                                                </tr>
-                                                {% endfor %}
-                                        </tbody>
-                                </table>
-                          </div>
-                        </div>
-                </div>
-        </div>
+<div class="row"><!-- List of Devices -->
+  <div class="col-lg-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">Devices</div>
+      <div class="panel-body">
+        <div class="table-responsive">
+          <table class="table table-condensed table-hover">
+            <thead>
+              <tr>
+                <th>Device path</th>
+                <th>Alias</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for device in devices %}
+              <tr>
+                <td> {{ device['devicepath'] }} </td>
+                <td> {{ device['alias'] }} </td>
+              </tr>
+              {% endfor %}
+             </tbody>
+           </table>
+         </div>
+       </div>
+     </div>
+   </div>
 </div>
+
+<div class="row"><!-- List of Logging -->
+  <div class="col-lg-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">Logging available</div>
+      <div class="panel-body">
+        <div class="table-responsive">
+          <table class="table table-condensed table-hover">
+            <thead>
+              <tr>
+                <th>Script</th>
+                <th>Type</th>
+                <th>Active</th>
+                <th>Info</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for logscript in logscripts %}
+              <tr>
+                <td> {{ logscript['name'] }} </td>
+                <td> Log script</td>
+                <td> {% if logscript['enabled'] %} Yes {% else %} No {% endif %} </td>
+                <td> {{ logscript['info'] }} </td>
+              </tr>
+              {% endfor %}
+             </tbody>
+           </table>
+         </div>
+       </div>
+     </div>
+   </div>
+</div>
+
+  <div class="row"><!-- Upgrade (git pull) -->
+    <div class="col-lg-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">Upgrade software</div>
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-lg-12">
+
+              Upgrade from git:<br><p>
+              <form role="form" action="/config" method="POST">
+                <button type="submit" name="action" value="git-pull" class="btn btn-success">Git pull</button>
+              </form>
+
+              Result:<br><p>
+              <div class="well">
+                {{ gitresult }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div><!-- End Set temperature -->
+
 </div>
 
 {% endblock %}

@@ -24,6 +24,11 @@ function initRelays(){
   done
 }
 
+function gitPull(){
+  cd $this_dir/..
+  git pull
+}
+
 function getW1DevicePath(){
   [ -z "$1" ] && local curDevice=$(ls /sys/bus/w1/devices | grep "^2" | head -1)
   echo "/sys/bus/w1/devices/$curDevice"
@@ -42,6 +47,8 @@ function getW1Temperature(){
 function getAlias(){
   local curDevice=$1
   local curAlias
+
+  [ -z "$1" ] && return 0
 
   [ ! -f $this_dir/../conf/aliases.conf ] && { echo $(basename $curDevice) ; return 0 ; }
   curAlias=$(grep "^$1" $this_dir/../conf/aliases.conf | awk -F";" '{print $NF}')

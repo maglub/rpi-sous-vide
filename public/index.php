@@ -89,6 +89,7 @@ $app->any('/', function (ServerRequestInterface $request, ResponseInterface $res
 //$app->map('/config', function () use ($app,$root) {
 $app->map( ['GET','POST'],'/config', function (ServerRequestInterface $request, ResponseInterface $response, $args = []) use ($app,$root) {
 
+  $gitResult = "";
 
   if ($request->isPost() ) {
 
@@ -133,18 +134,32 @@ $app->map( ['GET','POST'],'/config', function (ServerRequestInterface $request, 
         $res = setSetpoint(100);
         break;
 
+      case "git-pull":
+        $gitResult = gitPull();
+        break;
+
     }
 
-    $returnTo = (isset($allPostPutVars['returnTo']))?$allPostPutVars['returnTo']:"config";
-    return $response->withStatus(302)->withHeader('Location',$request->getUri()->withPath($this->router->pathFor($returnTo)));
+    if ($action != "git-pull"){
+      $returnTo = (isset($allPostPutVars['returnTo']))?$allPostPutVars['returnTo']:"config";
+      return $response->withStatus(302)->withHeader('Location',$request->getUri()->withPath($this->router->pathFor($returnTo)));
+    }
 
 
   }
 
   $processes = getProcesses();
   $setpoint  = getSetpointByFile();
+  $logscripts = getLoggingAvailable();
+  $devices = getDevices();
 
-  return $this->view->render($response, 'config.html', ["processes"=>$processes, "setpoint"=>$setpoint]);
+  return $this->view->render($response, 'config.html',
+                            [ "processes"=>$processes,
+                              "setpoint"=>$setpoint,
+                              "logscripts" => $logscripts,
+                              "devices" => $devices,
+                              "gitresult" => $gitResult
+                              ]);
 
 })->setName('config');
 

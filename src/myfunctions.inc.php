@@ -28,11 +28,74 @@ function getAppConfig($configFile = __DIR__ . "/../conf/app.conf"){
 }
 
 
+function isLoggingEnabled($logName){
+
+  $loggingEnabledDir = __DIR__ . "/../bin/logging-enabled";
+  if (file_exists($loggingEnabledDir . "/" . $logName)){
+    return true;
+  } else {
+    return false;
+  }
+
+}
+
+function getLoggingAvailable(){
+
+  $loggingAvailableDir = __DIR__ . "/../bin/logging-available";
+  $files = scandir($loggingAvailableDir);
+
+  $logscripts = Array();
+
+  foreach ($files as $file) {
+    if ($file != "." && $file != ".."){
+      $logscripts[] = [ 'name' => $file ] ;
+    }
+  }
+
+  foreach ($logscripts as &$logscript){
+    $logscript['enabled'] = isLoggingEnabled($logscript['name']);
+  }
+
+  return $logscripts;
+}
+
+function getDevices18s20(){
+  $res = `../bin/wrapper getW1DevicePaths`;	
+
+#  echo $res;
+  $devices = explode("\n", $res);
+
+  $res = Array();
+  foreach ($devices as $device){
+    if ($device != ""){
+      $alias = `../bin/wrapper getAlias {$device}`;
+      $res[] = ["devicepath" => $device, "alias" => $alias];
+    }
+  }
+
+  return $res;
+}
+
+function getDevices($type = "18s20"){
+
+  $devices=Array();
+
+  switch($type){
+
+    case "18s20":
+      $res = getDevices18s20();
+      break;
+  }
+
+  return $res;
+
+}
+
 #=============================================================
 # Maintenance functions
 #=============================================================
 function gitPull(){
-        $curRes = `sudo -u pi 'sh -c "cd ~/rpi-sous-vide ; git pull"'`;
+	$curRes = `sudo -u pi ../bin/wrapper gitPull`;	
         return $curRes;
 }
 
