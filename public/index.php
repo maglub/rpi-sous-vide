@@ -154,10 +154,10 @@ $app->map( ['GET','POST'],'/config', function (ServerRequestInterface $request, 
   $devices = getDevices();
 
   if (isset($gitResult['output'])) {
-    $gitResult['parsedOutput'] = Parsedown::instance()->parse(
-                  '```\n' .
+    $gitResult['parsedOutput'] = Parsedown::instance()->text(
+                  "```\n" .
                   $gitResult['output'] .
-                  '\n```'
+                  "\n```"
 		);
   }
 
