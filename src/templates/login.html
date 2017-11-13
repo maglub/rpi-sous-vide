@@ -8,11 +8,13 @@
                 <div class="login-panel panel panel-default">
                     <div class="panel-heading">
                         <h3 class="panel-title">Please Sign In</h3>
-					    {% if flash['error'] is defined %}
+						
+    {% for msg in flash('error') %}
 					    <br><div class="alert alert-danger">
-					        {{ flash.error }}
+					        {{ msg }}
 					    </div>
-					    {% endif %}
+    {% endfor %}
+
 						
                     </div>
                     <div class="panel-body">

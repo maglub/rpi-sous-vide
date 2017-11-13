@@ -27,7 +27,6 @@ function getAppConfig($configFile = __DIR__ . "/../conf/app.conf"){
 	return $config;
 }
 
-
 function isLoggingEnabled($logName){
 
   $loggingEnabledDir = __DIR__ . "/../bin/logging-enabled";

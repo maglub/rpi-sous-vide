@@ -92,7 +92,8 @@
                           {% if isAuthenticated %}
                           {% endif %}
                           Start/stop processes:
-                          <form role="form" action="/config" method="POST">
+                          <form role="form" action="/action" method="POST">
+                            <input type="hidden" name="returnTo" value="config">
                             <input type="submit" name="action" value="Start" class="btn btn-success">
                             <input type="submit" name="action" value="Stop" class="btn btn-danger">
                           </form>
@@ -177,15 +178,15 @@
             <div class="col-lg-12">
 
               Upgrade from git:<br><p>
-              <form role="form" action="/config" method="POST">
+              <form role="form" action="/action" method="POST">
+                <input type="hidden" name="returnTo" value="config">
                 <button type="submit" name="action" value="git-pull" class="btn btn-success">Git pull</button>
               </form>
-              {% if gitresult['output'] %}
-              Result:<br><p>
-              <div class="well">
+
+{% if gitresult['output'] %}
+              <br>Result:<br><p>
                 {{ gitresult['parsedOutput'] | raw }}
-              </div>
-              {% endif %}
+{% endif %}
             </div>
           </div>
         </div>

@@ -96,25 +96,22 @@
                      <li>
                         <a href="/"><i class="fa fa-dashboard fa-fw"></i> Home</a>
                      </li>
-                     
-                     <li>
-                        <a href="/config"><i class="fa fa-wrench fa-fw"></i> Config</a>
-                     </li>
                      <li>
                         <a href="/grafana"><i class="fa fa-bar-chart-o fa-fw"></i> Grafana</a>
                      </li>
+                     
 {% if isAuthenticated %}
                      <li>
-                        <a href="/admin"><i class="fa fa-lock fa-fw"></i> Admin</a>
+                        <a href="/config"><i class="fa fa-wrench fa-fw"></i> Config</a>
                      </li>
 {% endif %}
 
                      <li>
-						{% if(isAuthenticated) %}
+{% if(isAuthenticated) %}
                         <a href="/logout"><i class="fa fa-user fa-fw"></i> Log out</a>
-						{% else %}
+{% else %}
                         <a href="/login"><i class="fa fa-user fa-fw"></i> Login</a>
-						{% endif %}
+{% endif %}
                      </li>
                                        
                   </ul>
