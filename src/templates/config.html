@@ -183,10 +183,13 @@
                 <button type="submit" name="action" value="git-pull" class="btn btn-success">Git pull</button>
               </form>
 
-{% if gitresult['output'] %}
-              <br>Result:<br><p>
+              {% if gitresult['output'] %}
+              <br><h1>Result:</h1>
                 {{ gitresult['parsedOutput'] | raw }}
-{% endif %}
+              <ul>
+                <li>Note: many updates require you to re-run ./setup.sh on the command prompt.</li>
+              </ul>
+              {% endif %}
             </div>
           </div>
         </div>
