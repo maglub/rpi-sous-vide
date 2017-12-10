@@ -21,6 +21,10 @@ PILOGGER_DATA=$2
 
 curl -i -XPOST "http://${influxHost}:${influxPort}/write?db=${influxDb}" --data-binary "sensor_data,sensor=${PILOGGER_SENSOR} value=${PILOGGER_DATA}" > /dev/null 2>&1
 
+[ -n "$DEBUG" ] && cat<<EOT
+curl -i -XPOST "http://${influxHost}:${influxPort}/write?db=${influxDb}" --data-binary "sensor_data,sensor=${PILOGGER_SENSOR} value=${PILOGGER_DATA}" > /dev/null 2>&1
+EOT
+
 #--- Example curl calls, helps for debugging.
 #--- create database "smoker": curl -G http://192.168.4.55:8086/query --data-urlencode "q=CREATE DATABASE smoker"
 #--- example query:  curl -G 'http://192.168.4.55:8086/query?pretty=true' --data-urlencode "db=smoker" --data-urlencode "q=SELECT * FROM sensor_data"
