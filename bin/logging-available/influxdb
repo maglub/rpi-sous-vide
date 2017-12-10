@@ -4,7 +4,7 @@ this_dir=$(cd $(dirname $0);pwd)
 this_script=$(basename $0)
 
 #--- read config files
-. $this_dir/../conf/app.conf
+. $this_dir/../../conf/app.conf
 [ -f $this_dir/../conf/${this_script}.conf ] && . $this_dir/../conf/${this_script}.conf
 
 #----------------------------
