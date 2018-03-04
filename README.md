@@ -19,9 +19,11 @@ The basic idea is to:
 * Metric/Temperature collection and graphing
 
 The application, as seen on a mobile device:
+
 <img width=250px src=pics/screenshot-mobilephone.png>
 
 Dasboard in grafana:
+
 <img src=pics/screenshot-bacon.png>
 
 This was a "one day project" that turned into a weekend project, that turned into... It is not really in a state to be used by anyone else than me at the moment, but the basic idea is to have a web-gui based on:
