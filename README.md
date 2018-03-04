@@ -13,7 +13,7 @@ I make mistakes, very often. Build this on your own risk.
 rpi-sous-vide is a Raspberry pi based PID controller for a home built sous vide machinery, a home built smoker (to smoke meat, fish, etc), a greenhouse, or anything else that you need to control depending on the current temperature, and a setpoint temperature that you wish to reach. The basic principle is the same. I even use it to control the solar heating for my pool. You measure the media (water or air), and decide to turn on or off a heating element or a pump. Currently it supports two output relays, to control a heating element and a motor to stir water.
 
 <img src=pics/screenshot-bacon.png>
-<img src=pics/screenshot-mobilephone.png>
+<img width=480px src=pics/screenshot-mobilephone.png>
 
 This was a "one day project" that turned into a weekend project, that turned into... It is not really in a state to be used by anyone else than me at the moment, but the basic idea is to have a web-gui based on:
 
