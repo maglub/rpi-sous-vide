@@ -1,23 +1,22 @@
 #!/bin/bash
 
-n=1
+this_dir=$(cd $(dirname $0); pwd)
+. $this_dir/../conf/app.conf
+
+[ -z "$application_type" ] && application_type=smoker
+
+case $application_type in
+  greenhouse)
+    DEVICE_ALIAS=(soil-temp air-temp greenhouse-temp)
+    ;;
+  smoker|*)
+    DEVICE_ALIAS=(smoker-temp air-temp smoke-generator-temp)
+    ;;
+esac
+
+n=0
 for device in $(ls /sys/bus/w1/devices | grep 28)
 do
-  case $n in
-    1)
-      echo "/sys/bus/w1/devices/$device;smoker-temp"
-      ;; 
-    2)
-      echo "/sys/bus/w1/devices/$device;air-temp"
-      ;; 
-    3)
-      echo "/sys/bus/w1/devices/$device;smoke-generator-temp"
-      ;; 
-  esac
+  echo "/sys/bus/w1/devices/$device;${ARRAY[$n]}"
   (( n = $n + 1 ))
 done
-
-#/sys/bus/w1/devices/28-0000054dd803;smoker-temp
-#/sys/bus/w1/devices/28-0000054e25dd;air-temp
-#/sys/bus/w1/devices/28-0000054e64c2;smoke-generator-temp
-
