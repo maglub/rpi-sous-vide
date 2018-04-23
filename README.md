@@ -110,6 +110,7 @@ sudo shutdown -r now
 After the reboot, the 1wire interface is enabled and you should be able to see your devices. You should give your sensors names in the conf/aliases.conf file now.
 
 ```
+#--- if you set up a greenhouse, change the application_type to "greenhouse" in conf/app.conf
 cd rpi-sous-vide
 ./bin/genAliases | tee conf/aliases.conf
 ```
