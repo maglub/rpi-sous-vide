@@ -4,17 +4,22 @@ this_dir=$(cd $(dirname $0);pwd)
 this_script=$(basename $0)
 
 #--- read config files
-. $this_dir/../conf/app.conf
-[ -f $this_dir/../conf/${this_script}.conf ] && . $this_dir/../conf/${this_script}.conf
+. $this_dir/../../conf/app.conf
+[ -f $this_dir/../../conf/${this_script}.conf ] && . $this_dir/../../conf/${this_script}.conf
 
 #----------------------------
 # influx
 #----------------------------
 #--- set these variables in conf/app.conf - default below works in my (Magnus) environment
-[ -z "$influxHost" ]     && influxHost=192.168.4.55
-[ -z "$influxPort" ]     && influxPort=8086
-[ -z "$influxDb" ]       && influxDb=smokerWue
-[ -z "$influxSenderId" ] && influxSenderId=wue-smoker
+#[ -z "$influxHost" ]     && influxHost=192.168.4.55
+#[ -z "$influxPort" ]     && influxPort=8086
+#[ -z "$influxDb" ]       && influxDb=smokerWue
+#[ -z "$influxSenderId" ] && influxSenderId=wue-smoker
+
+[ -z "$influxHost" ]     && { echo "influxHost is not set in app.conf" ; exit 1 ; }
+[ -z "$influxPort" ]     && { echo "influxPort is not set in app.conf" ; exit 1 ; }
+[ -z "$influxDb" ]       && { echo "influxDb is not set in app.conf" ; exit 1 ; }
+[ -z "$influxSenderId" ] && { echo "influxSenderId is not set in app.conf" ; exit 1 ; }
 
 PILOGGER_SENSOR=$1
 PILOGGER_DATA=$2
