@@ -17,6 +17,6 @@ esac
 n=0
 for device in $(ls /sys/bus/w1/devices | grep 28)
 do
-  echo "/sys/bus/w1/devices/$device;${ARRAY[$n]}"
+  echo "/sys/bus/w1/devices/$device;${DEVICE_ALIAS[$n]}"
   (( n = $n + 1 ))
 done
