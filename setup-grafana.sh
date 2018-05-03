@@ -97,7 +97,7 @@ do
   echo
   echo "  - Delete dashboard: $n"
   #--- delete dashboard
-  curl --silent -X DELETE 'http://localhost:3000/api/dashboards/db/${n}'
+  curl --silent -X DELETE "http://localhost:3000/api/dashboards/db/${n}"
 done
 
 echo
@@ -109,8 +109,6 @@ echo
 echo "  - Setting dashboard as home: ${application_type}"
 #--- set the dashboard  as Home
 curl --silent -H 'Content-Type: application/json;charset=UTF-8' 'http://localhost:3000/api/user/preferences/' -X PUT --data-binary '{"homeDashboardId":'$(curl --silent http://localhost:3000/api/dashboards/db/${application_type} | jq '.dashboard.id')'}'
-
-  ;;
 
 echo "  - Done!"
 
