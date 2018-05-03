@@ -98,6 +98,10 @@ sudo apt-get -y install git
 git clone https://github.com/maglub/rpi-sous-vide.git
 
 cd rpi-sous-vide
+
+#--- if you need en_US.UTF-8
+# piLoggerLocale=true ./setup.sh
+
 ./setup.sh
 ./setup-influxdb.sh
 ./setup-grafana.sh
