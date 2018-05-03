@@ -101,6 +101,7 @@ do
   curl --silent -X DELETE "http://localhost:3000/api/dashboards/db/${n}"
 done
 
+echo
 echo -n "* Waiting 3 seconds for grafana to realize that the old dashboard is deleted properly"
 sleep 3
 echo "  - Done!"
