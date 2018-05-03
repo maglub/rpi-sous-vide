@@ -255,6 +255,9 @@ Total (ca) in CHF: ca 110.00 chf
 * Note: I could not find an SSR-25 DA in the Fritzing library.
 
 <img src=pics/schematics.png >
+<img src=pics/ds18b20-soldered.jpg >
+<img src=pics/relay-control-soldered.jpg >
+
 
 # Runtime
 
