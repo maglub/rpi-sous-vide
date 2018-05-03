@@ -3,6 +3,9 @@
 this_dir=$(cd $(dirname $0);pwd)
 
 . /etc/os-release 
+. $this_dir/conf/app.conf
+
+[ -z "$application_type" ] && application_type=smoker
 
 echo -n "* Checking pre requisites apt-transport-https jq"
 dpkg -s apt-transport-https jq >/dev/null 2>&1 || {
@@ -80,7 +83,6 @@ echo "  - Done!"
 
 echo "* Setting up datasource and dashboard"
 
-
 echo "  - Deleting data source: smoker"
 #--- delete datasource (this works without cookies, since we removed authentification above)
 curl --silent -X DELETE 'http://localhost:3000/api/datasources/name/smoker'
@@ -90,20 +92,25 @@ echo "  - Adding data source: smoker"
 #--- add datasource (this works without cookies, since we removed authentification above)
 curl --silent -H 'Content-Type: application/json;charset=UTF-8' -X POST --data-binary '{"Name":"smoker","Type":"influxdb","Access":"proxy","url":"http://localhost:8086","database":"smoker","basicAuth":false,"isDefault":true}' http://localhost:3000/api/datasources/
 
-echo
-echo "  - Delete dashboard: smoker"
-#--- delete dashboard
-curl --silent -X DELETE 'http://localhost:3000/api/dashboards/db/smoker'
+for n in smoker greenhouse
+do
+  echo
+  echo "  - Delete dashboard: $n"
+  #--- delete dashboard
+  curl --silent -X DELETE 'http://localhost:3000/api/dashboards/db/${n}'
+done
 
 echo
-echo "  - Adding dashboard: smoker"
+echo "  - Adding dashboard: $application_type"
 #--- add dashboard
-curl --silent -H 'Content-Type: application/json;charset=UTF-8' 'http://localhost:3000/api/dashboards/db/' -X POST -d @./bin/smoker.dashboard.json
+curl --silent -H 'Content-Type: application/json;charset=UTF-8' 'http://localhost:3000/api/dashboards/db/' -X POST -d @./bin/${application_type}.dashboard.json
 
 echo
-echo "  - Setting dashboard as home: smoker"
+echo "  - Setting dashboard as home: ${application_type}"
 #--- set the dashboard  as Home
-curl --silent -H 'Content-Type: application/json;charset=UTF-8' 'http://localhost:3000/api/user/preferences/' -X PUT --data-binary '{"homeDashboardId":'$(curl --silent http://localhost:3000/api/dashboards/db/smoker | jq '.dashboard.id')'}'
+curl --silent -H 'Content-Type: application/json;charset=UTF-8' 'http://localhost:3000/api/user/preferences/' -X PUT --data-binary '{"homeDashboardId":'$(curl --silent http://localhost:3000/api/dashboards/db/${application_type} | jq '.dashboard.id')'}'
+
+  ;;
 
 echo "  - Done!"
 

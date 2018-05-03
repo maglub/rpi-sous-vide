@@ -5,8 +5,6 @@ I make mistakes, very often. Build this on your own risk.
 
 # Introduction
 
-* 2016-05-15, NOTE: This is a work in progress. Please wait a few weeks and come back.
-* 2017-07-08, NOTE: This is still a work in progress. It is slowly getting into a state where normal people can install it and use it.
 * 2017-10-25, Added installation scripts for influxdb and grafana
 
 
