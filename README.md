@@ -255,7 +255,13 @@ Total (ca) in CHF: ca 110.00 chf
 * Note: I could not find an SSR-25 DA in the Fritzing library.
 
 <img src=pics/schematics.png >
+
+* Wiring up the ds18b20
+
 <img src=pics/ds18b20-soldered.jpg >
+
+* Wiring up the solid state control
+
 <img src=pics/relay-control-soldered.jpg >
 
 
