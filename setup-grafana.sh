@@ -7,6 +7,7 @@ this_dir=$(cd $(dirname $0);pwd)
 
 [ -z "$application_type" ] && application_type=smoker
 
+echo "* Application type: $application_type"
 echo -n "* Checking pre requisites apt-transport-https jq"
 dpkg -s apt-transport-https jq >/dev/null 2>&1 || {
   echo "  - Installing apt-transport-https and jq"
@@ -99,6 +100,11 @@ do
   #--- delete dashboard
   curl --silent -X DELETE "http://localhost:3000/api/dashboards/db/${n}"
 done
+
+echo -n "* Waiting 3 seconds for grafana to realize that the old dashboard is deleted properly"
+sleep 3
+echo "  - Done!"
+
 
 echo
 echo "  - Adding dashboard: $application_type"
