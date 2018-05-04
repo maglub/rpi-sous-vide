@@ -78,8 +78,8 @@ case $VERSION_ID in
 esac
 echo "  - Done!"
 
-echo -n "* Waiting 5 seconds for grafana to start properly"
-sleep 5
+echo -n "* Waiting 10 seconds for grafana to start properly"
+sleep 10
 echo "  - Done!"
 
 echo "* Setting up datasource and dashboard"
