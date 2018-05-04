@@ -20,15 +20,10 @@ esac
 # influx
 #----------------------------
 #--- set these variables in conf/app.conf - default below works in my (Magnus) environment
-#[ -z "$influxHost" ]     && influxHost=192.168.4.55
-#[ -z "$influxPort" ]     && influxPort=8086
-#[ -z "$influxDb" ]       && influxDb=smokerWue
-#[ -z "$influxSenderId" ] && influxSenderId=wue-smoker
-
 influxHost=localhost
 influxPort=8086
 influxDb=smoker
-influxSenderId=wue-smoker
+influxSenderId=this-smoker
 
 PILOGGER_SENSOR=$1
 PILOGGER_DATA=$2

@@ -68,3 +68,13 @@ echo -n "* Enabling influxdb logging for the application"
 }
 echo "  - Done!"
 
+
+#--- enable logging of metrics to the influxdb
+
+echo "* Adding some dummy data to the database"
+
+$this_dir/bin/logging-enabled/influxdb.local smoker-setpoint 10
+$this_dir/bin/logging-enabled/influxdb.local smoker-temp 10
+$this_dir/bin/logging-enabled/influxdb.local smoker-output-pwm 50
+$this_dir/bin/logging-enabled/influxdb.local air-temp 10
+

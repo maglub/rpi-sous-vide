@@ -1,4 +1,7 @@
 #--- system
+application_type=smoker
+#application_type=greenhouse
+
 libDir=/var/lib/rpi-sous-vide
 #tmpDir=${libDir}/tmp
 tmpDir=/dev/shm

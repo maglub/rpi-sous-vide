@@ -50,6 +50,25 @@ echo "  - Initializing the setpoint file"
 cat<<EOT
 
 #================================
+# Adding en_US.UTF-8 locale
+#================================
+EOT
+
+[ -n "$piLoggerLocale" ] && {
+  echo "  - setting up locale (if not already set up)"
+  [[ -z "$(grep -v '^#' /etc/locale.gen | grep 'en_US.UTF-8')" ]] && {
+    sudo sed -ie  's/^# en_US.UTF-8/en_US.UTF-8/' /etc/locale.gen
+    sudo locale-gen
+    sudo update-locale LANG=en_US.UTF-8
+    sudo update-locale LANGUAGE=en_US.UTF-8
+    sudo update-locale LC_ALL=en_US.UTF-8
+  }
+}
+
+
+cat<<EOT
+
+#================================
 # Config file etc/app.conf
 #================================
 EOT

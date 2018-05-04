@@ -4,13 +4,25 @@ I make mistakes, very often. Build this on your own risk.
 
 # Introduction
 
-* 2017-10-13, Migration from Slim 2 to Slim 3 framework done
+* 2018-05-04, Migration from Slim 2 to Slim 3 framework done
 * 2017-10-25, Added installation scripts for influxdb and grafana
-* 2017-07-08, NOTE: This is still a work in progress. It is slowly getting into a state where normal people can install it and use it.
-* 2016-05-15, NOTE: This is a work in progress. Please wait a few weeks and come back.
 
 
-rpi-sous-vide is a Raspberry pi based PID controller for a home built sous vide machinery, a home built smoker (to smoke meat, fish, etc), or anything else that you need to control depending on the current temperature, and a setpoint temperature that you wish to reach. The basic principle is the same. I even use it to control the solar heating for my pool. You measure the media (water or air), and decide to turn on or off a heating element or a pump. Currently it supports two output relays, to control a heating element and a motor to stir water.
+rpi-sous-vide is a Raspberry pi based PID controller for a home built sous vide machinery, a home built smoker (to smoke meat, fish, etc), a greenhouse, or anything else that you need to control depending on the current temperature, and a setpoint temperature that you wish to reach. The basic principle is the same. I even use it to control the solar heating for my pool. You measure the media (water or air), and decide to turn on or off a heating element or a pump. Currently it supports two output relays, to control a heating element and a motor to stir water.
+
+The basic idea is to:
+
+* Control the temperature in a setting
+* Web based application
+* Metric/Temperature collection and graphing
+
+The application, as seen on a mobile device:
+
+<img width=250px src=pics/screenshot-mobilephone.png>
+
+Dasboard in grafana:
+
+<img src=pics/screenshot-bacon.png>
 
 This was a "one day project" that turned into a weekend project, that turned into... It is not really in a state to be used by anyone else than me at the moment, but the basic idea is to have a web-gui based on:
 
@@ -86,6 +98,10 @@ sudo apt-get -y install git
 git clone https://github.com/maglub/rpi-sous-vide.git
 
 cd rpi-sous-vide
+
+#--- if you need en_US.UTF-8
+# piLoggerLocale=true ./setup.sh
+
 ./setup.sh
 ./setup-influxdb.sh
 ./setup-grafana.sh
@@ -96,6 +112,7 @@ sudo shutdown -r now
 After the reboot, the 1wire interface is enabled and you should be able to see your devices. You should give your sensors names in the conf/aliases.conf file now.
 
 ```
+#--- if you set up a greenhouse, change the application_type to "greenhouse" in conf/app.conf
 cd rpi-sous-vide
 ./bin/genAliases | tee conf/aliases.conf
 ```
@@ -246,6 +263,15 @@ Total (ca) in CHF: ca 110.00 chf
 * Note: I could not find an SSR-25 DA in the Fritzing library.
 
 <img src=pics/schematics.png >
+
+* Wiring up the ds18b20
+
+<img src=pics/ds18b20-soldered.jpg >
+
+* Wiring up the solid state control
+
+<img src=pics/relay-control-soldered.jpg >
+
 
 # Runtime
 
