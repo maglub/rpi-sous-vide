@@ -209,12 +209,17 @@ function configAlert(){
 
   #--- things to check
   $config["aliasesFile"] = file_exists("/home/pi/rpi-sous-vide/conf/aliases.conf") ;
+  $config["grafanaInstalled"] = file_exists("/etc/grafana/grafana.ini") ;
 
   #--- if one or more things are not ok, set config_ok to false
-  foreach ($config as $key => $value) {
-    print "$key = $value<br>\n";
-    if (! $value) { $config["config_ok"] = false ; }
-  } 
+  #--- only certain things should alert
+  if (! $config["aliasesFile"]) { $config["config_ok"] = false ; };
+
+#  #--- if one or more things are not ok, set config_ok to false
+#  foreach ($config as $key => $value) {
+#    print "$key = $value<br>\n";
+#    if (! $value) { $config["config_ok"] = false ; }
+#  } 
 
   return $config;
 }

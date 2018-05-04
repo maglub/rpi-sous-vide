@@ -96,9 +96,11 @@
                      <li>
                         <a href="/"><i class="fa fa-dashboard fa-fw"></i> Home</a>
                      </li>
+{% if configAlert['grafanaInstalled'] %}
                      <li>
                         <a href="/grafana"><i class="fa fa-bar-chart-o fa-fw"></i> Grafana</a>
                      </li>
+{% endif %}
                      
 {% if isAuthenticated %}
                      <li>
