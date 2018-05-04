@@ -14,7 +14,6 @@
         "slim/twig-view": "^2.1",
         "erusev/parsedown": "dev-master",
         "dogancelik/slim-json": "dev-master",
-        "slim/flash": "dev-master",
         "kanellov/slim-twig-flash": "dev-master"
     },
     "minimum-stability": "dev" 

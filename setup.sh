@@ -85,7 +85,7 @@ echo "* Checking for config file $this_dir/etc/app.conf"
 cat<<EOT
 
 #================================
-# packages for php5 and lighttpd
+# packages for php5/7 and lighttpd
 #================================
 EOT
 
@@ -95,7 +95,7 @@ curInstallPackages=""
 
 if [ -n "$(grep stretch /etc/os-release)" ]
 then
-for package in php-cgi php php-sqlite3 php-cli php-rrd php-curl lighttpd sqlite3 bc screen
+for package in php-cgi php php-sqlite3 php-cli php-rrd php-mbstring php-curl lighttpd sqlite3 bc screen
   do
     echo -n "  - Checking $package"
     sudo dpkg -s $package >/dev/null 2>&1 || { echo "  - Adding package $package to the install list" ; curInstallPackages="$curInstallPackages $package" ; }
