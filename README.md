@@ -90,9 +90,10 @@ This matrix show which versions of raspbian that works. Please try and use the "
 
 | Raspbian Distribution | lite | GUI | PHP |
 | ------------------------- |:--:|:--:|:--:|
-| Stretch | :white_check_mark: | :grey_question: | 7.0 |
+| Stretch | :white_check_mark: | :white_check_mark: | 7.0 |
 | Jessie | :white_check_mark:| :no_entry:| 5.6 |
 | Older | :grey_question: | :grey_question: | :grey_question: |
+| Reaally old | :no_entry: | :no_entry: | :no_entry: |
 
 
 # Installation
