@@ -7,6 +7,14 @@ I make mistakes, very often. Build this on your own risk.
 * 2018-05-04, Migration from Slim 2 to Slim 3 framework done
 * 2017-10-25, Added installation scripts for influxdb and grafana
 
+NOTE NOTE NOTE: If you do a "git pull" 2018-05-04 or later, on a system that has been installed before, you will have to run "./setup.sh" again, to resolve the new dependencies of the migration from the Slim2 to Slim3 php framework.
+
+```
+#--- upgrade from Slim2 to Slim3
+cd ~/rpi-sous-vide
+rm -rf vendor
+./setup.sh
+```
 
 rpi-sous-vide is a Raspberry pi based PID controller for a home built sous vide machinery, a home built smoker (to smoke meat, fish, etc), a greenhouse, or anything else that you need to control depending on the current temperature, and a setpoint temperature that you wish to reach. The basic principle is the same. I even use it to control the solar heating for my pool. You measure the media (water or air), and decide to turn on or off a heating element or a pump. Currently it supports two output relays, to control a heating element and a motor to stir water.
 
