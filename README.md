@@ -281,6 +281,10 @@ Total (ca) in CHF: ca 110.00 chf
 
 <img src=pics/schematics.png >
 
+* Wiring up the solid state control
+
+<img src=pics/relay-control-soldered.jpg >
+
 * Wiring up the ds18b20 (if you have only one thermometer)
 
 <img src=pics/ds18b20-soldered.jpg >
@@ -296,11 +300,6 @@ Total (ca) in CHF: ca 110.00 chf
 * The thermometers connected to the breakout board
 
 <img src=pics/one_wire_cables_connected.jpg>
-
-
-* Wiring up the solid state control
-
-<img src=pics/relay-control-soldered.jpg >
 
 
 # Runtime
