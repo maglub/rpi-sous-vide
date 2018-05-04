@@ -71,6 +71,8 @@ echo "  - Done!"
 
 #--- enable logging of metrics to the influxdb
 
+echo "* Adding some dummy data to the database"
+
 $this_dir/bin/logging-enabled/influxdb.local smoker-setpoint 10
 $this_dir/bin/logging-enabled/influxdb.local smoker-temp 10
 $this_dir/bin/logging-enabled/influxdb.local smoker-output-pwm 50
