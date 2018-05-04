@@ -84,6 +84,15 @@ Separating the components in that way, I can play around with different ways of 
 * The control can be the default PID code, or be could be any algorithm of choice
 * The output could use the default "slow" PWM or other means of control that can accept a range from 0 - 100 as input.
 
+# Compatibility
+
+| Distribution | lite | GUI |
+| ------------------------- |:--:|:--:|
+| Stretch | :white_check_mark: | :grey_question: |
+| Jessie | :white_check_mark:| :no_entry:| 
+| Older | :grey_question: | :grey_question: |
+
+
 # Installation
 
 * Install raspbian on an SD card
