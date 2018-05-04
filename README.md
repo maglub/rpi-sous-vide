@@ -86,7 +86,9 @@ Separating the components in that way, I can play around with different ways of 
 
 # Compatibility
 
-| Distribution | lite | GUI | PHP |
+This matrix show which versions of raspbian that works. Please try and use the "newest" possible, as I am not testing backwards compatibility properly.
+
+| Raspbian Distribution | lite | GUI | PHP |
 | ------------------------- |:--:|:--:|:--:|
 | Stretch | :white_check_mark: | :grey_question: | 7.0 |
 | Jessie | :white_check_mark:| :no_entry:| 5.6 |
