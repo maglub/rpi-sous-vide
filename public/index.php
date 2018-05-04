@@ -202,6 +202,10 @@ $app->map( ['GET','POST'],'/action', function ($request, $response, $args = []) 
         $gitResult = gitPull();
         $this->flash->addMessage('gitresult', $gitResult['output']);
         break;
+
+      case "genAliasFile":
+        $res = genAliasFile();
+        break;
     }
 
   }
@@ -236,12 +240,16 @@ $app->map( ['GET','POST'],'/config', function ($request, $response, $args = []) 
     $gitResult = Array();
   }
 
+  #--- check for aliases.conf
+  $aliasesFileExists = file_exists("/home/pi/rpi-sous-vide/conf/aliases.conf");
+
   return $this->view->render($response, 'config.html',
                             [ "processes"=>$processes,
                               "setpoint"=>$setpoint,
                               "logscripts" => $logscripts,
                               "devices" => $devices,
-                              "gitresult" => $gitResult
+                              "gitresult" => $gitResult,
+                              "aliasesFileExists" => $aliasesFileExists
                               ]);
 
 })->setName('config');

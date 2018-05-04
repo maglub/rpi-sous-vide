@@ -193,6 +193,11 @@ function getProcesses(){
         return $ret;
 }
 
+function genAliasFile(){
+  $curRes = `sudo -u pi ../bin/wrapper genAliasFile`;
+
+  return true;
+}
 
 function getPid(){
   $config = getAppConfig();

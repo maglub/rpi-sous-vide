@@ -126,11 +126,24 @@
               {% endfor %}
               {% else %}
               <tr>
-                <td> No devices found. You might not have a conf/aliases.conf file, and/or your devices are not visible in /sys/bus/w1/devices. See <a href="https://github.com/maglub/rpi-sous-vide/wiki/setup-device-aliases">FAQ</a>
+                <td> No devices found, as your devices are not visible in /sys/bus/w1/devices.
               </tr>
+
               {% endif %}
+
              </tbody>
            </table>
+
+              {% if not aliasesFileExists %}
+                NOTE: conf/aliases.conf does not exist!<p>
+                If you need to recreate the alias file manually, see <a href="https://github.com/maglub/rpi-sous-vide/wiki/setup-device-aliases">FAQ</a><p>
+              To create the alias file:<br><p>
+              <form role="form" action="/action" method="POST">
+                <input type="hidden" name="returnTo" value="config">
+                <button type="submit" name="action" value="genAliasFile" class="btn btn-danger">Generate alias file</button>
+              </form>
+              {% endif %} 
+
          </div>
        </div>
      </div>

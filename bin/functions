@@ -224,3 +224,8 @@ function killProcesses(){
 function startProcesses(){
   $this_dir/startup.sh
 }
+
+function genAliasFile(){
+  $this_dir/genAliases > $this_dir/../conf/aliases.conf 
+}
+
