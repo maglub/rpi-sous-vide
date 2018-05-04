@@ -199,6 +199,27 @@ function genAliasFile(){
   return true;
 }
 
+function configAlert(){
+  #--- this function will just check a couple of things that should/could be configured in the web gui
+
+  $config = Array();
+
+  #--- initial assumption is that all is ok
+  $config["config_ok"] = true;
+
+  #--- things to check
+  $config["aliasesFile"] = file_exists("/home/pi/rpi-sous-vide/conf/aliases.conf") ;
+
+  #--- if one or more things are not ok, set config_ok to false
+  foreach ($config as $key => $value) {
+    print "$key = $value<br>\n";
+    if (! $value) { $config["config_ok"] = false ; }
+  } 
+
+  return $config;
+}
+
+
 function getPid(){
   $config = getAppConfig();
   return $config;

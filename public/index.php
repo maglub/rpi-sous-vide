@@ -61,6 +61,7 @@ $container ['view'] = function ($container) {
         #--- global variables for Twig/View
         #--- Note to self: Figure out if there is a way to pass global variables outside this function
         $view->getEnvironment()->addGlobal('isAuthenticated', isAuthenticated());
+        $view->getEnvironment()->addGlobal('configAlert', configAlert());
 
 	return $view;
 };
@@ -240,16 +241,12 @@ $app->map( ['GET','POST'],'/config', function ($request, $response, $args = []) 
     $gitResult = Array();
   }
 
-  #--- check for aliases.conf
-  $aliasesFileExists = file_exists("/home/pi/rpi-sous-vide/conf/aliases.conf");
-
   return $this->view->render($response, 'config.html',
                             [ "processes"=>$processes,
                               "setpoint"=>$setpoint,
                               "logscripts" => $logscripts,
                               "devices" => $devices,
-                              "gitresult" => $gitResult,
-                              "aliasesFileExists" => $aliasesFileExists
+                              "gitresult" => $gitResult
                               ]);
 
 })->setName('config');

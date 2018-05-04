@@ -102,7 +102,7 @@
                      
 {% if isAuthenticated %}
                      <li>
-                        <a href="/config"><i class="fa fa-wrench fa-fw"></i> Config</a>
+                        <a href="/config">{% if not configAlert['config_ok'] %} <button type="button" class="btn btn-danger btn-circle"><span class="glyphicon glyphicon-alert"></button>{% endif %}<i class="fa fa-wrench fa-fw"></i> Config</a>
                      </li>
 {% endif %}
 
