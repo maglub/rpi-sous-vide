@@ -281,9 +281,22 @@ Total (ca) in CHF: ca 110.00 chf
 
 <img src=pics/schematics.png >
 
-* Wiring up the ds18b20
+* Wiring up the ds18b20 (if you have only one thermometer)
 
 <img src=pics/ds18b20-soldered.jpg >
+
+* The breakout board (if you have more than one thermometer)
+
+<img src=pics/one_wire_breakout.jpg>
+
+* The breakout board cable 
+
+<img src=pics/one_wire_breakout_cable.jpg>
+
+* The thermometers connected to the breakout board
+
+<img src=pics/one_wire_cables_connected.jpg>
+
 
 * Wiring up the solid state control
 
