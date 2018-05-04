@@ -226,6 +226,9 @@ function startProcesses(){
 }
 
 function genAliasFile(){
-  $this_dir/genAliases > $this_dir/../conf/aliases.conf 
+  if [ $(ls /sys/bus/w1/devices/28* 2>/dev/null | wc -l) -gt 0 ]
+  then
+    $this_dir/genAliases > $this_dir/../conf/aliases.conf 
+  fi
 }
 
