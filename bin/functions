@@ -127,7 +127,7 @@ function setHeater(){
 }
 
 function getSetpointFromFile(){
-  [ -f ${setpointFile} ] && { cat $setpointFile | awk '{printf "%s", $NF}' ; return 0 ; }
+  [ -f ${setpointFile} ] && { cat $setpointFile | awk '{printf "%i", $NF}' ; return 0 ; }
   echo -n 0
 }
 
