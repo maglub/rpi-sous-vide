@@ -153,6 +153,8 @@ while true
 do
   pid_input=$(getTemperatureFromFile)
   pid_setpoint=$(getSetpointFromFile)
+  pid_setpoint_nonAdjusted=$pid_setpoint
+  pid_setpoint=$(echo "scale=2;${pid_setpoint} + ${pid_adjustment}" | bc)
 
   printStatus
 
@@ -164,7 +166,7 @@ do
     setOutput $pid_output
     pid_windowCount=0
 
-    logData smoker-setpoint $pid_setpoint
+    logData smoker-setpoint $pid_setpoint_nonAdjusted
     logData smoker-output-pwm $pid_output
 
   fi
