@@ -165,6 +165,39 @@
 <!-- List of Logging -->
 {{ scriptAvailableBox("Logging", logscripts) }}
 
+<!-- Crontab -->
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="panel panel-default">
+      <div class="panel-heading"> Crontab </div>
+      <div id="panel" class="panel-body">
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-lg-12">
+{% if crontab %}
+              <pre>{{ crontab }}</pre>
+{% else %}
+              No crontab configured!
+{% endif %}
+            </div>
+
+              Enable/Disable cron:<br><p>
+              <form role="form" action="/action" method="POST">
+                <input type="hidden" name="returnTo" value="config">
+                <button type="submit" name="action" value="cronEnable" class="btn btn-success">Enable autostart in cron</button>
+                <button type="submit" name="action" value="cronDisable" class="btn btn-success">Disable autostart</button>
+              </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+<div>
+
+
+<!-- GIT -->
+
   <div class="row"><!-- Upgrade (git pull) -->
     <div class="col-lg-12">
       <div class="panel panel-default">

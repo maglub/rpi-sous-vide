@@ -207,6 +207,15 @@ $app->map( ['GET','POST'],'/action', function ($request, $response, $args = []) 
       case "genAliasFile":
         $res = genAliasFile();
         break;
+
+      case "cronEnable":
+        $res = cronEnable();
+        break;
+
+      case "cronDisable":
+        $res = cronDisable();
+        break;
+
     }
 
   }
@@ -233,6 +242,7 @@ $app->map( ['GET','POST'],'/config', function ($request, $response, $args = []) 
   $outputscripts = getPluginAvailable("output");
   $logscripts = getPluginAvailable("logging");
   $devices = getDevices();
+  $crontab = getCrontab();
 
   if (isset($gitResult['output'])) {
     $gitResult['parsedOutput'] = Parsedown::instance()->text(
@@ -252,7 +262,8 @@ $app->map( ['GET','POST'],'/config', function ($request, $response, $args = []) 
                               "outputscripts" => $outputscripts,
                               "logscripts" => $logscripts,
                               "devices" => $devices,
-                              "gitresult" => $gitResult
+                              "gitresult" => $gitResult,
+                              "crontab" => $crontab
                               ]);
 
 })->setName('config');

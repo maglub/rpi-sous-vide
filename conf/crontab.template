@@ -1,0 +1,2 @@
+# XXX_RPI_SOUS_VIDE_XXX - Automatic start at boot
+@reboot ~/rpi-sous-vide/bin/wrapper initRelays > /dev/null ; ~/rpi-sous-vide/bin/wrapper setHeater off > /dev/null ; ~/rpi-sous-vide/bin/startup.sh > /dev/null # XXX_RPI_SOUS_VIDE_XXX

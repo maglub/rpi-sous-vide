@@ -2,9 +2,11 @@ User_Alias PILOGGER_HTTPD = www-data
 Cmnd_Alias PILOGGER_HTTPD_CMD = /home/pi/rpi-sous-vide/bin/wrapper killProcesses , /home/pi/rpi-sous-vide/bin/wrapper startProcesses , /home/pi/rpi-sous-vide/bin/wrapper setSetpoint * , /bin/chown pi\:pi * 
 Cmnd_Alias PILOGGER_GIT_PULL = /home/pi/rpi-sous-vide/bin/wrapper gitPull
 Cmnd_Alias PILOGGER_GEN_ALIAS_FILE = /home/pi/rpi-sous-vide/bin/wrapper genAliasFile
+Cmnd_Alias PILOGGER_CRONTAB = /home/pi/rpi-sous-vide/bin/wrapper getCrontab , /home/pi/rpi-sous-vide/bin/wrapper cronEnable , /home/pi/rpi-sous-vide/bin/wrapper cronDisable 
 
 PILOGGER_HTTPD ALL=(ALL) NOPASSWD: PILOGGER_HTTPD_CMD
 PILOGGER_HTTPD ALL=(pi) NOPASSWD: PILOGGER_GIT_PULL
 PILOGGER_HTTPD ALL=(pi) NOPASSWD: PILOGGER_GEN_ALIAS_FILE
+PILOGGER_HTTPD ALL=(pi) NOPASSWD: PILOGGER_CRONTAB
 
 pi ALL=(ALL) NOPASSWD: ALL

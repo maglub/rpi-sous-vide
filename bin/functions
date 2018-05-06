@@ -245,3 +245,33 @@ function getPluginInfo(){
   local pluginName=$2
   $this_dir/${type}-available/${pluginName} --info
 }
+
+function killCronJobs(){
+  ps -ef | grep [X]XX_RPI_SOUS_VIDE_XXX | awk '{print $2}' | xargs -L1 -IX kill X
+  return 0 
+}
+
+function cronEnable(){
+  local interval="$1"
+  (crontab -l | grep -v "XXX_RPI_SOUS_VIDE_XXX"; $this_dir/wrapper genCrontab ) | crontab  - 
+}
+
+function cronDisable(){
+  local interval="$1"
+  (crontab -l | grep -v "XXX_RPI_SOUS_VIDE_XXX" ) | crontab  - 
+  killCronJobs
+}
+
+function getCrontab(){
+  crontab -l | grep -vE "^# [^X]|^# $"
+}
+
+function genCrontab(){
+  local interval=$1
+  [ -z "$interval"] && interval=0
+
+  [ $interval -gt 3600 ] && return 1
+
+  cat $this_dir/../conf/crontab.template | sed -e 's/XXX_DIVIDER_XXX/1/g' -e 's/XXX_SLEEP_TIME_XXX/'$sleepTime'/g'
+}
+

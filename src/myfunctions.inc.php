@@ -299,4 +299,20 @@ function getPid(){
   $config = getAppConfig();
   return $config;
 }
+
+function getCrontab(){
+  $crontab = `sudo -u pi ../bin/wrapper getCrontab 2>/dev/null`;
+  return $crontab; 
+}
+
+function cronDisable(){
+  $crontab = `sudo -u pi ../bin/wrapper cronDisable 2>/dev/null`;
+  return $crontab; 
+}
+
+function cronEnable(){
+  $crontab = `sudo -u pi ../bin/wrapper cronEnable 2>/dev/null`;
+  return $crontab; 
+}
+
 ?>
