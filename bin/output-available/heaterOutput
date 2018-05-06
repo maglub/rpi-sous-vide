@@ -2,9 +2,16 @@
 
 this_dir=$(cd $(dirname $0);pwd)
 
-. $this_dir/../conf/app.conf
-. $this_dir/functions
-
+case $(basename $this_dir) in
+  bin)
+    . $this_dir/../conf/app.conf
+    . $this_dir/functions
+    ;;
+  input-available)
+    . $this_dir/../../conf/app.conf
+    . $this_dir/../functions
+    ;;
+esac
 
 # The basic assumption is that the pulse window is ca 10 seconds, and that the pulse width is set in a percentage of this window
 # the pulse window is dynamically set in the app.conf
@@ -56,9 +63,35 @@ function initialize(){
   heater_dutyWindowInterval=$(echo "scale=0;${heater_timeWindow}/${heater_dutySleepTime}" | bc)
 }
 
+
+function oneLiner(){
+
+  cat<<EOT
+PWM based output script
+EOT
+
+  return 0
+}
+
 #=============================================
 # MAIN
 #=============================================
+
+if [ -n "$1" ]
+then
+  case $1 in
+    --setup)
+      echo "* Setup of requirements for $this_script"
+      doSetup
+      exit 0
+    ;;
+    --info)
+      oneLiner
+      exit 0
+   ;;
+  esac
+fi
+
 [ -z "$heaterDutyFile" ] && heaterDutyFile="$tmpDir/heaterDuty"
 [ -z "$heater_dutyWindowInterval" ] && heater_dutyWindowInterval=100
 
