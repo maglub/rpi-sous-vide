@@ -16,6 +16,10 @@ gpioPins="$heaterPin $pumpPin"
 
 heaterDutyFile="$tmpDir/heaterDuty"
 
+#--- temperature set when booting (important when controlling a freezer of fridge)
+bootSetPoint=0
+
+
 #--- ms
 heater_timeWindow=2
 heater_dutySleepTime=0.05
