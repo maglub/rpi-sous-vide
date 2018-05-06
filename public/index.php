@@ -228,7 +228,11 @@ $app->map( ['GET','POST'],'/config', function ($request, $response, $args = []) 
 
   $processes = getProcesses();
   $setpoint  = getSetpointByFile();
-  $logscripts = getLoggingAvailable();
+  $inputscripts = getPluginAvailable("input");
+  $controlscripts = getPluginAvailable("control");
+  $outputscripts = getPluginAvailable("output");
+  $logscripts = getPluginAvailable("logging");
+#  $logscripts = getLoggingAvailable();
   $devices = getDevices();
 
   if (isset($gitResult['output'])) {
@@ -244,6 +248,9 @@ $app->map( ['GET','POST'],'/config', function ($request, $response, $args = []) 
   return $this->view->render($response, 'config.html',
                             [ "processes"=>$processes,
                               "setpoint"=>$setpoint,
+                              "inputscripts" => $inputscripts,
+                              "controlscripts" => $controlscripts,
+                              "outputscripts" => $outputscripts,
                               "logscripts" => $logscripts,
                               "devices" => $devices,
                               "gitresult" => $gitResult

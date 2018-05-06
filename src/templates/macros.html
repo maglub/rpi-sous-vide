@@ -24,3 +24,37 @@
   </div>
 {% endmacro %}
 
+{% macro scriptAvailableBox(type, scripts) %}
+<div class="row"><!-- List of {{type}} -->
+  <div class="col-lg-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">{{type}} available</div>
+      <div class="panel-body">
+        <div class="table-responsive">
+          <table class="table table-condensed table-hover">
+            <thead>
+              <tr>
+                <th>Script</th>
+                <th>Type</th>
+                <th>Active</th>
+                <th>Info</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for script in scripts %}
+              <tr>
+                <td> {{ script['name'] }} </td>
+                <td> {{type}} script</td>
+                <td> {% if script['enabled'] %} Yes {% else %} No {% endif %} </td>
+                <td> {{ script['info'] }} </td>
+              </tr>
+              {% endfor %}
+             </tbody>
+           </table>
+         </div>
+       </div>
+     </div>
+   </div>
+</div>
+
+{% endmacro %}

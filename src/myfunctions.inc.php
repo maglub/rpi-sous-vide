@@ -38,6 +38,57 @@ function isLoggingEnabled($logName){
 
 }
 
+function isPluginEnabled($type, $pluginName){
+
+  #--- input, output, control => only one can be enabled, symlink in ./bin
+  #--- logging can have any number of plugins enabled, symlink in logging-enabled, nginx/lighttpd style
+
+  $returnVal = false;
+
+  switch ($type) {
+    case "logging":
+      $returnVal = isLoggingEnabled($pluginName);
+      break;
+    default:
+      $binDir = __DIR__ . "/../bin";
+      #--- the file "$type" has to exist in the bin directory, and symlink to a
+      #--- file in the $type-avaiable directory
+      if (file_exists($binDir . "/" . $type)){
+        $symlinkDestination = readlink($binDir . "/" . $type);
+        if ( $type . "-available/" . $pluginName == $symlinkDestination ) {
+          $returnVal = true;
+        } else {
+          $returnVal = false;
+        }
+      } else {
+        $returnVal = false;
+      }
+  }
+
+  return $returnVal;
+}
+
+function getPluginAvailable($type){
+
+  $pluginDir = __DIR__ . "/../bin/" . $type . "-available";
+  $files = scandir($pluginDir);
+
+  $scripts = Array();
+
+  foreach ($files as $file) {
+    if ($file != "." && $file != ".."){
+      $scripts[] = [ 'name' => $file ] ;
+    }
+  }
+
+  foreach ($scripts as &$script){
+    $script['enabled'] = isPluginEnabled($type, $script['name']);
+  }
+
+  return $scripts;
+}
+
+/*
 function getLoggingAvailable(){
 
   $loggingAvailableDir = __DIR__ . "/../bin/logging-available";
@@ -57,6 +108,12 @@ function getLoggingAvailable(){
 
   return $logscripts;
 }
+*/
+
+function getDeviceAlias($device){
+  $alias = `../bin/wrapper getAlias {$device}`;
+  return $alias;
+}
 
 function getDevices18s20(){
   $res = `../bin/wrapper getW1DevicePaths`;	
@@ -67,8 +124,9 @@ function getDevices18s20(){
   $res = Array();
   foreach ($devices as $device){
     if ($device != ""){
-      $alias = `../bin/wrapper getAlias {$device}`;
-      $res[] = ["devicepath" => $device, "alias" => $alias];
+      $alias = getDeviceAlias($device);
+      $temperature = getTemperatureByAliasByFile($alias);
+      $res[] = ["devicepath" => $device, "alias" => $alias, "temperature" => $temperature ];
     }
   }
 
@@ -117,6 +175,11 @@ function getTemperature(){
 
 function getTemperatureByFile(){
 	$curRes = `../bin/wrapper getTemperatureFromFile`;
+	return $curRes;
+}
+
+function getTemperatureByAliasByFile($alias){
+	$curRes = `../bin/wrapper getTemperatureByAliasFromFile $alias`;
 	return $curRes;
 }
 

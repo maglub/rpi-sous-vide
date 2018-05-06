@@ -136,6 +136,13 @@ function getTemperatureFromFile(){
   echo -n 0
 }
 
+function getTemperatureByAliasFromFile(){
+  local alias=$1
+  echo $alias >> /tmp/bapp.txt
+  [ -f ${temperatureFile}.${alias} ] && { cat ${temperatureFile}.${alias} | awk '{printf "%s", $NF}' ; return 0 ; }
+  echo -n 0
+}
+
 function setTemperatureToFile(){
   local TS=$(date "+%Y%m%d_%H%M%S %s")
   [ -n "$2" ] && { echo $1 > ${temperatureFile}.$2 ; return 0 ; }

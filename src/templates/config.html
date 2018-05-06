@@ -1,4 +1,5 @@
 {% extends "_layout.html" %}
+{% from 'macros.html' import scriptAvailableBox %}
 
 {% block div %}
 <div class="row">
@@ -114,6 +115,7 @@
               <tr>
                 <th>Device path</th>
                 <th>Alias</th>
+                <th>Last reading</th>
               </tr>
             </thead>
             <tbody>
@@ -122,6 +124,7 @@
               <tr>
                 <td> {{ device['devicepath'] }} </td>
                 <td> {{ device['alias'] }} </td>
+                <td> {{ device['temperature'] }} </td>
               </tr>
               {% endfor %}
               {% else %}
@@ -149,6 +152,15 @@
      </div>
    </div>
 </div>
+
+<!-- List of Input -->
+{{ scriptAvailableBox("Input", inputscripts) }}
+
+<!-- List of Control -->
+{{ scriptAvailableBox("Control", controlscripts) }}
+
+<!-- List of Output -->
+{{ scriptAvailableBox("Output", outputscripts) }}
 
 <div class="row"><!-- List of Logging -->
   <div class="col-lg-12">

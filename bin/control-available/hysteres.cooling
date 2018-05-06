@@ -1,0 +1,141 @@
+#!/bin/bash
+
+this_dir=$(cd $(dirname $0);pwd)
+
+. $this_dir/../conf/app.conf
+. $this_dir/functions
+
+#=============================================
+# Functions
+#=============================================
+function printStatus(){
+
+  #--- http://misc.flogisoft.com/bash/tip_colors_and_formatting
+  bgColor_default="\e[49m"
+  bgColor_on="\e[42m"
+  bgColor_off="\e[49m"
+
+  if [ $curState -ne $targetState ]
+  then
+    bgColor_turnOn=$bgColor_on
+  else
+    bgColor_turnOn=$bgColor_off
+  fi
+
+  bgColor_heaterDuty=${bgColor_default}
+  bgColor_onState=${bgColor_default}
+
+#  [ $onState -eq 1 ] && bgColor_onState="\e[42m"
+#  [ "$heaterDuty" != "$saveHeaterDuty" ] && bgColor_heaterDuty="\e[42m"
+
+
+  printf "setpoint: %-6.2f input: %-6.2f curState: %-6i ${bgColor_turnOn}targetState: %-6i${bgColor_default} curTime: %s onTime: %s offTime: %s compOffSec: %s hyst: %s\n" \
+      $setpoint \
+      $input \
+      $curState \
+      $targetState \
+      $curTime \ $onTime  \
+      $offTime \
+      $compressorOffSeconds \
+      $hysteres
+
+}
+
+function initialize(){
+
+  return 0
+}
+
+#=============================================
+# MAIN
+#=============================================
+
+MANUAL=0
+AUTOMATIC=1
+DIRECT=0
+REVERSE=1
+controllerDirection=$DIRECT
+
+#--- the compressor should have a grace time of a couple of minutes before it is turned on
+#--- after off
+
+[ -z "$temperatureFile" ] && temperatureFile="$tmpDir/temperature"
+[ -z "$setpointFile" ] && setpointFile="$tmpDir/setpoint"
+[ ! -f "$setpointFile" ] && { echo 0 > $setpointFile ; }
+
+[ -z "$heaterDutyFile" ] && heaterDutyFile="$tmpDir/heaterDuty"
+[ -z "$heaterDutyWindow" ] && heaterDutyWindow=100
+
+
+curState=0
+targetState=0
+sleepTime=1
+offTime=$(date --date="5 minutes ago" "+%s")
+onTime=$(date --date="5 minutes ago" "+%s")
+logTime=$(date --date="5 minutes ago" "+%s")
+hysteres=0
+compressorSleepTime=180
+logSleepTime=10
+compressorOffSeconds=0
+
+
+while true
+do
+  . $this_dir/../conf/app.conf
+
+  input=$(getTemperatureFromFile)
+  setpoint=$(getSetpointFromFile)
+  curTime=$(date "+%s")
+  
+  #--- The hysteres algorithm is super simple:
+  #--- Turn on the compressor at $setpoint + $hyseteres
+  [ $(echo "$input"'>'"($setpoint + $hysteres)" | bc) -ne 0 ] && targetState=100
+  #--- Turn off the compressor at $setpoint
+  [ $(echo "$input"'<='$setpoint | bc) -ne 0 ] && targetState=0
+
+#  if [ $(echo $input'>'$setpoint | bc) -ne 0 ]
+#  then
+#    targetState=100
+#  else
+#    targetState=0
+#  fi
+
+  (( compressorOffSeconds = $curTime - $offTime ))
+
+  printStatus
+
+  if [ $curState -ne $targetState ]
+  then
+    #--- check the current time
+    case $targetState in
+      100)
+          [[ $curState -ne $targetState && $compressorOffSeconds -ge $compressorSleepTime ]] && {
+            onTime=$(date "+%s") 
+            setOutput 100
+            curState=$targetState
+          }
+          ;;
+        *)
+          #--- turn off
+          offTime=$(date "+%s") 
+          [[ $curState -ne $targetState ]] && {
+            setOutput 0
+            curState=$targetState
+          }
+          ;;
+    esac
+  fi
+
+  (( logDiff = $curTime - $logTime ))
+  
+  [[ $logDiff -ge $logSleepTime ]] && {
+    logData smoker-setpoint $setpoint
+    logData smoker-output-pwm $curState
+    logData compressor-off-time $compressorOffSeconds
+    logTime=$(date "+%s") 
+  }
+  sleep $sleepTime
+done
+
+exit 0
+
