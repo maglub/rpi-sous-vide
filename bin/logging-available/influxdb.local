@@ -13,8 +13,8 @@ case $(basename $this_dir) in
 esac
 
 #--- read config files
-. $configDir/../conf/app.conf
-[ -f $configDir/../conf/${this_script}.conf ] && . $configDir/../conf/${this_script}.conf
+. $configDir/app.conf
+[ -f $configDir/${this_script}.conf ] && . $configDir/../conf/${this_script}.conf
 
 #----------------------------
 # influx
@@ -27,6 +27,18 @@ influxSenderId=this-smoker
 
 PILOGGER_SENSOR=$1
 PILOGGER_DATA=$2
+
+case $1 in 
+  --setup)
+    echo "No setup needed"
+    exit 0
+    ;;
+  --info)
+    echo "Logging to localhost influxdb"
+    exit 0
+    ;;
+esac
+
 
 curl -i -XPOST "http://${influxHost}:${influxPort}/write?db=${influxDb}" --data-binary "sensor_data,sensor=${PILOGGER_SENSOR} value=${PILOGGER_DATA}" > /dev/null 2>&1
 

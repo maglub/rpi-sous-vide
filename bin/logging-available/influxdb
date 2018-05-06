@@ -3,9 +3,18 @@
 this_dir=$(cd $(dirname $0);pwd)
 this_script=$(basename $0)
 
+case $(basename $this_dir) in
+  bin)
+    configDir=$this_dir/../conf
+    ;;
+  *)
+    configDir=$this_dir/../../conf
+    ;;
+esac
+
 #--- read config files
-. $this_dir/../../conf/app.conf
-[ -f $this_dir/../../conf/${this_script}.conf ] && . $this_dir/../../conf/${this_script}.conf
+. $configDir/app.conf
+[ -f $configDir/${this_script}.conf ] && . $configDir/${this_script}.conf
 
 #----------------------------
 # influx
@@ -20,6 +29,17 @@ this_script=$(basename $0)
 [ -z "$influxPort" ]     && { echo "influxPort is not set in app.conf" ; exit 1 ; }
 [ -z "$influxDb" ]       && { echo "influxDb is not set in app.conf" ; exit 1 ; }
 [ -z "$influxSenderId" ] && { echo "influxSenderId is not set in app.conf" ; exit 1 ; }
+
+case $1 in
+  --setup)
+    echo "No setup needed"
+    exit 0
+    ;;
+  --info)
+    echo "Logging to remote influxdb"
+    exit 0
+    ;;
+esac
 
 PILOGGER_SENSOR=$1
 PILOGGER_DATA=$2
