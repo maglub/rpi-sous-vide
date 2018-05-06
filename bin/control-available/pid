@@ -2,9 +2,16 @@
 
 this_dir=$(cd $(dirname $0);pwd)
 
-. $this_dir/../conf/app.conf
-. $this_dir/functions
-
+case $(basename $this_dir) in
+  bin)
+    . $this_dir/../conf/app.conf
+    . $this_dir/functions
+    ;;
+  input-available)
+    . $this_dir/../../conf/app.conf
+    . $this_dir/../functions
+    ;;
+esac
 
 # The basic assumption is that the pulse window is ca 10 seconds, and that the pulse width is set in a percentage of this window
 # the pulse window is dynamically set in the app.conf
@@ -111,6 +118,18 @@ function initialize(){
 #=============================================
 # MAIN
 #=============================================
+
+case $1 in 
+  --setup)
+    echo "No setup needed"
+    exit 0
+    ;;
+  --info)
+    echo "Simple PID based heating plugin"
+    exit 0
+    ;;
+esac
+
 
 MANUAL=0
 AUTOMATIC=1

@@ -239,3 +239,9 @@ function genAliasFile(){
   fi
 }
 
+
+function getPluginInfo(){
+  local type=$1
+  local pluginName=$2
+  $this_dir/${type}-available/${pluginName} --info
+}

@@ -38,6 +38,12 @@ function isLoggingEnabled($logName){
 
 }
 
+function getPluginInfo($type, $pluginName){
+  $pluginInfo = `../bin/wrapper getPluginInfo {$type} {$pluginName}`;
+  return $pluginInfo;
+}
+
+
 function isPluginEnabled($type, $pluginName){
 
   #--- input, output, control => only one can be enabled, symlink in ./bin
@@ -83,6 +89,7 @@ function getPluginAvailable($type){
 
   foreach ($scripts as &$script){
     $script['enabled'] = isPluginEnabled($type, $script['name']);
+    $script['info'] = getPluginInfo($type, $script['name']);
   }
 
   return $scripts;

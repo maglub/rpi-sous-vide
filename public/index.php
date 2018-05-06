@@ -232,7 +232,6 @@ $app->map( ['GET','POST'],'/config', function ($request, $response, $args = []) 
   $controlscripts = getPluginAvailable("control");
   $outputscripts = getPluginAvailable("output");
   $logscripts = getPluginAvailable("logging");
-#  $logscripts = getLoggingAvailable();
   $devices = getDevices();
 
   if (isset($gitResult['output'])) {

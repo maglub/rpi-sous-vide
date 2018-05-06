@@ -3,8 +3,16 @@
 this_dir=$(cd $(dirname $0);pwd)
 this_script=$(basename $0)
 
-. $this_dir/../conf/app.conf
-. $this_dir/functions
+case $(basename $this_dir) in
+  bin)
+    . $this_dir/../conf/app.conf
+    . $this_dir/functions
+    ;;
+  input-available)
+    . $this_dir/../../conf/app.conf
+    . $this_dir/../functions
+    ;;
+esac
 
 #=====================================
 # Functions
@@ -47,6 +55,15 @@ function doSetup(){
   return 0
 }
 
+function oneLiner(){
+
+  cat<<EOT
+Input directly connected DS 1wire devices per gpio bitbanging.
+EOT
+
+  return 0
+}
+
 #=====================================
 # MAIN
 #=====================================
@@ -59,6 +76,10 @@ then
       doSetup
       exit 0
     ;;
+    --info)
+      oneLiner
+      exit 0
+   ;;
   esac
 fi
 

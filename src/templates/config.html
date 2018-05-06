@@ -162,37 +162,8 @@
 <!-- List of Output -->
 {{ scriptAvailableBox("Output", outputscripts) }}
 
-<div class="row"><!-- List of Logging -->
-  <div class="col-lg-12">
-    <div class="panel panel-default">
-      <div class="panel-heading">Logging available</div>
-      <div class="panel-body">
-        <div class="table-responsive">
-          <table class="table table-condensed table-hover">
-            <thead>
-              <tr>
-                <th>Script</th>
-                <th>Type</th>
-                <th>Active</th>
-                <th>Info</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for logscript in logscripts %}
-              <tr>
-                <td> {{ logscript['name'] }} </td>
-                <td> Log script</td>
-                <td> {% if logscript['enabled'] %} Yes {% else %} No {% endif %} </td>
-                <td> {{ logscript['info'] }} </td>
-              </tr>
-              {% endfor %}
-             </tbody>
-           </table>
-         </div>
-       </div>
-     </div>
-   </div>
-</div>
+<!-- List of Logging -->
+{{ scriptAvailableBox("Logging", logscripts) }}
 
   <div class="row"><!-- Upgrade (git pull) -->
     <div class="col-lg-12">
