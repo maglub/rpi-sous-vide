@@ -1,0 +1,22 @@
+#!/bin/bash
+
+#--- no operation controller
+
+case $1 in
+  --setup)
+    echo "No setup needed"
+    exit 0
+    ;;
+  --info)
+    echo "Dummy controller, which does nothing"
+    exit 0
+    ;;
+esac
+
+
+while true
+do
+  echo "no operation"
+  sleep 3
+done
+
