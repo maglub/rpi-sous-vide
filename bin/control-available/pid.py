@@ -4,6 +4,7 @@
 """
 
 import time
+import os
 
 #=========================================
 # Classes
@@ -31,6 +32,7 @@ class PID:
     self.outMax = 100.0
     self.dInput = 0.0
     self.lastInput = 0.0
+    self.kd_dInput = 0.0
 
 
 
@@ -69,7 +71,7 @@ class PID:
     #--- compute PID output
 
     kp_error = self.Kp * self.error
-    self.dInput = self.Kd * self.dInput
+    self.kd_dInput = self.Kd * self.dInput
 
     if self.dInput <= self.outMin:
       self.dInput = self.outMin
@@ -87,15 +89,23 @@ class PID:
   #===============================================
   def getSetpoint(self):
     with open('/dev/shm/setpoint') as f:
-      self.setpoint = float(next(f))
+      try:
+        self.setpoint = float(next(f))
+      except:
+        print("Whoa! Could not read the setpoint file")
 
   #===============================================
   # getSetpoint => fetches the current target temperature from file
   #===============================================
   def getInput(self):
-    with open('/dev/shm/temperature') as f:
-      self.lastInput = self.input
-      self.input = float(next(f))
+    file = '/dev/shm/temperature'
+    if os.path.exists(file):
+      with open(file) as f:
+        try:
+          self.lastInput = self.input
+          self.input = float(next(f))
+        except:
+          print("Whoa! Could not read the input file")
 
   #===============================================
   # setOutput => sets the duty cycle in % to the file heaterDuty
@@ -120,7 +130,7 @@ class PID:
              0,              # omax
              self.Kp * self.error,     # kp_error
              self.iTerm,     # iTerm
-             self.dInput,    # kd_dInput
+             self.kd_dInput, # kd_dInput
              self.output,    # output
            )
          ) 
