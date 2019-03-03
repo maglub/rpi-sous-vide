@@ -59,7 +59,7 @@ class PID:
 
     #--- iTerm
     if ( self.iTerm > self.outMax):
-      pid_iTerm = self.outMax
+      self.iTerm = self.outMax
     elif self.iTerm < self.outMin:
       self.iTerm = self.outMin
 
@@ -82,15 +82,24 @@ class PID:
     elif self.output < self.outMin:
       self.output = self.outMin
 
+  #===============================================
+  # getSetpoint => fetches the setpoint  temperature from file
+  #===============================================
   def getSetpoint(self):
     with open('/dev/shm/setpoint') as f:
       self.setpoint = float(next(f))
 
+  #===============================================
+  # getSetpoint => fetches the current target temperature from file
+  #===============================================
   def getInput(self):
     with open('/dev/shm/temperature') as f:
       self.lastInput = self.input
       self.input = float(next(f))
 
+  #===============================================
+  # setOutput => sets the duty cycle in % to the file heaterDuty
+  #===============================================
   def setOutput(self):
     outputFile = open('/dev/shm/heaterDuty', 'w')
     outputFile.write(str(int(self.output)))
