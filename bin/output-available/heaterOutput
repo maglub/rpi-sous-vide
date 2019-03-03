@@ -114,6 +114,7 @@ outputState=0
 heaterDuty=0
 
 lastOutputState=$outputState
+lastHeaterDuty=0
 
 while true
 do
@@ -179,7 +180,13 @@ do
 
   [ $heater_dutyWindowCount -ge $heater_dutyWindowInterval ] && heater_dutyWindowCount=0
 
+  if [ $lastHeaterDuty -ne $heaterDuty ]
+  then
+    logData smoker-output-pwm $heaterDuty
+  fi
+
   lastOutputState=$outputState
+  lastHeaterDuty=$heaterDuty
 
   sleep $heater_dutySleepTime
 done

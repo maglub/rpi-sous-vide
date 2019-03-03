@@ -1,0 +1,18 @@
+#!/bin/bash
+
+#=====================================
+# Log things that might not be logged from
+# the scripts
+#=====================================
+
+this_dir=$(cd $(dirname $0);pwd)
+
+. $this_dir/../conf/app.conf
+. $this_dir/functions
+
+setpoint=$(getSetpointFromFile)
+heaterDuty=$(getHeaterDuty)
+
+logData smoker-setpoint $setpoint
+logData smoker-output-pwm $heaterDuty
+

@@ -165,6 +165,7 @@ function getHeaterDuty(){
 }
 
 function setSetpoint(){
+  logData smoker-setpoint $1
   echo $1 > $setpointFile
 }
 
