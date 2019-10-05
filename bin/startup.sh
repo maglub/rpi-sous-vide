@@ -14,5 +14,6 @@ echo $bootSetPoint > $setpointFile
 cd /home/pi/rpi-sous-vide/bin
 
 screen -d -m ./input
+screen -d -m ./input-mcp3208-wrapper
 screen -d -m ./control
 screen -d -m ./output

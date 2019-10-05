@@ -104,7 +104,7 @@ else
   #--- older raspbian
   #--- note, php5-cgi has to come before php5. Otherwise apt-get will install apache2 to satisfy dependencies
   #--- https://wildlyinaccurate.com/installing-php-on-debian-without-apache/
-  for package in php5-cgi php5 php5-sqlite php5-cli php5-rrd php5-curl lighttpd sqlite3 bc screen
+  for package in php5-cgi php5 php5-sqlite php5-cli php5-rrd php5-curl lighttpd sqlite3 bc screen python-dev python-pip
   do
     echo -n "  - Checking $package"
     sudo dpkg -s $package >/dev/null 2>&1 || { echo "  - Adding package $package to the install list" ; curInstallPackages="$curInstallPackages $package" ; }
@@ -200,6 +200,17 @@ cd -
 cat<<EOT
 
 #================================
+# Setup python dependencies
+#================================
+EOT
+
+echo "* Installing required python modules"
+sudo pip install spidev argparse
+
+
+cat<<EOT
+
+#================================
 # Setup input dependencies
 #================================
 EOT
@@ -207,4 +218,5 @@ EOT
 echo "* Running $this_dir/bin/input --setup"
 
 $this_dir/bin/input --setup
+$this_dir/bin/input-mcp3208-wrapper --setup
 

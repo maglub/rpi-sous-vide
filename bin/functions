@@ -213,13 +213,13 @@ function isOutputRunning(){
 
 function getProcessId(){
   local process="$1"
-  local pid=$(ps -ef | grep -E "[S]CREEN.*${process}" | awk '{print $2}')
+  local pid=$(ps -ef | grep -E "[S]CREEN.*${process}$" | awk '{print $2}')
   echo $pid
   return 0
 }
 
 function getProcessIds(){
-  local processes="input control output"
+  local processes="input input-mcp3208-wrapper control output"
   for process in $processes
   do
     getProcessId $process
