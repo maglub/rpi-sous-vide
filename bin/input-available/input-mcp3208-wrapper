@@ -26,6 +26,19 @@ function doSetup(){
   # when called
   #=============================================
 
+  local rebootRequired=""
+
+  #--- /boot/config.txt
+  echo "* Checking /boot/config.txt"
+  [ -z "$(grep -v "^#" /boot/config.txt | grep "dtparam=spi=on")" ] && {
+    echo "  - Adding config to /boot/config.txt"
+    echo "dtparam=spi=on" | sudo tee -a /boot/config.txt
+    echo "  - Reboot required!"
+    rebootRequired=true
+  }
+
+  [ -n "$rebootRequired" ] && { echo ; echo "NOTE: Reboot required!" ; }
+
   return 0
 }
 

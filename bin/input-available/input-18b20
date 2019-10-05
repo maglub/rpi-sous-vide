@@ -126,7 +126,7 @@ echo "* Setting up symlink for ${temperatureFile} to the proper PID input"
   fi
 
   [ -f $temperatureFile ] && rm $temperatureFile
-  ln -sf $temperatureFile.$curDevice $temperatureFile
+  ln -sf $temperatureFile.$(basename $curDevice) $temperatureFile
 }
 
 while true
