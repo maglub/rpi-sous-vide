@@ -34,6 +34,15 @@ function getW1DevicePath(){
   echo "/sys/bus/w1/devices/$curDevice"
 }
 
+function getW1DevicePathByAlias(){
+  if [ -n "$1" ]
+  then
+    [ ! -f $this_dir/../conf/aliases.conf ] && { echo $(basename $curDevice) ; return 0 ; }
+    curAlias=$(grep ";${1}$" $this_dir/../conf/aliases.conf | awk -F";" '{print $1}')
+    echo $curAlias
+  fi
+}
+
 function getW1DevicePaths(){
   ls /sys/bus/w1/devices | grep "^2" | xargs -L1 -IX echo /sys/bus/w1/devices/X
 }

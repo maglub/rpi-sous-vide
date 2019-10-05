@@ -102,6 +102,9 @@ do
   }
 done
 
+#--- set up the symlink to the "default" temperature file, assuming that we will not find
+#--- an alias called "smoker-temp"
+
 echo "* Setting up symlink for ${temperatureFile} to the proper PID input" 
 [ $(getW1DevicePaths | wc -l) -eq 0 ] && { echo "  - Error: could not find any 1wire devices" ; exit 1 ; }
 [ $(getW1DevicePaths | wc -l) -eq 1 ] && {
@@ -110,8 +113,18 @@ echo "* Setting up symlink for ${temperatureFile} to the proper PID input"
   ln -sf $temperatureFile.$curDevice $temperatureFile
 }
 [ $(getW1DevicePaths | wc -l) -gt 1 ] && {
-  curDevice=$(basename $(getW1DevicePaths 2>/dev/null | head -1 ))
-  echo "  - There are multiple 1wire device available, symlinking to the first found: $temperatureFile -> $temperatureFile.$curDevice" 
+
+  curDevice=$(getW1DevicePathByAlias smoker-temp)
+
+  if [ -n "$curDevice" ]
+  then
+    echo "  - There are multiple 1wire device available, symlinking to alias smoker-temp: $temperatureFile -> $temperatureFile.$curDevice" 
+  else
+    #--- if no alias for smoker-temp is defined, just pick the first one found in the filesystem
+    curDevice=$(basename $(getW1DevicePaths 2>/dev/null | head -1 ))
+    echo "  - There are multiple 1wire device available, but no alias for smoker-temp, symlinking to the first found: $temperatureFile -> $temperatureFile.$curDevice" 
+  fi
+
   [ -f $temperatureFile ] && rm $temperatureFile
   ln -sf $temperatureFile.$curDevice $temperatureFile
 }

@@ -1,0 +1,73 @@
+#!/bin/bash
+
+this_dir=$(cd $(dirname $0);pwd)
+this_script=$(basename $0)
+
+case $(basename $this_dir) in
+  bin)
+    . $this_dir/../conf/app.conf
+    . $this_dir/functions
+    mcp3208_script=$this_dir/input-available/input-mcp3208.py
+    ;;
+  input-available)
+    . $this_dir/../../conf/app.conf
+    . $this_dir/../functions
+    mcp3208_script=$this_dir/input-mcp3208.py
+    ;;
+esac
+
+#=====================================
+# Functions
+#=====================================
+function doSetup(){
+
+  #=============================================
+  # This function will set up the 1wire requirements
+  # when called
+  #=============================================
+
+  return 0
+}
+
+function oneLiner(){
+
+  cat<<EOT
+Input directly connected MCP3208 SPI thermometers.
+EOT
+
+  return 0
+}
+
+#=====================================
+# MAIN
+#=====================================
+
+if [ -n "$1" ]
+then
+  case $1 in
+    --setup)
+      echo "* Setup of requirements for $this_script"
+      doSetup
+      exit 0
+    ;;
+    --info)
+      oneLiner
+      exit 0
+   ;;
+  esac
+fi
+
+while true
+do
+  TS=$(date "+%Y%m%d_%H%M%S %s")
+
+  for curDevice in 0 1 2 3
+  do
+    curTemperature=$($mcp3208_script --input $curDevice)
+
+    printf "${TS} Meat thermometer device: %s temperature: %-6.2f\n" $curDevice $curTemperature
+    logData probe-${curDevice} $curTemperature
+  done
+
+  sleep 5
+done
