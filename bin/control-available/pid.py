@@ -5,6 +5,12 @@
 
 import time
 import os
+from sys import argv
+
+if argv[1] == '--info':
+        print("PID controller written in Python")
+        exit(0);
+
 
 #=========================================
 # Classes
