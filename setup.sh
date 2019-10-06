@@ -97,14 +97,7 @@ curRelease=$(grep VERSION_CODENAME= /etc/os-release | cut -d= -f2)
 echo "  - OS Release: $curRelease"
 
 case $curRelease in
-  buster|stretch)
-    for package in php-cgi php php-sqlite3 php-cli php-rrd php-mbstring php-curl lighttpd sqlite3 bc screen python-dev python-pip
-      do
-        echo -n "  - Checking $package"
-        sudo dpkg -s $package >/dev/null 2>&1 || { echo "  - Adding package $package to the install list" ; curInstallPackages="$curInstallPackages $package" ; }
-      done
-    ;;
-  jessie|*)
+  jessie|wheezy)
     #--- older raspbian
     #--- note, php5-cgi has to come before php5. Otherwise apt-get will install apache2 to satisfy dependencies
     #--- https://wildlyinaccurate.com/installing-php-on-debian-without-apache/
@@ -113,6 +106,13 @@ case $curRelease in
       echo -n "  - Checking $package"
       sudo dpkg -s $package >/dev/null 2>&1 || { echo "  - Adding package $package to the install list" ; curInstallPackages="$curInstallPackages $package" ; }
     done
+    ;;
+  buster|stretch|*)
+    for package in php-cgi php php-sqlite3 php-cli php-rrd php-mbstring php-curl lighttpd sqlite3 bc screen python-dev python-pip
+      do
+        echo -n "  - Checking $package"
+        sudo dpkg -s $package >/dev/null 2>&1 || { echo "  - Adding package $package to the install list" ; curInstallPackages="$curInstallPackages $package" ; }
+      done
     ;;
 esac
 
