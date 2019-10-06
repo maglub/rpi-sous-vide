@@ -113,8 +113,8 @@ case $curRelease in
       echo -n "  - Checking $package"
       sudo dpkg -s $package >/dev/null 2>&1 || { echo "  - Adding package $package to the install list" ; curInstallPackages="$curInstallPackages $package" ; }
     done
-  ;;
-case
+    ;;
+esac
 
 [ -n "$curInstallPackages" ] && { echo "  - Installing packages: $curInstallPackages" ; sudo apt-get -q -y install $curInstallPackages ; }
 
