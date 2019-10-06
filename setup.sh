@@ -93,7 +93,7 @@ echo "* Checking installed packages"
 
 curInstallPackages=""
 
-curRelease=$(grep stretch /etc/os-release)
+curRelease=$(grep VERSION_CODENAME= /etc/os-release | cut -d= -f2)
 echo "  - OS Release: $curRelease"
 
 case $curRelease in
