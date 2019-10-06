@@ -94,6 +94,7 @@ echo "* Checking installed packages"
 curInstallPackages=""
 
 curRelease=$(grep stretch /etc/os-release)
+echo "  - OS Release: $curRelease"
 
 case $curRelease in
   buster|stretch)
