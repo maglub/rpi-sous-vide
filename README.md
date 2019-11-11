@@ -321,9 +321,9 @@ Start the three programs:
 
 * One sample take ca 0.9 seconds on a Raspberry Pi Zero, and 0.8 seconds on a Raspberry Pi 3B, so don't expect this to work in very fast changing environments. 
 
-# Feedback/bugs/feature requests
+# Feedback/bugs/feature requests/Contributions
 
-Please provide any bug reports, feature requests or other feedback in the Issue tracker here in this project.
+Please provide any bug reports, feature requests or other feedback in the Issue tracker here in this project. I happily receive contributions!
 
 * https://github.com/maglub/rpi-sous-vide/issues
 
