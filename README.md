@@ -333,6 +333,14 @@ If you would like to contribute code, the process is simple.
 * If you have code you would like to contribute, please fork this project and devlop your enhancement.
 * When you are ready, please create a pull request
 
+## Coding standards
+
+Currently I am very relaxed when it comes to coding standards, but there are a couple of things to keep in mind:
+
+* Please use spaces, not tabs, for indentation
+* The feature should not break the existing platform
+* The feature should not change the architecture too much
+
 # References
 
 * Main inspiration: https://learn.adafruit.com/sous-vide-powered-by-arduino-the-sous-viduino/pid
