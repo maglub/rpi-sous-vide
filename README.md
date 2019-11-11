@@ -332,7 +332,7 @@ If you rather follow tagged releases, please check the "Releases" page. https://
 
 # Feedback/bugs/feature requests/Contributions
 
-Please provide any bug reports, feature requests or other feedback in the Issue tracker here in this project. I happily receive contributions!
+Please provide any bug reports, feature requests, vulnerabilities, or other feedback in the Issue tracker here in this project. I happily receive contributions!
 
 * https://github.com/maglub/rpi-sous-vide/issues
 
