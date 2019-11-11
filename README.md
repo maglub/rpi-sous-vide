@@ -324,6 +324,12 @@ Start the three programs:
 
 * One sample take ca 0.9 seconds on a Raspberry Pi Zero, and 0.8 seconds on a Raspberry Pi 3B, so don't expect this to work in very fast changing environments. 
 
+# Releases
+
+Every now and then I will create a new release tag. Mostly "master" is considered to be stable, so just "follow master" to be up to date.
+
+If you rather follow tagged releases, please check the "Releases" page. https://github.com/maglub/rpi-sous-vide/releases
+
 # Feedback/bugs/feature requests/Contributions
 
 Please provide any bug reports, feature requests or other feedback in the Issue tracker here in this project. I happily receive contributions!
