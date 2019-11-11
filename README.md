@@ -327,6 +327,12 @@ Please provide any bug reports, feature requests or other feedback in the Issue 
 
 * https://github.com/maglub/rpi-sous-vide/issues
 
+If you would like to contribute code, the process is simple.
+
+* Please create an issue with a feature request
+* If you have code you would like to contribute, please fork this project and devlop your enhancement.
+* When you are ready, please create a pull request
+
 # References
 
 * Main inspiration: https://learn.adafruit.com/sous-vide-powered-by-arduino-the-sous-viduino/pid
