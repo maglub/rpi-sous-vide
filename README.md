@@ -47,7 +47,10 @@ One of my design criterias is to separate the problem domain on the low level to
 * control (temperature control, i.e PID or other algorithm) => reads from tmp/temperature and tmp/setpoint, writes to tmp/heaterDuty 
 * output heater control (setting the heater to a range of 0% to 100%) reads from tmp/heaterDuty, controls the relay(s)
 
-Conceptual view:
+## Conceptual view:
+
+This is an overview of the API (input/output/interactions) between the systems components.
+
 
 ```
       +------------------------------+   +----------+   +----------------------+
